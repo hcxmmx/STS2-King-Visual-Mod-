@@ -1,0 +1,13 @@
+**/.godot/
+**/bin/
+**/obj/
+**/.vs/
+**/*.import
+**/*.png
+**/*.jpg
+**/*.ogg
+**/*.mp3
+01_Raw_Materials/
+03-godot-project/Hcxmmx_King/Asset/
+03-godot-project/Hcxmmx_King/Audio/
+03-godot-project/Hcxmmx_King/tscn/
