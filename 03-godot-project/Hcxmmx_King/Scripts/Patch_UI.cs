@@ -167,142 +167,83 @@ internal static class NCharacterSelectButton_Init_Patch_Avatar
 }
 
 // ==========================================
-// 🎨 选人界面：右键换肤雷达与动态弹幕引擎
+// 🎨 选人界面：终极原生 UI 按钮换肤与动态弹幕
 // ==========================================
 [HarmonyPatch(typeof(MegaCrit.Sts2.Core.Nodes.Screens.CharacterSelect.NCharacterSelectButton), "Init")]
 internal static class NCharacterSelectButton_SkinToggle_Patch
 {
-    private static readonly StringName SkinToggleBoundKey = new("KingSkinToggleBound");
-    private static readonly StringName TouchStartTimeKey = new("KingTouchStartMs");
-    private static readonly StringName TouchingKey = new("KingIsTouching");
-    private static readonly StringName TouchIndexKey = new("KingTouchIndex");
-    private static readonly StringName TouchStartPosKey = new("KingTouchStartPos");
-
-    private const ulong LongPressThresholdMs = 650;
-    private const float LongPressMoveTolerancePx = 24f;
+    private static readonly StringName SkinBtnInjectedKey = new("KingSkinBtnInjected");
+    private const string BtnNodeName = "KingSkinToggleBtn";
 
     private static void Postfix(Control __instance, object character)
     {
         var entryName = KingGlobals.GetCharacterEntry(character);
         if (!string.Equals(entryName, KingGlobals.TargetCharacterId, StringComparison.OrdinalIgnoreCase)) return;
 
-        if (__instance.HasMeta(SkinToggleBoundKey)) return;
-        __instance.SetMeta(SkinToggleBoundKey, true);
+        // 双重防重：Meta 与节点名都做检查
+        if (__instance.HasMeta(SkinBtnInjectedKey) || __instance.GetNodeOrNull<Button>(BtnNodeName) != null) return;
+        __instance.SetMeta(SkinBtnInjectedKey, true);
 
-        // 极其暴力的底层拦截：监听这个 Control 节点的所有输入
-        __instance.GuiInput += (InputEvent @event) =>
+        var toggleBtn = new Button();
+        toggleBtn.Name = BtnNodeName;
+        toggleBtn.Flat = true;
+
+        Action updateBtnVisuals = () =>
         {
-            // 🎯 通道 1：鼠标右键按下瞬间切换
-            if (@event is InputEventMouseButton rightClick && rightClick.ButtonIndex == MouseButton.Right)
-            {
-                if (rightClick.Pressed)
-                {
-                    ExecuteSkinToggle(__instance);
-                }
-                return;
-            }
-
-            // 🎯 通道 2：触屏/左键长按（按住>=阈值，且松开位置仍在按钮区域内）
-            bool isPressEvent = false;
-            bool isReleaseEvent = false;
-            int pointerIndex = -1;
-            Vector2 eventPos = Vector2.Zero;
-
-            if (@event is InputEventScreenTouch touch)
-            {
-                isPressEvent = touch.Pressed;
-                isReleaseEvent = !touch.Pressed;
-                pointerIndex = touch.Index;
-                eventPos = touch.Position;
-            }
-            else if (@event is InputEventMouseButton leftClick && leftClick.ButtonIndex == MouseButton.Left)
-            {
-                isPressEvent = leftClick.Pressed;
-                isReleaseEvent = !leftClick.Pressed;
-                pointerIndex = -1;
-                eventPos = leftClick.GlobalPosition;
-            }
-            else
-            {
-                return;
-            }
-
-            if (isPressEvent)
-            {
-                __instance.SetMeta(TouchStartTimeKey, Time.GetTicksMsec());
-                __instance.SetMeta(TouchingKey, true);
-                __instance.SetMeta(TouchIndexKey, pointerIndex);
-                __instance.SetMeta(TouchStartPosKey, eventPos);
-                return;
-            }
-
-            if (!isReleaseEvent) return;
-            if (!__instance.HasMeta(TouchingKey) || !__instance.GetMeta(TouchingKey).AsBool()) return;
-
-            int trackedIndex = __instance.HasMeta(TouchIndexKey) ? (int)__instance.GetMeta(TouchIndexKey).AsInt64() : -2;
-            if (trackedIndex != pointerIndex)
-            {
-                return;
-            }
-
-            __instance.SetMeta(TouchingKey, false);
-
-            ulong startMs = __instance.HasMeta(TouchStartTimeKey) ? (ulong)__instance.GetMeta(TouchStartTimeKey).AsInt64() : 0;
-            ulong duration = Time.GetTicksMsec() - startMs;
-
-            Vector2 startPos = __instance.HasMeta(TouchStartPosKey) ? __instance.GetMeta(TouchStartPosKey).AsVector2() : eventPos;
-            float movedDistance = startPos.DistanceTo(eventPos);
-
-            bool insideOnRelease = __instance.GetGlobalRect().HasPoint(eventPos);
-            bool isLongPress = duration >= LongPressThresholdMs;
-            bool withinMoveTolerance = movedDistance <= LongPressMoveTolerancePx;
-
-            if (isLongPress && withinMoveTolerance && insideOnRelease)
-            {
-                ExecuteSkinToggle(__instance);
-            }
+            toggleBtn.Text = KingGlobals.IsWhiteKingSkin ? "👑切换：白王" : "👑切换：蓝王";
+            toggleBtn.AddThemeColorOverride("font_color", KingGlobals.IsWhiteKingSkin ? new Color(1f, 0.9f, 0.5f) : new Color(0.5f, 0.8f, 1f));
         };
-    }
 
-    private static void ExecuteSkinToggle(Control parent)
-    {
-        // 1. 切换状态并存档
-        KingGlobals.IsWhiteKingSkin = !KingGlobals.IsWhiteKingSkin;
-        KingGlobals.SaveConfig();
+        updateBtnVisuals();
+        toggleBtn.AddThemeFontSizeOverride("font_size", 16);
+        toggleBtn.AddThemeConstantOverride("outline_size", 4);
+        toggleBtn.AddThemeColorOverride("font_outline_color", Colors.Black);
+        toggleBtn.MouseFilter = Control.MouseFilterEnum.Stop;
+        toggleBtn.FocusMode = Control.FocusModeEnum.All;
+        toggleBtn.CustomMinimumSize = new Vector2(90f, 30f);
 
-        // 2. 准备弹幕
-        string quote = KingGlobals.IsWhiteKingSkin ? "✨ 无伤的证明，白王降临！" : "🔵 熟悉的味道，重返经典。";
+        __instance.AddChild(toggleBtn);
 
-        // 3. 发射动态弹幕
-        FireDynamicDanmaku(parent, quote, KingGlobals.IsWhiteKingSkin);
+        void RepositionButton()
+        {
+            toggleBtn.Position = new Vector2(Mathf.Max(6f, __instance.Size.X - toggleBtn.Size.X - 10f), 10f);
+        }
 
-        // 4. 标记事件已处理，防止事件穿透
-        parent.AcceptEvent();
+        RepositionButton();
+        __instance.Resized += RepositionButton;
+        toggleBtn.Resized += RepositionButton;
+
+        toggleBtn.Pressed += () =>
+        {
+            KingGlobals.IsWhiteKingSkin = !KingGlobals.IsWhiteKingSkin;
+            KingGlobals.SaveConfig();
+            updateBtnVisuals();
+
+            string quote = KingGlobals.IsWhiteKingSkin ? "✨无伤的证明，白王降临！" : "🔵熟悉的味道，重返经典。";
+            FireDynamicDanmaku(__instance, quote, KingGlobals.IsWhiteKingSkin);
+            toggleBtn.AcceptEvent();
+        };
     }
 
     private static void FireDynamicDanmaku(Control parent, string text, bool isWhiteKing)
     {
-        // 代码级虚空造物！不需要任何预设节点！
         var label = new Label();
         label.Text = text;
+        label.ZIndex = 100;
 
-        // 极其细腻的美术微调
-        label.AddThemeFontSizeOverride("font_size", 22);
+        label.AddThemeFontSizeOverride("font_size", 20);
         label.AddThemeColorOverride("font_color", isWhiteKing ? new Color(1f, 0.9f, 0.5f) : new Color(0.5f, 0.8f, 1f));
         label.AddThemeConstantOverride("outline_size", 4);
         label.AddThemeColorOverride("font_outline_color", Colors.Black);
 
         parent.AddChild(label);
 
-        // 初始位置设在按钮的正上方
-        label.Position = new Vector2(parent.Size.X / 2f - 100f, -30f);
+        float estimatedTextWidth = Mathf.Max(140f, text.Length * 18f);
+        label.Position = new Vector2(parent.Size.X / 2f - estimatedTextWidth / 2f, -20f);
 
-        // 极其丝滑的升空与消散动画
         var tween = parent.CreateTween();
-        tween.TweenProperty(label, "position:y", label.Position.Y - 60f, 1.2f).SetTrans(Tween.TransitionType.Quad).SetEase(Tween.EaseType.Out);
+        tween.TweenProperty(label, "position:y", label.Position.Y - 50f, 1.2f).SetTrans(Tween.TransitionType.Quad).SetEase(Tween.EaseType.Out);
         tween.Parallel().TweenProperty(label, "modulate:a", 0f, 1.2f).SetTrans(Tween.TransitionType.Cubic);
-
-        // 极其干净的内存回收
         tween.TweenCallback(Callable.From(() => label.QueueFree()));
     }
 }
