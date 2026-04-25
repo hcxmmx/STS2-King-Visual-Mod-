@@ -173,6 +173,13 @@ internal static class NCharacterSelectButton_Init_Patch_Avatar
 internal static class NCharacterSelectButton_SkinToggle_Patch
 {
     private static readonly StringName SkinToggleBoundKey = new("KingSkinToggleBound");
+    private static readonly StringName TouchStartTimeKey = new("KingTouchStartMs");
+    private static readonly StringName TouchingKey = new("KingIsTouching");
+    private static readonly StringName TouchIndexKey = new("KingTouchIndex");
+    private static readonly StringName TouchStartPosKey = new("KingTouchStartPos");
+
+    private const ulong LongPressThresholdMs = 650;
+    private const float LongPressMoveTolerancePx = 24f;
 
     private static void Postfix(Control __instance, object character)
     {
@@ -185,23 +192,92 @@ internal static class NCharacterSelectButton_SkinToggle_Patch
         // 极其暴力的底层拦截：监听这个 Control 节点的所有输入
         __instance.GuiInput += (InputEvent @event) =>
         {
-            // 🎯 锁定：鼠标右键 + 按下瞬间
-            if (@event is InputEventMouseButton mouseEvent && mouseEvent.Pressed && mouseEvent.ButtonIndex == MouseButton.Right)
+            // 🎯 通道 1：鼠标右键按下瞬间切换
+            if (@event is InputEventMouseButton rightClick && rightClick.ButtonIndex == MouseButton.Right)
             {
-                // 1. 切换状态并存档
-                KingGlobals.IsWhiteKingSkin = !KingGlobals.IsWhiteKingSkin;
-                KingGlobals.SaveConfig();
+                if (rightClick.Pressed)
+                {
+                    ExecuteSkinToggle(__instance);
+                }
+                return;
+            }
 
-                // 2. 准备弹幕
-                string quote = KingGlobals.IsWhiteKingSkin ? "✨ 无伤的证明，白王降临！" : "🔵 熟悉的味道，重返经典。";
+            // 🎯 通道 2：触屏/左键长按（按住>=阈值，且松开位置仍在按钮区域内）
+            bool isPressEvent = false;
+            bool isReleaseEvent = false;
+            int pointerIndex = -1;
+            Vector2 eventPos = Vector2.Zero;
 
-                // 3. 发射极其优雅的动态弹幕
-                FireDynamicDanmaku(__instance, quote, KingGlobals.IsWhiteKingSkin);
+            if (@event is InputEventScreenTouch touch)
+            {
+                isPressEvent = touch.Pressed;
+                isReleaseEvent = !touch.Pressed;
+                pointerIndex = touch.Index;
+                eventPos = touch.Position;
+            }
+            else if (@event is InputEventMouseButton leftClick && leftClick.ButtonIndex == MouseButton.Left)
+            {
+                isPressEvent = leftClick.Pressed;
+                isReleaseEvent = !leftClick.Pressed;
+                pointerIndex = -1;
+                eventPos = leftClick.GlobalPosition;
+            }
+            else
+            {
+                return;
+            }
 
-                // 强行标记事件已处理，防止事件穿透给官方逻辑
-                __instance.AcceptEvent();
+            if (isPressEvent)
+            {
+                __instance.SetMeta(TouchStartTimeKey, Time.GetTicksMsec());
+                __instance.SetMeta(TouchingKey, true);
+                __instance.SetMeta(TouchIndexKey, pointerIndex);
+                __instance.SetMeta(TouchStartPosKey, eventPos);
+                return;
+            }
+
+            if (!isReleaseEvent) return;
+            if (!__instance.HasMeta(TouchingKey) || !__instance.GetMeta(TouchingKey).AsBool()) return;
+
+            int trackedIndex = __instance.HasMeta(TouchIndexKey) ? (int)__instance.GetMeta(TouchIndexKey).AsInt64() : -2;
+            if (trackedIndex != pointerIndex)
+            {
+                return;
+            }
+
+            __instance.SetMeta(TouchingKey, false);
+
+            ulong startMs = __instance.HasMeta(TouchStartTimeKey) ? (ulong)__instance.GetMeta(TouchStartTimeKey).AsInt64() : 0;
+            ulong duration = Time.GetTicksMsec() - startMs;
+
+            Vector2 startPos = __instance.HasMeta(TouchStartPosKey) ? __instance.GetMeta(TouchStartPosKey).AsVector2() : eventPos;
+            float movedDistance = startPos.DistanceTo(eventPos);
+
+            bool insideOnRelease = __instance.GetGlobalRect().HasPoint(eventPos);
+            bool isLongPress = duration >= LongPressThresholdMs;
+            bool withinMoveTolerance = movedDistance <= LongPressMoveTolerancePx;
+
+            if (isLongPress && withinMoveTolerance && insideOnRelease)
+            {
+                ExecuteSkinToggle(__instance);
             }
         };
+    }
+
+    private static void ExecuteSkinToggle(Control parent)
+    {
+        // 1. 切换状态并存档
+        KingGlobals.IsWhiteKingSkin = !KingGlobals.IsWhiteKingSkin;
+        KingGlobals.SaveConfig();
+
+        // 2. 准备弹幕
+        string quote = KingGlobals.IsWhiteKingSkin ? "✨ 无伤的证明，白王降临！" : "🔵 熟悉的味道，重返经典。";
+
+        // 3. 发射动态弹幕
+        FireDynamicDanmaku(parent, quote, KingGlobals.IsWhiteKingSkin);
+
+        // 4. 标记事件已处理，防止事件穿透
+        parent.AcceptEvent();
     }
 
     private static void FireDynamicDanmaku(Control parent, string text, bool isWhiteKing)
