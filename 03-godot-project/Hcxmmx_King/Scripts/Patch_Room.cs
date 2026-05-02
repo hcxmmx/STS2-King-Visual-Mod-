@@ -23,6 +23,20 @@ internal static class NMerchantRoom_Ready_Patch
         var characterContainer = __instance.GetNodeOrNull<Control>("%CharacterContainer");
         if (characterContainer == null) return;
 
+        // 🚨 终极安全锁：极其严格的战备状态嗅探
+        var theEvent = Traverse.Create(__instance).Field("_event").GetValue();
+        if (theEvent != null)
+        {
+            // 利用极其霸道的反射强行读取 StartedFight 状态
+            bool isFighting = Traverse.Create(theEvent).Property("StartedFight").GetValue<bool>() || Traverse.Create(theEvent).Field("StartedFight").GetValue<bool>();
+            
+            if (isFighting)
+            {
+                GD.Print("🚨 战术拦截！假商人图穷匕见，进入战斗状态，放弃注入商店机甲，将舞台交还给战斗核心！");
+                return; // 极其冷酷地撤退！
+            }
+        }
+
         var scene = KingGlobals.KingScene ?? KingGlobals.KingScenePreloaded;
         KingGlobals.KingScene = scene;
         if (scene == null) return;
