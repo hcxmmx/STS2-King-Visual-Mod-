@@ -170,3 +170,80 @@ internal static class NRestSiteRoom_Exit_Patch
 {
     private static void Prefix() { KingGlobals.IsInShop = false; }
 }
+
+// ==========================================
+// 🎭 假商人雷达：极其优雅的伪装识破
+// ==========================================
+
+// 👉 改动点 1：替换 typeof 里的类名路径
+[HarmonyPatch(typeof(MegaCrit.Sts2.Core.Nodes.Events.Custom.NFakeMerchant), nameof(MegaCrit.Sts2.Core.Nodes.Events.Custom.NFakeMerchant._Ready))]
+internal static class NFakeMerchant_Ready_Patch
+{
+    // 👉 改动点 2：替换 __instance 的参数类型
+    private static void Postfix(MegaCrit.Sts2.Core.Nodes.Events.Custom.NFakeMerchant __instance)
+    {
+        KingGlobals.VerboseLog("\n====== 🎭 侦测到进入假商人房间！开始替换模型！ ======");
+        KingGlobals.IsInShop = true; 
+
+        var players = Traverse.Create(__instance).Field("_players").GetValue<System.Collections.IList>();
+        var playerVisuals = Traverse.Create(__instance).Field("_playerVisuals").GetValue<System.Collections.IList>();
+        if (players == null || playerVisuals == null || players.Count != playerVisuals.Count) return;
+
+        var characterContainer = __instance.GetNodeOrNull<Control>("%CharacterContainer");
+        if (characterContainer == null) return;
+
+        var scene = KingGlobals.KingScene ?? KingGlobals.KingScenePreloaded;
+        KingGlobals.KingScene = scene;
+        if (scene == null) return;
+
+        for (int i = 0; i < players.Count; i++)
+        {
+            var player = players[i];
+            var playerTraverse = Traverse.Create(player);
+            var character = playerTraverse.Property("Character").GetValue() ?? playerTraverse.Field("Character").GetValue();
+            string? entryName = KingGlobals.GetCharacterEntry(character);
+
+            if (!string.Equals(entryName, KingGlobals.TargetCharacterId, StringComparison.OrdinalIgnoreCase)) continue;
+            
+            var targetChild = playerVisuals[i] as Node2D;
+            if (targetChild == null) continue;
+
+            targetChild.Hide(); // 抹杀原版模型
+
+            var kingShopMecha = scene.Instantiate<Node2D>();
+            kingShopMecha.Name = $"KingShopMecha_Fake_{i}";
+            characterContainer.AddChild(kingShopMecha);
+
+            kingShopMecha.Position = targetChild.Position + new Vector2(0, 0);
+            kingShopMecha.Scale = new Vector2(7.5f, 7.5f);
+            KingGlobals.ApplyCurrentSkin(kingShopMecha);
+
+            var kingSprite = KingGlobals.FindFirstNode<AnimatedSprite2D>(kingShopMecha, s => s.Name != "VFX_Slash");
+            var vfxSprite = kingShopMecha.GetNodeOrNull<AnimatedSprite2D>("VFX_Slash");
+            var petNode = kingShopMecha.GetNodeOrNull<Node2D>("SerenadePet");
+
+            if (vfxSprite != null) vfxSprite.Visible = false;
+            if (petNode != null) petNode.Visible = false;
+
+            if (kingSprite != null)
+            {
+                kingSprite.AnimationFinished += () =>
+                {
+                    if (kingSprite.Animation == "idleThink")
+                    {
+                        kingSprite.Play("think");
+                    }
+                };
+                kingSprite.Play("idleThink");
+            }
+        }
+    }
+}
+
+// 离开假商人房间解锁
+// 👉 改动点 3：替换 typeof 里的类名路径
+[HarmonyPatch(typeof(MegaCrit.Sts2.Core.Nodes.Events.Custom.NFakeMerchant), "HideScreen")]
+internal static class NFakeMerchant_HideScreen_Patch
+{
+    private static void Prefix() { KingGlobals.IsInShop = false; }
+}
