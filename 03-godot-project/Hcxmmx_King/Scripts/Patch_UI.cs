@@ -247,3 +247,200 @@ internal static class NCharacterSelectButton_SkinToggle_Patch
         tween.TweenCallback(Callable.From(() => label.QueueFree()));
     }
 }
+
+// ==========================================
+// 🌐 多人读档界面 (主机端)：替换背景大立绘
+// ==========================================
+[HarmonyPatch(typeof(MegaCrit.Sts2.Core.Nodes.Screens.CharacterSelect.NMultiplayerLoadGameScreen), "InitializeAsHost")]
+internal static class NMultiplayerLoadGameScreen_InitializeAsHost_Patch
+{
+    private static void Postfix(Godot.Node __instance, object run)
+    {
+        KingGlobals.VerboseLog("\n====== 🌐 多人读档雷达 (Host)：侦测到界面加载！ ======");
+
+        var bgContainer = __instance.GetNodeOrNull<Godot.Control>("%BgContainer") 
+                       ?? __instance.GetNodeOrNull<Godot.Control>("BgContainer")
+                       ?? __instance.GetNodeOrNull<Godot.Control>("%Bg");
+        
+        var targetContainer = bgContainer ?? (__instance as Godot.Control);
+
+        string charId = "";
+        try {
+            var playersList = Traverse.Create(run).Property("Players").GetValue<System.Collections.IList>() 
+                           ?? Traverse.Create(run).Field("Players").GetValue<System.Collections.IList>();
+            
+            if (playersList != null && playersList.Count > 0)
+            {
+                var hostPlayer = playersList[0]; 
+                var modelIdObj = Traverse.Create(hostPlayer).Property("CharacterId").GetValue() 
+                              ?? Traverse.Create(hostPlayer).Field("CharacterId").GetValue();
+                
+                if (modelIdObj != null) charId = modelIdObj.ToString() ?? ""; 
+            }
+        } catch (Exception ex) { 
+            KingGlobals.ErrorLog($"[Error] Host提取角色ID异常: {ex.Message}");
+        }
+        KingGlobals.VerboseLog($"Host 最终提取的 ID: '{charId}'");
+
+        if (string.IsNullOrEmpty(charId) || (!charId.Contains("Regent", StringComparison.OrdinalIgnoreCase) && !charId.Contains(KingGlobals.TargetCharacterId, StringComparison.OrdinalIgnoreCase)))
+        {
+            return;
+        }
+
+        if (targetContainer != null)
+        {
+            if (bgContainer != null)
+            {
+                foreach (Godot.Node child in bgContainer.GetChildren())
+                {
+                    if (child is Godot.CanvasItem canvasItem) canvasItem.Hide();
+                }
+            }
+            else
+            {
+                var staticBg = targetContainer.GetNodeOrNull<Godot.CanvasItem>("StaticBg");
+                if (staticBg != null) staticBg.Hide();
+
+                var animatedBg = targetContainer.GetNodeOrNull<Godot.CanvasItem>("AnimatedBg");
+                if (animatedBg != null) animatedBg.Hide();
+            }
+
+            var existingScreen = targetContainer.GetNodeOrNull<Control>("KingSelectUI_MP");
+            if (existingScreen != null)
+            {
+                existingScreen.Show();
+            }
+            else
+            {
+                if (KingGlobals.KingSelectUiScene == null)
+                {
+                    KingGlobals.KingSelectUiScene = KingGlobals.KingSelectUiPreloaded;
+                }
+                if (KingGlobals.KingSelectUiScene == null)
+                {
+                    KingGlobals.KingSelectUiScene = (PackedScene)Godot.ResourceLoader.LoadThreadedGet(KingGlobals.KingSelectUiPath);
+                }
+
+                if (KingGlobals.KingSelectUiScene != null)
+                {
+                    var kingScreen = KingGlobals.KingSelectUiScene.Instantiate<Godot.Control>();
+                    kingScreen.Name = "KingSelectUI_MP";
+                    kingScreen.SetAnchorsPreset(Godot.Control.LayoutPreset.FullRect);
+                    targetContainer.AddChild(kingScreen);
+
+                    if (bgContainer == null) 
+                    {
+                        targetContainer.MoveChild(kingScreen, 0);
+                    }
+                    
+                    var voicePlayer = kingScreen.GetNodeOrNull<Godot.AudioStreamPlayer>("KingVoicePlayer");
+                    if (voicePlayer != null)
+                    {
+                         voicePlayer.Play();
+                    }
+                    KingGlobals.VerboseLog($"✅ 成功在 {targetContainer.Name} 上铺设了国王王座背景图！");
+                }
+            }
+        }
+    }
+}
+
+// ==========================================
+// 🌐 多人读档界面 (客机端)：替换背景大立绘
+// ==========================================
+[HarmonyPatch(typeof(MegaCrit.Sts2.Core.Nodes.Screens.CharacterSelect.NMultiplayerLoadGameScreen), "InitializeAsClient")]
+internal static class NMultiplayerLoadGameScreen_InitializeAsClient_Patch
+{
+    private static void Postfix(Godot.Node __instance, object message)
+    {
+        KingGlobals.VerboseLog("\n====== 🌐 多人读档雷达 (Client)：侦测到界面加载！ ======");
+
+        var bgContainer = __instance.GetNodeOrNull<Godot.Control>("%BgContainer") 
+                       ?? __instance.GetNodeOrNull<Godot.Control>("BgContainer")
+                       ?? __instance.GetNodeOrNull<Godot.Control>("%Bg");
+        var targetContainer = bgContainer ?? (__instance as Godot.Control);
+
+        string charId = "";
+        try {
+            var runObj = Traverse.Create(message).Property("Run").GetValue() ?? Traverse.Create(message).Field("Run").GetValue();
+            if (runObj != null)
+            {
+                var playersList = Traverse.Create(runObj).Property("Players").GetValue<System.Collections.IList>() 
+                               ?? Traverse.Create(runObj).Field("Players").GetValue<System.Collections.IList>();
+                
+                if (playersList != null && playersList.Count > 0)
+                {
+                    var targetPlayer = playersList[0];
+                    var modelIdObj = Traverse.Create(targetPlayer).Property("CharacterId").GetValue() 
+                                  ?? Traverse.Create(targetPlayer).Field("CharacterId").GetValue();
+                    
+                    if (modelIdObj != null) charId = modelIdObj.ToString() ?? "";
+                }
+            }
+        } catch (Exception ex) { 
+            KingGlobals.ErrorLog($"[Error] Client提取角色ID异常: {ex.Message}");
+        }
+        KingGlobals.VerboseLog($"Client 最终提取的 ID: '{charId}'");
+
+        if (string.IsNullOrEmpty(charId) || (!charId.Contains("Regent", StringComparison.OrdinalIgnoreCase) && !charId.Contains(KingGlobals.TargetCharacterId, StringComparison.OrdinalIgnoreCase)))
+        {
+            return;
+        }
+
+        if (targetContainer != null)
+        {
+            if (bgContainer != null)
+            {
+                foreach (Godot.Node child in bgContainer.GetChildren())
+                {
+                    if (child is Godot.CanvasItem canvasItem) canvasItem.Hide();
+                }
+            }
+            else
+            {
+                var staticBg = targetContainer.GetNodeOrNull<Godot.CanvasItem>("StaticBg");
+                if (staticBg != null) staticBg.Hide();
+
+                var animatedBg = targetContainer.GetNodeOrNull<Godot.CanvasItem>("AnimatedBg");
+                if (animatedBg != null) animatedBg.Hide();
+            }
+
+            var existingScreen = targetContainer.GetNodeOrNull<Control>("KingSelectUI_MP");
+            if (existingScreen != null)
+            {
+                existingScreen.Show();
+            }
+            else
+            {
+                if (KingGlobals.KingSelectUiScene == null)
+                {
+                    KingGlobals.KingSelectUiScene = KingGlobals.KingSelectUiPreloaded;
+                }
+                if (KingGlobals.KingSelectUiScene == null)
+                {
+                    KingGlobals.KingSelectUiScene = (PackedScene)Godot.ResourceLoader.LoadThreadedGet(KingGlobals.KingSelectUiPath);
+                }
+
+                if (KingGlobals.KingSelectUiScene != null)
+                {
+                    var kingScreen = KingGlobals.KingSelectUiScene.Instantiate<Godot.Control>();
+                    kingScreen.Name = "KingSelectUI_MP";
+                    kingScreen.SetAnchorsPreset(Godot.Control.LayoutPreset.FullRect);
+                    targetContainer.AddChild(kingScreen);
+
+                    if (bgContainer == null) 
+                    {
+                        targetContainer.MoveChild(kingScreen, 0);
+                    }
+
+                    var voicePlayer = kingScreen.GetNodeOrNull<Godot.AudioStreamPlayer>("KingVoicePlayer");
+                    if (voicePlayer != null)
+                    {
+                         voicePlayer.Play();
+                    }
+                    KingGlobals.VerboseLog($"✅ 成功在 {targetContainer.Name} 上铺设了国王王座背景图！");
+                }
+            }
+        }
+    }
+}
