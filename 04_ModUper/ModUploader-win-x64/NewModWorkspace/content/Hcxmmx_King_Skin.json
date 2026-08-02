@@ -1,0 +1,11 @@
+{
+  "id": "Hcxmmx_King_Skin",
+  "name": "屑国王与夜歌皮肤 (King & Serenade Skin)",
+  "author": "hcxmmx",
+  "description": "将储君战斗模型替换为《死亡细胞》中的国王，附带专属视觉特效。",
+  "version": "1.0",
+  "has_pck": true,
+  "has_dll": true,
+  "dependencies": [],
+  "affects_gameplay": false 
+}

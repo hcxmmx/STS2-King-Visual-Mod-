@@ -1,0 +1,80 @@
+id:3747763262
+
+标题:【死亡细胞】储君皮肤MOD：国王与夜歌 (The Beheaded / King)
+描述:
+[b]“只要你记得对我好，我们或许也可以在一起玩得很开心……” —— 夜歌[/b]
+
+本项目是一个面向《杀戮尖塔 2》的高质量角色视觉替换 Mod。我们将游戏中的 [b]储君 (REGENT)[/b] 全链路重构为《死亡细胞 (Dead Cells)》中的 [b]“国王 + 夜歌”[/b] 主题风格！
+
+这不是简单的模型替换，而是从底层重构了角色的动作、特效与交互逻辑，为您带来极其沉浸的一体化体验。
+
+[hr][/hr]
+[h2]✨ 核心亮点 (Features)[/h2]
+
+[list]
+[*] 👑 [b]全场景视觉接管[/b]：涵盖选人界面、战斗实体、商店驻留、篝火休息及顶部栏头像的完整模型与 UI 替换。
+[*] 🎭 [b]动态双皮肤系统[/b]：在选人界面 [b]右键点击头像[/b] 即可即时切换皮肤（无伤者白王 / 默认蓝王）！伴随动态弹幕反馈，且支持配置自动本地保存。
+[*] ⚔️ [b]动作与专属特效连携[/b]：为攻击、受击、施法注入专属的武器连段池（如武士刀、平底锅、巨镰等），并与自定义光影 Shader 完美同步。
+[*] 🦇 [b]夜歌联动系统 (Serenade System)[/b]：
+  - [b]卡牌响应[/b]：识别特定卡牌（如“君王之剑”）触发夜歌轮盘连击与残影视觉。
+  - [b]形态平滑切换[/b]：从肩部漂浮的“幼年期”到独立飞剑的“完全体”无缝过渡。
+  - [b]专属弹幕引擎[/b]：根据战斗情境（受击、铸造、待机等），夜歌会自动触发极其符合原版“病娇”人设的文字弹幕演出！
+[/list]
+
+[hr][/hr]
+[h2]⚠️ 兼容性说明 (Compatibility)[/h2]
+
+[list]
+[*] 本 Mod 当前仅对 [b]储君 (REGENT)[/b] 生效，绝对不影响其他原版角色。
+[*] 若您订阅了其他深度修改“选人界面UI”或“顶部栏头像逻辑”的 Mod，可能会产生冲突。
+[/list]
+
+[hr][/hr]
+[h2]⚖️ 引用、致谢与版权声明 (Credits & License)[/h2]
+
+[list]
+[*] 💻 [b]源码逻辑[/b]：本项目的底层逻辑代码由作者独立完成，采用 [b]MIT License[/b]。
+[*] 🎮 [b]原作致谢[/b]：感谢 [b]MegaCrit[/b] 开发的《杀戮尖塔 2》，以及 [b]Motion Twin & Evil Empire[/b] 创作的《死亡细胞》中极其经典的枭首者/国王形象。
+[*] 🎨 [b]美术与音频资产[/b]：本项目所配套的美术序列帧、音频素材均通过官方公开工具解包获取，版权完全归属于原开发商。本 Mod 仅作非盈利的同人交流与跨界联动展示，请勿用于任何商业行为！
+[*] 💬 [b]特别鸣谢[/b]：感谢死亡细胞社区提供的对话文本整理，帮助实现了“夜歌”原汁原味的交互体验。
+[/list]
+
+[hr][/hr]
+[h2]🌐 English Description[/h2]
+
+[b]"As long as you remember to be nice to me, we might just have a lot of fun together..." — Serenade[/b]
+
+This is a high-quality visual overhaul Mod for Slay the Spire 2. We have completely transformed [b]The REGENT[/b] into the [b]"King + Serenade"[/b] theme from [i]Dead Cells[/i]! 
+
+This is not a simple model swap. We have reconstructed the character's animations, VFX, and interaction logic from the ground up to create an incredibly immersive and seamless experience.
+
+[hr][/hr]
+[h2]✨ Features[/h2]
+
+[list]
+[*] 👑 [b]Full Visual Overhaul[/b]: Complete model and UI replacement covering the character select screen, combat entities, merchant interactions, campfire resting, and the top-bar portrait.
+[*] 🎭 [b]Dynamic Dual Skin System[/b]: Simply [b]Right-Click the portrait[/b] on the character select screen to instantly toggle between skins (Flawless White King / Default Blue King)! Includes dynamic text pop-ups and auto-saves your preference.
+[*] ⚔️ [b]Custom Combat & VFX[/b]: Exclusive weapon combo pools (e.g., Katana, Pan, Giant Scythe) injected for attacking, taking damage, and casting skills, perfectly synchronized with custom lighting shaders.
+[*] 🦇 [b]Serenade Synergy System[/b]:
+  - [b]Card Reactivity[/b]: Playing specific cards triggers Serenade's roulette combos and afterimage effects.
+  - [b]Form Switching[/b]: Smooth transitions from floating on the shoulder to an independent flying sword.
+  - [b]Custom Danmaku Engine[/b]: Depending on the combat situation, Serenade will trigger floating text dialogs that perfectly capture its original yandere/tsundere personality!
+[/list]
+
+[hr][/hr]
+[h2]⚠️ Compatibility[/h2]
+
+[list]
+[*] This Mod currently ONLY affects [b]The REGENT[/b] and will not alter other original characters.
+[*] Potential conflicts may arise if you use other Mods that deeply modify the character select UI or top-bar portrait logic.
+[/list]
+
+[hr][/hr]
+[h2]⚖️ Credits & License[/h2]
+
+[list]
+[*] 💻 [b]Source Code[/b]: The underlying logic code is developed independently by the author and is under the [b]MIT License[/b].
+[*] 🎮 [b]Special Thanks[/b]: Thanks to [b]MegaCrit[/b] for Slay the Spire 2, and to [b]Motion Twin & Evil Empire[/b] for the iconic Beheaded/King from Dead Cells.
+[*] 🎨 [b]Assets[/b]: Visual frames and audio assets used in this Mod were extracted using official tools. All copyrights belong to the original developers. This Mod is strictly for non-profit, fan-made cross-over appreciation.
+[*] 💬 [b]Community[/b]: Thanks to the Dead Cells community for the dialog text compilations that helped bring Serenade's authentic interactions to life.
+[/list]
