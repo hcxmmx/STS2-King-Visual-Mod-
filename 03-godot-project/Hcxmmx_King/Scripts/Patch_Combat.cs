@@ -413,7 +413,7 @@ internal static class NCreature_AnimDie_Patch
 // ==========================================
 // 🏆 极其嚣张的胜利结算
 // ==========================================
-[HarmonyPatch(typeof(MegaCrit.Sts2.Core.Combat.CombatManager), "EndCombatInternal")]
+[HarmonyPatch(typeof(MegaCrit.Sts2.Core.Combat.CombatManager), "EndCombatInternal", new Type[0])]
 internal static class CombatManager_EndCombatInternal_Patch
 {
     private static void Prefix(object __instance) 
