@@ -87,10 +87,10 @@ internal static class NSovereignBladeVfx_Ready_Patch
         var serenadeNode = serenadeScene.Instantiate<Node2D>();
         serenadeNode.Name = "SerenadeMecha";
         swordBone.AddChild(serenadeNode); // 极其霸道地挂载在骨骼上
-        
-        serenadeNode.Position = Vector2.Zero; 
+
+        serenadeNode.Position = Vector2.Zero;
         serenadeNode.Scale = new Vector2(4.0f, 4.0f); // 缩放可微调
-        
+
         // 抓取本体和特效节点
         var swordSprite = KingGlobals.FindFirstNode<AnimatedSprite2D>(serenadeNode, n => n.Name == "SwordSprite");
         var vfxSprite = KingGlobals.FindFirstNode<AnimatedSprite2D>(serenadeNode, n => n.Name == "VFX_FlyingSword");
@@ -129,7 +129,7 @@ internal static class NSovereignBladeVfx_Ready_Patch
             }
         }
         // 发射进化弹幕！
-        DanmakuEngine.Fire(KingGlobals.SerenadeForgedQuotes[KingGlobals.Rng.Next(KingGlobals.SerenadeForgedQuotes.Length)]);
+        DanmakuEngine.Fire(KingLocalization.PickQuote(SerenadeQuoteKind.Summon));
     }
 }
 
@@ -201,8 +201,7 @@ internal static class NSovereignBladeVfx_Forge_Patch
         if (serenadeNode == null) return;
 
         // 1. 极其傲娇的专属弹幕 (不变)
-        string[] forgeQuotes = { "这破铁又重了！", "给我血肉来磨砺！", "能量充盈...渴望斩杀！" };
-        DanmakuEngine.Fire(forgeQuotes[KingGlobals.Rng.Next(forgeQuotes.Length)]);
+        DanmakuEngine.Fire(KingLocalization.PickQuote(SerenadeQuoteKind.Forge));
 
         // ==========================================
         // 🚀 终极视觉方案 A：残影爆裂 + 缓动过载
@@ -214,10 +213,10 @@ internal static class NSovereignBladeVfx_Forge_Patch
             var tween = serenadeNode.CreateTween();
             Vector2 baseScale = new Vector2(4.0f, 4.0f); // 基础大小
             Vector2 surgeScale = new Vector2(6.5f, 6.5f); // 极其暴力的放大 (比之前更大)
-            
+
             // 拉长反馈时间：0.15秒炸开 -> 悬停0.1秒展现压迫感 -> 0.5秒极其平滑地缩回 (总耗时0.75秒，绝对看得到！)
             tween.TweenProperty(serenadeNode, "scale", surgeScale, 0.15).SetEase(Tween.EaseType.Out).SetTrans(Tween.TransitionType.Back);
-            tween.TweenInterval(0.1); 
+            tween.TweenInterval(0.1);
             tween.TweenProperty(serenadeNode, "scale", baseScale, 0.5).SetEase(Tween.EaseType.InOut).SetTrans(Tween.TransitionType.Cubic);
 
             // 👻 步骤 2：生成极其炫酷的血红残影
@@ -227,9 +226,9 @@ internal static class NSovereignBladeVfx_Forge_Patch
             {
                 serenadeNode.AddChild(ghost);
                 ghost.ZIndex = swordSprite.ZIndex - 1; // 垫在本体下面
-                
+
                 // 给残影染上极其浓烈的血红色
-                ghost.Modulate = new Color(1f, 0.1f, 0.1f, 0.8f); 
+                ghost.Modulate = new Color(1f, 0.1f, 0.1f, 0.8f);
 
                 var ghostTween = ghost.CreateTween();
                 ghostTween.SetParallel(true); // 让放大和变透明同时进行
@@ -237,7 +236,7 @@ internal static class NSovereignBladeVfx_Forge_Patch
                 // 残影极其夸张地向外扩散到 2.5倍，并在 0.8 秒内极其凄美地消散
                 ghostTween.TweenProperty(ghost, "scale", new Vector2(2.5f, 2.5f), 0.8).SetEase(Tween.EaseType.Out).SetTrans(Tween.TransitionType.Expo);
                 ghostTween.TweenProperty(ghost, "modulate:a", 0f, 0.8).SetEase(Tween.EaseType.In);
-                
+
                 // 残影消散后，极其干脆地自我销毁，绝不占用内存！
                 ghostTween.Chain().TweenCallback(Callable.From(() => ghost.QueueFree()));
             }

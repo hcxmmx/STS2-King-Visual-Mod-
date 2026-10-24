@@ -1,0 +1,52 @@
+{
+  "Text": {
+    "character.name": "The Beheaded",
+    "character.description": "A greedy, arrogant king, seeking new amusements and bloodshed in the Spire.\nAccompanied by the enchanted sword Serenade.",
+    "skin.white.button": "👑 White King",
+    "skin.blue.button": "👑 Blue King",
+    "skin.white.selected": "✨ Proof of a flawless victory. The White King arrives!",
+    "skin.blue.selected": "🔵 A familiar look. Back to the classics."
+  },
+  "Quotes": {
+    "Idle": [
+      "I hope you've got some food ready for me.",
+      "This island feels different somehow... Hm. Must be my imagination.",
+      "So... boooring...",
+      "What happened to all that fighting you promised?",
+      "Wake me when something happens.",
+      "Thank goodness I can't smell anything.",
+      "At least the scenery's nice."
+    ],
+    "Attack": [
+      "Hey, hurry up and hit something!",
+      "Let's keep hunting!",
+      "Yes! Kill them!",
+      "That last monster had a bit of a kick...",
+      "Where are all the monsters?!",
+      "Come on! Kill!"
+    ],
+    "Hit": [
+      "Dodge, you idiot! Are you trying to snap me in half?!",
+      "Who said anyone but me could touch him?!",
+      "Why are WE getting hit?! Hit them back!",
+      "Stop blocking blades with that lump of meat you call a body!",
+      "Hey! They got me dirty! Kill them!",
+      "Your dodging is so... boooring...",
+      "Protect me, you useless husk!"
+    ],
+    "Summon": [
+      "More food for me? Good boy!",
+      "This power... Let's keep hunting!",
+      "Now that you've woken me up, kill a few more!",
+      "We're going killing together again? Wonderful!",
+      "I'm heavier now... Hold tight. Don't drop me!",
+      "More... I need more power to tear them apart!",
+      "That's more like it! Now take me to something I can slice!"
+    ],
+    "Forge": [
+      "This scrap of iron just got heavier!",
+      "Give me flesh to hone my edge!",
+      "Brimming with power... Hungry for the kill!"
+    ]
+  }
+}

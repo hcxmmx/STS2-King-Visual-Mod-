@@ -1,6 +1,8 @@
 using System;
+using System.Reflection;
 using Godot;
 using HarmonyLib;
+using MegaCrit.Sts2.Core.Combat;
 using MegaCrit.Sts2.Core.Nodes.Combat;
 
 namespace Hcxmmx.KingMod.Scripts;
@@ -56,11 +58,6 @@ internal static class NCreature_Ready_Patch
 {
     private static void Postfix(NCreature __instance)
     {
-        KingGlobals.IsDead = false;
-        KingGlobals.IsInShop = false;
-        KingGlobals.ResetCombo(); // 进场清空连击缓存
-        KingGlobals.IsSwordForged = false; // 🚨 极其关键：进场必定是幼年期图标形态！
-        
         KingGlobals.VerboseLog(() => $"\n---> King Project: 侦测到 NCreature 试图活化！节点名称 = {__instance.Name} <---");
 
         var scene = KingGlobals.KingScene ?? KingGlobals.KingScenePreloaded;
@@ -74,8 +71,12 @@ internal static class NCreature_Ready_Patch
         var visuals = __instance.Visuals;
         if (visuals == null) return;
 
+        if (visuals.HasNode("KingMecha")) return;
+        KingGlobals.IsInShop = false;
+        KingGlobals.IsSwordForged = false;
+
         KingGlobals.VerboseLog("====== 突破所有防线！强行夺舍储君 (REGENT)！ ======");
-        
+
         var originalBody = visuals.GetNodeOrNull<Node2D>("%Visuals");
         originalBody?.Hide();
 
@@ -85,38 +86,15 @@ internal static class NCreature_Ready_Patch
 
         kingNode.Name = "KingMecha";
         visuals.AddChild(kingNode);
-        kingNode.Position = Vector2.Zero; 
+        kingNode.Position = Vector2.Zero;
         kingNode.Scale = new Vector2(4.0f, 4.0f); // 保持长官极其霸气的4倍巨大化
         kingNode.Visible = true;
 
-        // 🚨 换肤协议：寻找 Body 节点并强行注入 LUT 贴图！
-        var kingBodyNode = KingGlobals.FindFirstNode<AnimatedSprite2D>(kingNode, n => n.Name == "Body");
-        if (kingBodyNode != null && kingBodyNode.Material is ShaderMaterial shaderMat)
-        {
-            // 极其安全的资源局部化，防止误伤无辜
-            shaderMat = (ShaderMaterial)shaderMat.Duplicate();
-            kingBodyNode.Material = shaderMat;
-
-            Texture2D targetPalette = KingGlobals.IsWhiteKingSkin ? KingGlobals.PaletteWhiteKing : KingGlobals.PaletteDefault;
-            shaderMat.SetShaderParameter("palette_lut", targetPalette);
-
-            // 极其细腻的流光适配
-            if (KingGlobals.IsWhiteKingSkin)
-            {
-                shaderMat.SetShaderParameter("glow_color_1", new Color(1.0f, 0.9f, 0.5f)); // 金色流光
-                shaderMat.SetShaderParameter("glow_color_2", new Color(1.0f, 1.0f, 1.0f)); // 纯白
-            }
-            else
-            {
-                shaderMat.SetShaderParameter("glow_color_1", new Color(1.0f, 0.82f, 0.2f)); // 原版黄
-                shaderMat.SetShaderParameter("glow_color_2", new Color(0.2f, 0.8f, 1.0f));  // 原版蓝
-            }
-            KingGlobals.VerboseLog(() => $"🎨 战术皮肤已实装：{(KingGlobals.IsWhiteKingSkin ? "白王" : "蓝王")}");
-        }
+        KingGlobals.ApplyCurrentSkin(kingNode);
 
         var kingSprite = KingGlobals.FindFirstNode<AnimatedSprite2D>(kingNode);
         var kingVfx = KingGlobals.FindFirstNode<AnimatedSprite2D>(kingNode, n => n.Name == "VFX_Slash");
-        
+
         KingCombatNodeCache.Store(kingNode, kingSprite, kingVfx);
 
         // 特效节点隐形待命协议
@@ -128,6 +106,7 @@ internal static class NCreature_Ready_Patch
 
         if (kingSprite != null)
         {
+            KingPresentation.Attach(kingNode, kingSprite, __instance.Entity.CombatState);
             KingGlobals.CleanupActiveKingSprites();
             KingGlobals.ActiveKingSprites.Add(kingSprite);
 
@@ -136,7 +115,7 @@ internal static class NCreature_Ready_Patch
             {
                 if (kingSprite.Animation != "Idle" && kingSprite.Animation != "letha" && kingSprite.Animation != "travolta" && kingSprite.Animation != "what" && kingSprite.Animation != "no")
                 {
-                    kingSprite.Play("Idle"); 
+                    kingSprite.Play("Idle");
                     kingNode.Position = Vector2.Zero;
                 }
             };
@@ -207,7 +186,7 @@ internal static class NCreature_SetAnimationTrigger_Patch
     }
     private static void Postfix(NCreature __instance, string trigger)
     {
-        if (KingGlobals.IsInShop || KingGlobals.IsDead) return;
+        if (KingGlobals.IsInShop) return;
 
         var player = __instance?.Entity?.Player;
         if (player == null || !string.Equals(player.Character?.Id?.Entry, KingGlobals.TargetCharacterId, StringComparison.OrdinalIgnoreCase)) return;
@@ -215,9 +194,10 @@ internal static class NCreature_SetAnimationTrigger_Patch
         var visuals = __instance?.Visuals;
         var kingMecha = visuals?.GetNodeOrNull<Node2D>("KingMecha");
         if (kingMecha == null) return;
+        var presentation = KingPresentation.For(kingMecha);
 
         var kingSprite = KingCombatNodeCache.GetSprite(kingMecha);
-        if (kingSprite == null) return;
+        if (kingSprite == null || presentation.IsDead) return;
 
         KingGlobals.VerboseLog(() => $"---> King Project: 收到动作指令: {trigger} <---");
 
@@ -227,24 +207,20 @@ internal static class NCreature_SetAnimationTrigger_Patch
             case "AttackSingle":
             case "AttackTriple":
             {
-                // 1. 如果没存货，或者上套连招打完，随机拔出一把新武器！
-                if (KingGlobals.CurrentCombo == null || KingGlobals.CurrentComboIndex >= KingGlobals.CurrentCombo.Length)
-                {
-                    KingGlobals.CurrentCombo = KingGlobals.AttackComboPool[KingGlobals.Rng.Next(KingGlobals.AttackComboPool.Length)];
-                    KingGlobals.CurrentComboIndex = 0;
-                }
+                var stage = presentation.NextAttack(KingGlobals.Rng);
+                string currentAtkFrame = stage.Body;
+                KingPresentation.WeaponUse(kingMecha);
 
-                // 2. 拔出当前段数的物理攻击动作
-                string currentAtkFrame = KingGlobals.CurrentCombo[KingGlobals.CurrentComboIndex];
-                
                 kingSprite.Stop();
                 kingSprite.Play(currentAtkFrame);
-                
+                KingWeaponAudio.OnAnimation(kingMecha, stage);
+
                 // ==========================================
                 // 🎇 极其致命的刀光引爆逻辑
                 // ==========================================
                 var vfxSprite = KingCombatNodeCache.GetVfx(kingMecha);
-                if (vfxSprite != null && KingGlobals.AttackVfxMap.TryGetValue(currentAtkFrame, out var mappedVfx))
+                if (vfxSprite != null) { vfxSprite.Stop(); vfxSprite.Visible = false; }
+                if (vfxSprite != null && stage.Vfx is { } mappedVfx)
                 {
                     vfxSprite.Visible = true;
                     vfxSprite.Stop();
@@ -252,23 +228,20 @@ internal static class NCreature_SetAnimationTrigger_Patch
                     KingGlobals.VerboseLog(() => $"🎇 连携引爆: 动作 [{currentAtkFrame}] 映射刀光 -> [{mappedVfx}]");
                 }
 
-                KingGlobals.VerboseLog(() => $"💥 连段斩击: {currentAtkFrame} (第 {KingGlobals.CurrentComboIndex + 1}/{KingGlobals.CurrentCombo.Length} 段)");
-                KingGlobals.CurrentComboIndex++;
-                
                 kingMecha.Position = Vector2.Zero;
 
                 // ==========================================
                 // 💬 夜歌傲娇弹幕：攻击吐槽！(仅在连招第一击触发，防刷屏)
                 // ==========================================
-                if (KingGlobals.CurrentComboIndex == 1) 
+                if (presentation.ComboIndex == 1)
                 {
-                    DanmakuEngine.Fire(KingGlobals.SerenadeAttackQuotes[KingGlobals.Rng.Next(KingGlobals.SerenadeAttackQuotes.Length)]);
+                    DanmakuEngine.Fire(KingLocalization.PickQuote(SerenadeQuoteKind.Attack));
                 }
                 break;
             }
             case "Hit":
             {
-                KingGlobals.ResetCombo(); // 🚨 受击打断连击！
+                presentation.ResetCombo(); // 🚨 受击打断连击！
                 string chosenHit = KingGlobals.HitPool[KingGlobals.Rng.Next(KingGlobals.HitPool.Length)];
                 kingSprite.Stop();
                 kingSprite.Play(chosenHit);
@@ -277,12 +250,12 @@ internal static class NCreature_SetAnimationTrigger_Patch
                 // ==========================================
                 // 💬 夜歌傲娇弹幕：挨打吐槽！
                 // ==========================================
-                DanmakuEngine.Fire(KingGlobals.SerenadeHitQuotes[KingGlobals.Rng.Next(KingGlobals.SerenadeHitQuotes.Length)]);
+                DanmakuEngine.Fire(KingLocalization.PickQuote(SerenadeQuoteKind.Hit));
                 break;
             }
             case "Cast":
             {
-                KingGlobals.ResetCombo(); // 🚨 施法打断连击！
+                presentation.ResetCombo(); // 🚨 施法打断连击！
                 string chosenCast = KingGlobals.CastPool[KingGlobals.Rng.Next(KingGlobals.CastPool.Length)];
                 kingSprite.Stop();
                 kingSprite.Play(chosenCast);
@@ -291,96 +264,24 @@ internal static class NCreature_SetAnimationTrigger_Patch
                 // ==========================================
                 // 💬 夜歌傲娇弹幕：施法/无聊吐槽！
                 // ==========================================
-                DanmakuEngine.Fire(KingGlobals.SerenadeIdleQuotes[KingGlobals.Rng.Next(KingGlobals.SerenadeIdleQuotes.Length)]);
+                DanmakuEngine.Fire(KingLocalization.PickQuote(SerenadeQuoteKind.Idle));
                 break;
             }
             case "Die":
             case "Death":
             case "Dead":
-                KingGlobals.IsDead = true;
-                KingGlobals.ResetCombo();
-                string chosenDie = KingGlobals.DiePool[0]; 
+                presentation.IsDead = true;
+                presentation.ResetCombo();
+                string chosenDie = KingGlobals.DiePool[0];
                 kingSprite.Stop();
                 kingSprite.Play(chosenDie);
                 kingMecha.Position = Vector2.Zero;
                 break;
             default:
-                KingGlobals.ResetCombo();
-                kingSprite.Play("Idle"); 
+                presentation.ResetCombo();
+                kingSprite.Play("Idle");
                 kingMecha.Position = Vector2.Zero;
                 break;
-        }
-    }
-}
-
-// ==========================================
-// 💬 夜歌赛博弹幕通讯引擎 (抗崩坏安全版)
-// ==========================================
-internal static class DanmakuEngine
-{
-    public static void Fire(string text)
-    {
-        // 🚨 极其关键的安全协议：开火前全盘清理所有已死亡的丧尸节点！
-        KingGlobals.CleanupActiveKingSprites();
-        SerenadeManager.CleanUp();
-
-        Label? targetLabel = null;
-        Node2D? targetParent = null;
-
-        // 1. 智能寻的：现在是幼年期还是完全体？
-        if (KingGlobals.IsSwordForged && SerenadeManager.ActiveSerenades.Count > 0)
-        {
-            // 完全体：找那把飞剑
-            targetParent = SerenadeManager.ActiveSerenades[0];
-            if (GodotObject.IsInstanceValid(targetParent))
-            {
-                targetLabel = targetParent.GetNodeOrNull<Label>("ChatLabel");
-            }
-        }
-        else if (!KingGlobals.IsSwordForged && KingGlobals.ActiveKingSprites.Count > 0)
-        {
-            // 幼年期：找国王肩膀上的图标
-            foreach (var sprite in KingGlobals.ActiveKingSprites)
-            {
-                // 🛡️ 双重保险：碰它之前先摸摸脉搏，死了就跳过！
-                if (!GodotObject.IsInstanceValid(sprite)) continue; 
-
-                var king = sprite.GetParent() as Node2D;
-                if (king != null && GodotObject.IsInstanceValid(king))
-                {
-                    targetParent = king.GetNodeOrNull<Node2D>("SerenadePet");
-                    if (targetParent != null && GodotObject.IsInstanceValid(targetParent))
-                    {
-                        targetLabel = targetParent.GetNodeOrNull<Label>("ChatLabel");
-                        break;
-                    }
-                }
-            }
-        }
-
-        // 2. 引爆弹幕！(发射前最后一次存活确认)
-        if (targetLabel != null && GodotObject.IsInstanceValid(targetLabel) && 
-            targetParent != null && GodotObject.IsInstanceValid(targetParent))
-        {
-            targetLabel.Text = text;
-            targetLabel.Visible = true;
-            targetLabel.Modulate = new Color(1, 1, 1, 1);
-            targetLabel.Position = new Vector2(-targetLabel.Size.X / 2, -50f);
-
-            var tween = targetParent.CreateTween();
-            tween.TweenProperty(targetLabel, "position:y", targetLabel.Position.Y - 40f, 1.5f)
-                 .SetTrans(Tween.TransitionType.Quad)
-                 .SetEase(Tween.EaseType.Out);
-                 
-            tween.Parallel().TweenProperty(targetLabel, "modulate:a", 0f, 1.5f);
-            
-            // 动画播完后也要做生命检测，防止播的过程中节点被销毁导致崩溃
-            tween.TweenCallback(Callable.From(() => {
-                if (GodotObject.IsInstanceValid(targetLabel)) 
-                {
-                    targetLabel.Visible = false;
-                }
-            }));
         }
     }
 }
@@ -403,7 +304,7 @@ internal static class NCreature_AnimDie_Patch
         var kingSprite = KingCombatNodeCache.GetSprite(kingMecha);
         if (kingSprite == null) return;
 
-        KingGlobals.IsDead = true;
+        KingPresentation.For(kingMecha).IsDead = true;
         kingSprite.Stop();
         kingSprite.Play("letha");
         kingMecha.Position = Vector2.Zero;
@@ -413,10 +314,19 @@ internal static class NCreature_AnimDie_Patch
 // ==========================================
 // 🏆 极其嚣张的胜利结算
 // ==========================================
-[HarmonyPatch(typeof(MegaCrit.Sts2.Core.Combat.CombatManager), "EndCombatInternal", new Type[0])]
+// Normal combat now calls the turn-state overload; the parameterless wrapper is for tests.
+[HarmonyPatch]
 internal static class CombatManager_EndCombatInternal_Patch
 {
-    private static void Prefix(object __instance) 
+    private static MethodBase TargetMethod()
+    {
+        // CombatTurnState is internal in the game assembly, so resolve its exact type at runtime.
+        var turnStateType = typeof(CombatManager).Assembly.GetType("MegaCrit.Sts2.Core.Combat.CombatTurnState", throwOnError: true)!;
+        return AccessTools.DeclaredMethod(typeof(CombatManager), "EndCombatInternal", new[] { turnStateType })
+            ?? throw new MissingMethodException(typeof(CombatManager).FullName, "EndCombatInternal(CombatTurnState)");
+    }
+
+    private static void Prefix()
     {
         KingGlobals.VerboseLog("\n====== 🏆 战斗结束！国王开始极其嚣张地嘲讽！ ======");
         KingGlobals.CleanupActiveKingSprites();
@@ -424,6 +334,8 @@ internal static class CombatManager_EndCombatInternal_Patch
 
         foreach (var sprite in KingGlobals.ActiveKingSprites)
         {
+            if (!sprite.IsInsideTree() || sprite.Animation == "letha") continue;
+
             // 防重复嘲讽
             bool isAlreadyTaunting = (sprite.Animation == "travolta" || sprite.Animation == "no" || sprite.Animation == "what");
             if (!isAlreadyTaunting)

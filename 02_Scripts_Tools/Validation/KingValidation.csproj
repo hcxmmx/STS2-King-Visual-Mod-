@@ -1,0 +1,16 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net10.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <Sts2Dir Condition="'$(Sts2Dir)' == ''">D:\youxi\steamapps\common\Slay the Spire 2</Sts2Dir>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Remove="GodotBridge/**" />
+    <Reference Include="0Harmony">
+      <HintPath>$(Sts2Dir)\data_sts2_windows_x86_64\0Harmony.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+  </ItemGroup>
+</Project>

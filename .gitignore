@@ -1,6 +1,7 @@
 **/.godot/
 **/bin/
 **/obj/
+**/__pycache__/
 **/.vs/
 **/*.import
 **/*.png
@@ -11,3 +12,7 @@
 03-godot-project/Hcxmmx_King/Asset/
 03-godot-project/Hcxmmx_King/Audio/
 03-godot-project/Hcxmmx_King/tscn/
+/artifacts/
+/05_Preview/Generated/
+!03-godot-project/Hcxmmx_King/Presentation/scarfGlow0.png
+!03-godot-project/Hcxmmx_King/Presentation/scarfGlow1.png

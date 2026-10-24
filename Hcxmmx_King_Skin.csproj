@@ -5,10 +5,20 @@
     <LangVersion>12.0</LangVersion>
     <Nullable>enable</Nullable>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <EnableDefaultCompileItems>false</EnableDefaultCompileItems>
+    <DeployModOnBuild Condition="'$(DeployModOnBuild)' == ''">true</DeployModOnBuild>
 
     <Sts2Dir>D:\youxi\steamapps\common\Slay the Spire 2</Sts2Dir>
     <Sts2DataDir>$(Sts2Dir)\data_sts2_windows_x86_64</Sts2DataDir>
   </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Include="03-godot-project\Hcxmmx_King\Scripts\**\*.cs" />
+    <EmbeddedResource Include="03-godot-project\Hcxmmx_King\Localization\*.json"
+                      LogicalName="KingMod.Localization.%(Filename).json" />
+    <EmbeddedResource Include="03-godot-project\Hcxmmx_King\Presentation\weapons.json"
+                      LogicalName="KingMod.Presentation.weapons.json" />
+  </ItemGroup>
 
   <ItemGroup>
     <Reference Include="sts2">
@@ -22,7 +32,7 @@
     </Reference>
   </ItemGroup>
 
-  <Target Name="Copy Mod" AfterTargets="PostBuildEvent">
+  <Target Name="Copy Mod" AfterTargets="PostBuildEvent" Condition="'$(DeployModOnBuild)' == 'true'">
     <Message Text="🚀 正在将屑国王部署至尖塔前线..." Importance="high" />
     <MakeDir Directories="$(Sts2Dir)\mods\" />
     <Copy SourceFiles="$(TargetPath)" DestinationFolder="$(Sts2Dir)\mods\$(MSBuildProjectName)\" />

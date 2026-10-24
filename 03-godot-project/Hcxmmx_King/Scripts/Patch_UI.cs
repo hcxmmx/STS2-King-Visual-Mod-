@@ -1,9 +1,10 @@
 using System;
 using Godot;
 using HarmonyLib;
+using MegaCrit.Sts2.Core.Localization;
 
 // ✅ 命名空间已重构为 KingMod
-namespace Hcxmmx.KingMod.Scripts; 
+namespace Hcxmmx.KingMod.Scripts;
 
 [HarmonyPatch(typeof(MegaCrit.Sts2.Core.Nodes.Screens.CharacterSelect.NCharacterSelectScreen), "SelectCharacter")]
 internal static class NCharacterSelectScreen_SelectCharacter_Patch
@@ -61,16 +62,16 @@ internal static class NCharacterSelectScreen_SelectCharacter_Patch
                 // 如果这里报空，说明玩家手速太快，预加载还没搞完。LoadThreadedGet 会极其智能地等它加载完再返回。
                 KingGlobals.KingSelectUiScene = (PackedScene)ResourceLoader.LoadThreadedGet(KingGlobals.KingSelectUiPath);
             }
-            
+
             var kingScreenScene = KingGlobals.KingSelectUiScene;
-            
+
             if (kingScreenScene != null)
             {
                 var kingScreen = kingScreenScene.Instantiate<Control>();
                 kingScreen.SetAnchorsPreset(Control.LayoutPreset.FullRect);
                 bgContainer.AddChild(kingScreen);
                 KingGlobals.VerboseLog("✅ 狂风骤雨王座背景铺设完毕！");
-                
+
                 // 把 kingScreen 加到 bgContainer 之后...
                 var voicePlayer = kingScreen.GetNodeOrNull<AudioStreamPlayer>("KingVoicePlayer");
                 if (voicePlayer != null)
@@ -89,13 +90,13 @@ internal static class NCharacterSelectScreen_SelectCharacter_Patch
         {
             // 🎯 修改为细胞人的名字
             var nameTraverse = Traverse.Create(nameLabel);
-            nameTraverse.Method("SetTextAutoSize", new object[] { "枭首者" }).GetValue();
+            nameTraverse.Method("SetTextAutoSize", new object[] { KingLocalization.GetText("character.name") }).GetValue();
         }
 
         if (descLabel != null)
         {
             // 🎯 修改为极其霸气的专属介绍
-            descLabel.Text = "贪婪而傲慢的国王，前来尖塔寻找新的乐子与杀戮。\n带着一把魔剑夜歌";
+            descLabel.Text = KingLocalization.GetText("character.description");
         }
 
         if (__state != null)
@@ -131,7 +132,7 @@ internal static class NCharacterSelectButton_Init_Patch
     }
 }
 
-// 🔇 头像替换模块（暂未制作头像，已全段注释休眠）
+// 选人头像替换。
 
 [HarmonyPatch(typeof(MegaCrit.Sts2.Core.Nodes.Screens.CharacterSelect.NCharacterSelectButton), "Init")]
 internal static class NCharacterSelectButton_Init_Patch_Avatar
@@ -190,11 +191,18 @@ internal static class NCharacterSelectButton_SkinToggle_Patch
 
         Action updateBtnVisuals = () =>
         {
-            toggleBtn.Text = KingGlobals.IsWhiteKingSkin ? "👑切换：白王" : "👑切换：蓝王";
+            toggleBtn.Text = KingLocalization.GetText(KingGlobals.IsWhiteKingSkin ? "skin.white.button" : "skin.blue.button");
             toggleBtn.AddThemeColorOverride("font_color", KingGlobals.IsWhiteKingSkin ? new Color(1f, 0.9f, 0.5f) : new Color(0.5f, 0.8f, 1f));
         };
 
         updateBtnVisuals();
+        var locManager = LocManager.Instance;
+        if (locManager != null)
+        {
+            LocManager.LocaleChangeCallback refreshText = () => updateBtnVisuals();
+            locManager.SubscribeToLocaleChange(refreshText);
+            toggleBtn.TreeExiting += () => locManager.UnsubscribeToLocaleChange(refreshText);
+        }
         toggleBtn.AddThemeFontSizeOverride("font_size", 16);
         toggleBtn.AddThemeConstantOverride("outline_size", 4);
         toggleBtn.AddThemeColorOverride("font_outline_color", Colors.Black);
@@ -219,7 +227,7 @@ internal static class NCharacterSelectButton_SkinToggle_Patch
             KingGlobals.SaveConfig();
             updateBtnVisuals();
 
-            string quote = KingGlobals.IsWhiteKingSkin ? "✨无伤的证明，白王降临！" : "🔵熟悉的味道，重返经典。";
+            string quote = KingLocalization.GetText(KingGlobals.IsWhiteKingSkin ? "skin.white.selected" : "skin.blue.selected");
             FireDynamicDanmaku(__instance, quote, KingGlobals.IsWhiteKingSkin);
             toggleBtn.AcceptEvent();
         };
@@ -238,8 +246,8 @@ internal static class NCharacterSelectButton_SkinToggle_Patch
 
         parent.AddChild(label);
 
-        float estimatedTextWidth = Mathf.Max(140f, text.Length * 18f);
-        label.Position = new Vector2(parent.Size.X / 2f - estimatedTextWidth / 2f, -20f);
+        label.ResetSize();
+        label.Position = new Vector2((parent.Size.X - label.Size.X) / 2f, -20f);
 
         var tween = parent.CreateTween();
         tween.TweenProperty(label, "position:y", label.Position.Y - 50f, 1.2f).SetTrans(Tween.TransitionType.Quad).SetEase(Tween.EaseType.Out);
@@ -258,26 +266,26 @@ internal static class NMultiplayerLoadGameScreen_InitializeAsHost_Patch
     {
         KingGlobals.VerboseLog("\n====== 🌐 多人读档雷达 (Host)：侦测到界面加载！ ======");
 
-        var bgContainer = __instance.GetNodeOrNull<Godot.Control>("%BgContainer") 
+        var bgContainer = __instance.GetNodeOrNull<Godot.Control>("%BgContainer")
                        ?? __instance.GetNodeOrNull<Godot.Control>("BgContainer")
                        ?? __instance.GetNodeOrNull<Godot.Control>("%Bg");
-        
+
         var targetContainer = bgContainer ?? (__instance as Godot.Control);
 
         string charId = "";
         try {
-            var playersList = Traverse.Create(run).Property("Players").GetValue<System.Collections.IList>() 
+            var playersList = Traverse.Create(run).Property("Players").GetValue<System.Collections.IList>()
                            ?? Traverse.Create(run).Field("Players").GetValue<System.Collections.IList>();
-            
+
             if (playersList != null && playersList.Count > 0)
             {
-                var hostPlayer = playersList[0]; 
-                var modelIdObj = Traverse.Create(hostPlayer).Property("CharacterId").GetValue() 
+                var hostPlayer = playersList[0];
+                var modelIdObj = Traverse.Create(hostPlayer).Property("CharacterId").GetValue()
                               ?? Traverse.Create(hostPlayer).Field("CharacterId").GetValue();
-                
-                if (modelIdObj != null) charId = modelIdObj.ToString() ?? ""; 
+
+                if (modelIdObj != null) charId = modelIdObj.ToString() ?? "";
             }
-        } catch (Exception ex) { 
+        } catch (Exception ex) {
             KingGlobals.ErrorLog($"[Error] Host提取角色ID异常: {ex.Message}");
         }
         KingGlobals.VerboseLog($"Host 最终提取的 ID: '{charId}'");
@@ -287,61 +295,7 @@ internal static class NMultiplayerLoadGameScreen_InitializeAsHost_Patch
             return;
         }
 
-        if (targetContainer != null)
-        {
-            if (bgContainer != null)
-            {
-                foreach (Godot.Node child in bgContainer.GetChildren())
-                {
-                    if (child is Godot.CanvasItem canvasItem) canvasItem.Hide();
-                }
-            }
-            else
-            {
-                var staticBg = targetContainer.GetNodeOrNull<Godot.CanvasItem>("StaticBg");
-                if (staticBg != null) staticBg.Hide();
-
-                var animatedBg = targetContainer.GetNodeOrNull<Godot.CanvasItem>("AnimatedBg");
-                if (animatedBg != null) animatedBg.Hide();
-            }
-
-            var existingScreen = targetContainer.GetNodeOrNull<Control>("KingSelectUI_MP");
-            if (existingScreen != null)
-            {
-                existingScreen.Show();
-            }
-            else
-            {
-                if (KingGlobals.KingSelectUiScene == null)
-                {
-                    KingGlobals.KingSelectUiScene = KingGlobals.KingSelectUiPreloaded;
-                }
-                if (KingGlobals.KingSelectUiScene == null)
-                {
-                    KingGlobals.KingSelectUiScene = (PackedScene)Godot.ResourceLoader.LoadThreadedGet(KingGlobals.KingSelectUiPath);
-                }
-
-                if (KingGlobals.KingSelectUiScene != null)
-                {
-                    var kingScreen = KingGlobals.KingSelectUiScene.Instantiate<Godot.Control>();
-                    kingScreen.Name = "KingSelectUI_MP";
-                    kingScreen.SetAnchorsPreset(Godot.Control.LayoutPreset.FullRect);
-                    targetContainer.AddChild(kingScreen);
-
-                    if (bgContainer == null) 
-                    {
-                        targetContainer.MoveChild(kingScreen, 0);
-                    }
-                    
-                    var voicePlayer = kingScreen.GetNodeOrNull<Godot.AudioStreamPlayer>("KingVoicePlayer");
-                    if (voicePlayer != null)
-                    {
-                         voicePlayer.Play();
-                    }
-                    KingGlobals.VerboseLog($"✅ 成功在 {targetContainer.Name} 上铺设了国王王座背景图！");
-                }
-            }
-        }
+        KingSelectBackground.Apply(targetContainer, bgContainer != null);
     }
 }
 
@@ -355,7 +309,7 @@ internal static class NMultiplayerLoadGameScreen_InitializeAsClient_Patch
     {
         KingGlobals.VerboseLog("\n====== 🌐 多人读档雷达 (Client)：侦测到界面加载！ ======");
 
-        var bgContainer = __instance.GetNodeOrNull<Godot.Control>("%BgContainer") 
+        var bgContainer = __instance.GetNodeOrNull<Godot.Control>("%BgContainer")
                        ?? __instance.GetNodeOrNull<Godot.Control>("BgContainer")
                        ?? __instance.GetNodeOrNull<Godot.Control>("%Bg");
         var targetContainer = bgContainer ?? (__instance as Godot.Control);
@@ -365,19 +319,19 @@ internal static class NMultiplayerLoadGameScreen_InitializeAsClient_Patch
             var runObj = Traverse.Create(message).Property("Run").GetValue() ?? Traverse.Create(message).Field("Run").GetValue();
             if (runObj != null)
             {
-                var playersList = Traverse.Create(runObj).Property("Players").GetValue<System.Collections.IList>() 
+                var playersList = Traverse.Create(runObj).Property("Players").GetValue<System.Collections.IList>()
                                ?? Traverse.Create(runObj).Field("Players").GetValue<System.Collections.IList>();
-                
+
                 if (playersList != null && playersList.Count > 0)
                 {
                     var targetPlayer = playersList[0];
-                    var modelIdObj = Traverse.Create(targetPlayer).Property("CharacterId").GetValue() 
+                    var modelIdObj = Traverse.Create(targetPlayer).Property("CharacterId").GetValue()
                                   ?? Traverse.Create(targetPlayer).Field("CharacterId").GetValue();
-                    
+
                     if (modelIdObj != null) charId = modelIdObj.ToString() ?? "";
                 }
             }
-        } catch (Exception ex) { 
+        } catch (Exception ex) {
             KingGlobals.ErrorLog($"[Error] Client提取角色ID异常: {ex.Message}");
         }
         KingGlobals.VerboseLog($"Client 最终提取的 ID: '{charId}'");
@@ -387,60 +341,6 @@ internal static class NMultiplayerLoadGameScreen_InitializeAsClient_Patch
             return;
         }
 
-        if (targetContainer != null)
-        {
-            if (bgContainer != null)
-            {
-                foreach (Godot.Node child in bgContainer.GetChildren())
-                {
-                    if (child is Godot.CanvasItem canvasItem) canvasItem.Hide();
-                }
-            }
-            else
-            {
-                var staticBg = targetContainer.GetNodeOrNull<Godot.CanvasItem>("StaticBg");
-                if (staticBg != null) staticBg.Hide();
-
-                var animatedBg = targetContainer.GetNodeOrNull<Godot.CanvasItem>("AnimatedBg");
-                if (animatedBg != null) animatedBg.Hide();
-            }
-
-            var existingScreen = targetContainer.GetNodeOrNull<Control>("KingSelectUI_MP");
-            if (existingScreen != null)
-            {
-                existingScreen.Show();
-            }
-            else
-            {
-                if (KingGlobals.KingSelectUiScene == null)
-                {
-                    KingGlobals.KingSelectUiScene = KingGlobals.KingSelectUiPreloaded;
-                }
-                if (KingGlobals.KingSelectUiScene == null)
-                {
-                    KingGlobals.KingSelectUiScene = (PackedScene)Godot.ResourceLoader.LoadThreadedGet(KingGlobals.KingSelectUiPath);
-                }
-
-                if (KingGlobals.KingSelectUiScene != null)
-                {
-                    var kingScreen = KingGlobals.KingSelectUiScene.Instantiate<Godot.Control>();
-                    kingScreen.Name = "KingSelectUI_MP";
-                    kingScreen.SetAnchorsPreset(Godot.Control.LayoutPreset.FullRect);
-                    targetContainer.AddChild(kingScreen);
-
-                    if (bgContainer == null) 
-                    {
-                        targetContainer.MoveChild(kingScreen, 0);
-                    }
-
-                    var voicePlayer = kingScreen.GetNodeOrNull<Godot.AudioStreamPlayer>("KingVoicePlayer");
-                    if (voicePlayer != null)
-                    {
-                         voicePlayer.Play();
-                    }
-                    KingGlobals.VerboseLog($"✅ 成功在 {targetContainer.Name} 上铺设了国王王座背景图！");
-                }
-            }
-        }
+        KingSelectBackground.Apply(targetContainer, bgContainer != null);
     }
 }
