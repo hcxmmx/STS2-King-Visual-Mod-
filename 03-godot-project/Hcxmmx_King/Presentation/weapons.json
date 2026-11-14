@@ -13,12 +13,18 @@
             "source_hit_frame": 6,
             "release": {
               "path": "res://Hcxmmx_King/Presentation/Audio/weapon_katana_release1.ogg",
-              "volume_db": -6.0,
+              "volume_db": 0.0,
               "offset_seconds": 0.0
             },
             "hit": {
               "path": "res://Hcxmmx_King/Presentation/Audio/weapon_katana_hit1.ogg",
-              "volume_db": -6.0,
+              "volume_db": 0.0,
+              "offset_seconds": 0.0
+            },
+            "source_strike_index": 0,
+            "charge": {
+              "path": "res://Hcxmmx_King/Presentation/Audio/weapon_katana_charge1.ogg",
+              "volume_db": 0.0,
               "offset_seconds": 0.0
             }
           }
@@ -31,12 +37,18 @@
             "source_hit_frame": 5,
             "release": {
               "path": "res://Hcxmmx_King/Presentation/Audio/weapon_katana_release1.ogg",
-              "volume_db": -6.0,
+              "volume_db": 0.0,
               "offset_seconds": 0.0
             },
             "hit": {
               "path": "res://Hcxmmx_King/Presentation/Audio/weapon_katana_hit1.ogg",
-              "volume_db": -6.0,
+              "volume_db": 0.0,
+              "offset_seconds": 0.0
+            },
+            "source_strike_index": 1,
+            "charge": {
+              "path": "res://Hcxmmx_King/Presentation/Audio/weapon_katana_charge1.ogg",
+              "volume_db": 0.0,
               "offset_seconds": 0.0
             }
           }
@@ -49,12 +61,18 @@
             "source_hit_frame": 3,
             "release": {
               "path": "res://Hcxmmx_King/Presentation/Audio/weapon_katana_release3.ogg",
-              "volume_db": -6.0,
+              "volume_db": 0.0,
               "offset_seconds": 0.0
             },
             "hit": {
               "path": "res://Hcxmmx_King/Presentation/Audio/weapon_katana_hit1.ogg",
-              "volume_db": -6.0,
+              "volume_db": 0.0,
+              "offset_seconds": 0.0
+            },
+            "source_strike_index": 2,
+            "charge": {
+              "path": "res://Hcxmmx_King/Presentation/Audio/weapon_katana_charge1.ogg",
+              "volume_db": 0.0,
               "offset_seconds": 0.0
             }
           }
@@ -67,7 +85,27 @@
       "stages": [
         {
           "body": "AtkKingScepter",
-          "vfx": null
+          "vfx": null,
+          "audio": {
+            "source_item": "KingScepter",
+            "source_strike_index": 0,
+            "source_hit_frame": 0,
+            "release": {
+              "path": "res://Hcxmmx_King/Presentation/Audio/weapon_kingscepter_release.ogg",
+              "volume_db": 0.0,
+              "offset_seconds": 0.0
+            },
+            "hit": {
+              "path": "res://Hcxmmx_King/Presentation/Audio/weapon_kingscepter_hit.ogg",
+              "volume_db": 0.0,
+              "offset_seconds": 0.0
+            },
+            "charge": {
+              "path": "res://Hcxmmx_King/Presentation/Audio/weapon_eblade_charge2.ogg",
+              "volume_db": 0.0,
+              "offset_seconds": 0.0
+            }
+          }
         }
       ]
     },
@@ -77,15 +115,65 @@
       "stages": [
         {
           "body": "AtkVampireKillerA",
-          "vfx": "fxAtkVampireKillerA"
+          "vfx": "fxAtkVampireKillerA",
+          "audio": {
+            "source_item": "VampireKiller",
+            "source_strike_index": 0,
+            "source_hit_frame": 6,
+            "release": {
+              "path": "res://Hcxmmx_King/Presentation/Audio/purpleDLC_vampireKiller_releaseA.ogg",
+              "volume_db": 0.0,
+              "offset_seconds": 0.0
+            },
+            "hit": {
+              "path": "res://Hcxmmx_King/Presentation/Audio/purpleDLC_vampireKiller_hit.ogg",
+              "volume_db": 0.0,
+              "offset_seconds": 0.0
+            }
+          }
         },
         {
           "body": "AtkVampireKillerB",
-          "vfx": "fxAtkVampireKillerB"
+          "vfx": "fxAtkVampireKillerB",
+          "audio": {
+            "source_item": "VampireKiller",
+            "source_strike_index": 1,
+            "source_hit_frame": 10,
+            "release": {
+              "path": "res://Hcxmmx_King/Presentation/Audio/purpleDLC_vampireKiller_releaseB.ogg",
+              "volume_db": 0.0,
+              "offset_seconds": 0.0
+            },
+            "hit": {
+              "path": "res://Hcxmmx_King/Presentation/Audio/purpleDLC_vampireKiller_hit.ogg",
+              "volume_db": 0.0,
+              "offset_seconds": 0.0
+            }
+          }
         },
         {
           "body": "AtkVampireKillerC",
-          "vfx": "fxAtkVampireKillerC"
+          "vfx": "fxAtkVampireKillerC",
+          "audio": {
+            "source_item": "VampireKiller",
+            "source_strike_index": 2,
+            "source_hit_frame": 17,
+            "release": {
+              "path": "res://Hcxmmx_King/Presentation/Audio/purpleDLC_vampireKiller_releaseC.ogg",
+              "volume_db": 0.0,
+              "offset_seconds": 0.0
+            },
+            "hit": {
+              "path": "res://Hcxmmx_King/Presentation/Audio/purpleDLC_vampireKiller_hit.ogg",
+              "volume_db": 0.0,
+              "offset_seconds": 0.0
+            },
+            "charge": {
+              "path": "res://Hcxmmx_King/Presentation/Audio/purpleDLC_vampireKiller_hit03.ogg",
+              "volume_db": 0.0,
+              "offset_seconds": 0.0
+            }
+          }
         }
       ]
     },
@@ -95,15 +183,75 @@
       "stages": [
         {
           "body": "atkBroadSwordA",
-          "vfx": "fxAtkBroadSwordA"
+          "vfx": "fxAtkBroadSwordA",
+          "audio": {
+            "source_item": "BroadSword",
+            "source_strike_index": 0,
+            "source_hit_frame": 8,
+            "release": {
+              "path": "res://Hcxmmx_King/Presentation/Audio/weapon_broadsword_release1.ogg",
+              "volume_db": 0.0,
+              "offset_seconds": 0.0
+            },
+            "hit": {
+              "path": "res://Hcxmmx_King/Presentation/Audio/hit_broadsword.ogg",
+              "volume_db": 0.0,
+              "offset_seconds": 0.0
+            },
+            "charge": {
+              "path": "res://Hcxmmx_King/Presentation/Audio/weapon_broadsword_charge1.ogg",
+              "volume_db": 0.0,
+              "offset_seconds": 0.0
+            }
+          }
         },
         {
           "body": "atkBroadSwordB",
-          "vfx": "fxAtkBroadSwordB"
+          "vfx": "fxAtkBroadSwordB",
+          "audio": {
+            "source_item": "BroadSword",
+            "source_strike_index": 1,
+            "source_hit_frame": 12,
+            "release": {
+              "path": "res://Hcxmmx_King/Presentation/Audio/weapon_broadsword_release2.ogg",
+              "volume_db": 0.0,
+              "offset_seconds": 0.0
+            },
+            "hit": {
+              "path": "res://Hcxmmx_King/Presentation/Audio/hit_broadsword.ogg",
+              "volume_db": 0.0,
+              "offset_seconds": 0.0
+            },
+            "charge": {
+              "path": "res://Hcxmmx_King/Presentation/Audio/weapon_broadsword_charge2.ogg",
+              "volume_db": 0.0,
+              "offset_seconds": 0.0
+            }
+          }
         },
         {
           "body": "atkBroadSwordC",
-          "vfx": "fxAtkBroadSwordC"
+          "vfx": "fxAtkBroadSwordC",
+          "audio": {
+            "source_item": "BroadSword",
+            "source_strike_index": 2,
+            "source_hit_frame": 16,
+            "release": {
+              "path": "res://Hcxmmx_King/Presentation/Audio/weapon_broadsword_release3.ogg",
+              "volume_db": 0.0,
+              "offset_seconds": 0.0
+            },
+            "hit": {
+              "path": "res://Hcxmmx_King/Presentation/Audio/hit_broadsword.ogg",
+              "volume_db": 0.0,
+              "offset_seconds": 0.0
+            },
+            "charge": {
+              "path": "res://Hcxmmx_King/Presentation/Audio/weapon_broadsword_charge3.ogg",
+              "volume_db": 0.0,
+              "offset_seconds": 0.0
+            }
+          }
         }
       ]
     },
@@ -119,14 +267,15 @@
             "source_hit_frame": 8,
             "release": {
               "path": "res://Hcxmmx_King/Presentation/Audio/weapon_pan_release1.ogg",
-              "volume_db": -6.0,
+              "volume_db": 0.0,
               "offset_seconds": 0.0
             },
             "hit": {
               "path": "res://Hcxmmx_King/Presentation/Audio/weapon_pan_hit1.ogg",
-              "volume_db": -6.0,
+              "volume_db": 0.0,
               "offset_seconds": 0.0
-            }
+            },
+            "source_strike_index": 0
           }
         },
         {
@@ -137,14 +286,15 @@
             "source_hit_frame": 5,
             "release": {
               "path": "res://Hcxmmx_King/Presentation/Audio/weapon_pan_release2.ogg",
-              "volume_db": -6.0,
+              "volume_db": 0.0,
               "offset_seconds": 0.0
             },
             "hit": {
               "path": "res://Hcxmmx_King/Presentation/Audio/weapon_pan_hit2.ogg",
-              "volume_db": -6.0,
+              "volume_db": 0.0,
               "offset_seconds": 0.0
-            }
+            },
+            "source_strike_index": 1
           }
         },
         {
@@ -155,14 +305,15 @@
             "source_hit_frame": 6,
             "release": {
               "path": "res://Hcxmmx_King/Presentation/Audio/weapon_pan_release3.ogg",
-              "volume_db": -6.0,
+              "volume_db": 0.0,
               "offset_seconds": 0.0
             },
             "hit": {
               "path": "res://Hcxmmx_King/Presentation/Audio/weapon_pan_hit3.ogg",
-              "volume_db": -6.0,
+              "volume_db": 0.0,
               "offset_seconds": 0.0
-            }
+            },
+            "source_strike_index": 2
           }
         },
         {
@@ -173,14 +324,15 @@
             "source_hit_frame": 9,
             "release": {
               "path": "res://Hcxmmx_King/Presentation/Audio/weapon_pan_release4.ogg",
-              "volume_db": -6.0,
+              "volume_db": 0.0,
               "offset_seconds": 0.0
             },
             "hit": {
               "path": "res://Hcxmmx_King/Presentation/Audio/weapon_pan_hit4.ogg",
-              "volume_db": -6.0,
+              "volume_db": 0.0,
               "offset_seconds": 0.0
-            }
+            },
+            "source_strike_index": 3
           }
         }
       ]
@@ -191,15 +343,60 @@
       "stages": [
         {
           "body": "atkRapierA",
-          "vfx": "fxRapierA"
+          "vfx": "fxRapierA",
+          "audio": {
+            "source_item": "Rapier",
+            "source_strike_index": 0,
+            "source_hit_frame": 6,
+            "release": {
+              "path": "res://Hcxmmx_King/Presentation/Audio/weapon_rapier_release.ogg",
+              "volume_db": 0.0,
+              "offset_seconds": 0.0
+            },
+            "hit": {
+              "path": "res://Hcxmmx_King/Presentation/Audio/hit_blade.ogg",
+              "volume_db": 0.0,
+              "offset_seconds": 0.0
+            }
+          }
         },
         {
           "body": "atkRapierB",
-          "vfx": "fxRapierB"
+          "vfx": "fxRapierB",
+          "audio": {
+            "source_item": "Rapier",
+            "source_strike_index": 1,
+            "source_hit_frame": 2,
+            "release": {
+              "path": "res://Hcxmmx_King/Presentation/Audio/weapon_kunai_release.ogg",
+              "volume_db": 0.0,
+              "offset_seconds": 0.0
+            },
+            "hit": {
+              "path": "res://Hcxmmx_King/Presentation/Audio/hit_blade.ogg",
+              "volume_db": 0.0,
+              "offset_seconds": 0.0
+            }
+          }
         },
         {
           "body": "atkRapierC",
-          "vfx": "fxRapierC"
+          "vfx": "fxRapierC",
+          "audio": {
+            "source_item": "Rapier",
+            "source_strike_index": 0,
+            "source_hit_frame": 6,
+            "release": {
+              "path": "res://Hcxmmx_King/Presentation/Audio/weapon_rapier_release.ogg",
+              "volume_db": 0.0,
+              "offset_seconds": 0.0
+            },
+            "hit": {
+              "path": "res://Hcxmmx_King/Presentation/Audio/hit_blade.ogg",
+              "volume_db": 0.0,
+              "offset_seconds": 0.0
+            }
+          }
         }
       ]
     },
@@ -209,19 +406,99 @@
       "stages": [
         {
           "body": "atkScytheA1",
-          "vfx": "fxAtkScytheA1"
+          "vfx": "fxAtkScytheA1",
+          "audio": {
+            "source_item": "TickScytheRight",
+            "source_strike_index": 0,
+            "source_hit_frame": 23,
+            "release": {
+              "path": "res://Hcxmmx_King/Presentation/Audio/weapon_tickscythe_release1.ogg",
+              "volume_db": 0.0,
+              "offset_seconds": 0.0
+            },
+            "hit": {
+              "path": "res://Hcxmmx_King/Presentation/Audio/hit_broadsword.ogg",
+              "volume_db": 0.0,
+              "offset_seconds": 0.0
+            },
+            "charge": {
+              "path": "res://Hcxmmx_King/Presentation/Audio/weapon_tickscythe_charge2.ogg",
+              "volume_db": 0.0,
+              "offset_seconds": 0.0
+            }
+          }
         },
         {
           "body": "atkScytheA2",
-          "vfx": "fxAtkScytheA2"
+          "vfx": "fxAtkScytheA2",
+          "audio": {
+            "source_item": "TickScytheRight",
+            "source_strike_index": 1,
+            "source_hit_frame": 22,
+            "release": {
+              "path": "res://Hcxmmx_King/Presentation/Audio/weapon_tickscythe_release1.ogg",
+              "volume_db": 0.0,
+              "offset_seconds": 0.0
+            },
+            "hit": {
+              "path": "res://Hcxmmx_King/Presentation/Audio/hit_broadsword.ogg",
+              "volume_db": 0.0,
+              "offset_seconds": 0.0
+            },
+            "charge": {
+              "path": "res://Hcxmmx_King/Presentation/Audio/weapon_tickscythe_charge2.ogg",
+              "volume_db": 0.0,
+              "offset_seconds": 0.0
+            }
+          }
         },
         {
           "body": "atkScytheB1",
-          "vfx": "fxAtkScytheB2"
+          "vfx": "fxAtkScytheB2",
+          "audio": {
+            "source_item": "TickScytheLeft",
+            "source_strike_index": 0,
+            "source_hit_frame": 17,
+            "release": {
+              "path": "res://Hcxmmx_King/Presentation/Audio/weapon_tickscythe_release1.ogg",
+              "volume_db": 0.0,
+              "offset_seconds": 0.0
+            },
+            "hit": {
+              "path": "res://Hcxmmx_King/Presentation/Audio/hit_broadsword.ogg",
+              "volume_db": 0.0,
+              "offset_seconds": 0.0
+            },
+            "charge": {
+              "path": "res://Hcxmmx_King/Presentation/Audio/weapon_tickscythe_charge1.ogg",
+              "volume_db": 0.0,
+              "offset_seconds": 0.0
+            }
+          }
         },
         {
           "body": "atkScytheB2",
-          "vfx": "fxAtkScytheB1"
+          "vfx": "fxAtkScytheB1",
+          "audio": {
+            "source_item": "TickScytheLeft",
+            "source_strike_index": 1,
+            "source_hit_frame": 17,
+            "release": {
+              "path": "res://Hcxmmx_King/Presentation/Audio/weapon_tickscythe_release1.ogg",
+              "volume_db": 0.0,
+              "offset_seconds": 0.0
+            },
+            "hit": {
+              "path": "res://Hcxmmx_King/Presentation/Audio/hit_broadsword.ogg",
+              "volume_db": 0.0,
+              "offset_seconds": 0.0
+            },
+            "charge": {
+              "path": "res://Hcxmmx_King/Presentation/Audio/weapon_tickscythe_charge3.ogg",
+              "volume_db": 0.0,
+              "offset_seconds": 0.0
+            }
+          }
         }
       ]
     },
@@ -231,15 +508,75 @@
       "stages": [
         {
           "body": "atkTombstoneA3",
-          "vfx": "fxTombestoneAtkA"
+          "vfx": "fxTombestoneAtkA",
+          "audio": {
+            "source_item": "Tombstone",
+            "source_strike_index": 0,
+            "source_hit_frame": 14,
+            "release": {
+              "path": "res://Hcxmmx_King/Presentation/Audio/weapon_tombstone_release1.ogg",
+              "volume_db": 0.0,
+              "offset_seconds": 0.0
+            },
+            "hit": {
+              "path": "res://Hcxmmx_King/Presentation/Audio/weapon_tombstone_hit.ogg",
+              "volume_db": 0.0,
+              "offset_seconds": 0.0
+            },
+            "charge": {
+              "path": "res://Hcxmmx_King/Presentation/Audio/weapon_tombstone_charge1.ogg",
+              "volume_db": 0.0,
+              "offset_seconds": 0.0
+            }
+          }
         },
         {
           "body": "atkTombstoneB3",
-          "vfx": "fxTombestoneAtkB"
+          "vfx": "fxTombestoneAtkB",
+          "audio": {
+            "source_item": "Tombstone",
+            "source_strike_index": 1,
+            "source_hit_frame": 15,
+            "release": {
+              "path": "res://Hcxmmx_King/Presentation/Audio/weapon_tombstone_release1.ogg",
+              "volume_db": 0.0,
+              "offset_seconds": 0.0
+            },
+            "hit": {
+              "path": "res://Hcxmmx_King/Presentation/Audio/weapon_tombstone_hit.ogg",
+              "volume_db": 0.0,
+              "offset_seconds": 0.0
+            },
+            "charge": {
+              "path": "res://Hcxmmx_King/Presentation/Audio/weapon_tombstone_charge2.ogg",
+              "volume_db": 0.0,
+              "offset_seconds": 0.0
+            }
+          }
         },
         {
           "body": "atkTombstoneE3",
-          "vfx": "fxTombestoneAtkC"
+          "vfx": "fxTombestoneAtkC",
+          "audio": {
+            "source_item": "Tombstone",
+            "source_strike_index": 2,
+            "source_hit_frame": 16,
+            "release": {
+              "path": "res://Hcxmmx_King/Presentation/Audio/weapon_tombstone_release3.ogg",
+              "volume_db": 0.0,
+              "offset_seconds": 0.0
+            },
+            "hit": {
+              "path": "res://Hcxmmx_King/Presentation/Audio/weapon_tombstone_hit3.ogg",
+              "volume_db": 0.0,
+              "offset_seconds": 0.0
+            },
+            "charge": {
+              "path": "res://Hcxmmx_King/Presentation/Audio/weapon_tombstone_charge3.ogg",
+              "volume_db": 0.0,
+              "offset_seconds": 0.0
+            }
+          }
         }
       ]
     },
@@ -249,15 +586,75 @@
       "stages": [
         {
           "body": "halberdAtkA",
-          "vfx": "halberdFxAtkA"
+          "vfx": "halberdFxAtkA",
+          "audio": {
+            "source_item": "KingsSpear",
+            "source_strike_index": 0,
+            "source_hit_frame": 18,
+            "release": {
+              "path": "res://Hcxmmx_King/Presentation/Audio/weapon_doublelance_release1.ogg",
+              "volume_db": 0.0,
+              "offset_seconds": 0.0
+            },
+            "hit": {
+              "path": "res://Hcxmmx_King/Presentation/Audio/hit_blade.ogg",
+              "volume_db": 0.0,
+              "offset_seconds": 0.0
+            },
+            "charge": {
+              "path": "res://Hcxmmx_King/Presentation/Audio/weapon_spear_charge1.ogg",
+              "volume_db": 0.0,
+              "offset_seconds": 0.0
+            }
+          }
         },
         {
           "body": "halberdAtkB",
-          "vfx": "halberdFxAtkB"
+          "vfx": "halberdFxAtkB",
+          "audio": {
+            "source_item": "KingsSpear",
+            "source_strike_index": 1,
+            "source_hit_frame": 5,
+            "release": {
+              "path": "res://Hcxmmx_King/Presentation/Audio/weapon_doublelance_release2.ogg",
+              "volume_db": 0.0,
+              "offset_seconds": 0.0
+            },
+            "hit": {
+              "path": "res://Hcxmmx_King/Presentation/Audio/hit_blade.ogg",
+              "volume_db": 0.0,
+              "offset_seconds": 0.0
+            },
+            "charge": {
+              "path": "res://Hcxmmx_King/Presentation/Audio/weapon_stunmace_charge1.ogg",
+              "volume_db": 0.0,
+              "offset_seconds": 0.0
+            }
+          }
         },
         {
           "body": "halberdAtkC",
-          "vfx": "halberdFxAtkC"
+          "vfx": "halberdFxAtkC",
+          "audio": {
+            "source_item": "KingsSpear",
+            "source_strike_index": 2,
+            "source_hit_frame": 9,
+            "release": {
+              "path": "res://Hcxmmx_King/Presentation/Audio/weapon_doublelance_release3.ogg",
+              "volume_db": 0.0,
+              "offset_seconds": 0.0
+            },
+            "hit": {
+              "path": "res://Hcxmmx_King/Presentation/Audio/hit_blade.ogg",
+              "volume_db": 0.0,
+              "offset_seconds": 0.0
+            },
+            "charge": {
+              "path": "res://Hcxmmx_King/Presentation/Audio/weapon_broadsword_charge3.ogg",
+              "volume_db": 0.0,
+              "offset_seconds": 0.0
+            }
+          }
         }
       ]
     },
@@ -267,19 +664,380 @@
       "stages": [
         {
           "body": "perfectHalberdAtkA",
-          "vfx": "fxPerfectHalberdAtkA"
+          "vfx": "fxPerfectHalberdAtkA",
+          "audio": {
+            "source_item": "PerfectHalberd",
+            "source_strike_index": 0,
+            "source_hit_frame": 13,
+            "release": {
+              "path": "res://Hcxmmx_King/Presentation/Audio/weapon_perfectsw_release1.ogg",
+              "volume_db": 0.0,
+              "offset_seconds": 0.0
+            },
+            "hit": {
+              "path": "res://Hcxmmx_King/Presentation/Audio/hit_broadsword.ogg",
+              "volume_db": 0.0,
+              "offset_seconds": 0.0
+            },
+            "charge": {
+              "path": "res://Hcxmmx_King/Presentation/Audio/weapon_broadsword_charge3.ogg",
+              "volume_db": 0.0,
+              "offset_seconds": 0.0
+            }
+          }
         },
         {
           "body": "perfectHalberdAtkB",
-          "vfx": "fxPerfectHalberdAtkB"
+          "vfx": "fxPerfectHalberdAtkB",
+          "audio": {
+            "source_item": "PerfectHalberd",
+            "source_strike_index": 1,
+            "source_hit_frame": 6,
+            "release": {
+              "path": "res://Hcxmmx_King/Presentation/Audio/weapon_perfectsw_release2.ogg",
+              "volume_db": 0.0,
+              "offset_seconds": 0.0
+            },
+            "hit": {
+              "path": "res://Hcxmmx_King/Presentation/Audio/hit_broadsword.ogg",
+              "volume_db": 0.0,
+              "offset_seconds": 0.0
+            }
+          }
         },
         {
           "body": "perfectHalberdAtkC",
-          "vfx": "fxPerfectHalberdAtkC"
+          "vfx": "fxPerfectHalberdAtkC",
+          "audio": {
+            "source_item": "PerfectHalberd",
+            "source_strike_index": 2,
+            "source_hit_frame": 18,
+            "release": {
+              "path": "res://Hcxmmx_King/Presentation/Audio/weapon_perfectsw_release3.ogg",
+              "volume_db": 0.0,
+              "offset_seconds": 0.0
+            },
+            "hit": {
+              "path": "res://Hcxmmx_King/Presentation/Audio/hit_broadsword.ogg",
+              "volume_db": 0.0,
+              "offset_seconds": 0.0
+            }
+          }
         },
         {
           "body": "perfectHalberdAtkD",
-          "vfx": "fxPerfectHalberdAtkD"
+          "vfx": "fxPerfectHalberdAtkD",
+          "audio": {
+            "source_item": "PerfectHalberd",
+            "source_strike_index": 3,
+            "source_hit_frame": 5,
+            "release": {
+              "path": "res://Hcxmmx_King/Presentation/Audio/weapon_perfectsw_release4.ogg",
+              "volume_db": 0.0,
+              "offset_seconds": 0.0
+            },
+            "hit": {
+              "path": "res://Hcxmmx_King/Presentation/Audio/hit_broadsword.ogg",
+              "volume_db": 0.0,
+              "offset_seconds": 0.0
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "scissors",
+      "label": "巨型剪刀 · 新",
+      "weight": 1,
+      "stages": [
+        {
+          "body": "scissorsAtkA",
+          "vfx": "fxScissorsAtkA",
+          "source_item": "Scissor",
+          "source_strike": 0,
+          "audio": {
+            "source_item": "Scissor",
+            "source_strike_index": 0,
+            "source_hit_frame": 15,
+            "release": {
+              "path": "res://Hcxmmx_King/Presentation/Audio/weapon_scissors_atk1.ogg",
+              "volume_db": 0.0,
+              "offset_seconds": 0.0
+            },
+            "hit": {
+              "path": "res://Hcxmmx_King/Presentation/Audio/weapon_scissors_hit2.ogg",
+              "volume_db": 0.0,
+              "offset_seconds": 0.0
+            }
+          }
+        },
+        {
+          "body": "scissorsAtkB",
+          "vfx": "fxScissorsAtkB",
+          "source_item": "Scissor",
+          "source_strike": 1,
+          "audio": {
+            "source_item": "Scissor",
+            "source_strike_index": 1,
+            "source_hit_frame": 13,
+            "release": {
+              "path": "res://Hcxmmx_King/Presentation/Audio/weapon_scissors_atk2.ogg",
+              "volume_db": 0.0,
+              "offset_seconds": 0.0
+            },
+            "hit": {
+              "path": "res://Hcxmmx_King/Presentation/Audio/weapon_scissors_hit3.ogg",
+              "volume_db": 0.0,
+              "offset_seconds": 0.0
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "nunchuck_pan",
+      "label": "双截锅 · 新",
+      "weight": 1,
+      "stages": [
+        {
+          "body": "AtkNunchuckPanRefactoA",
+          "vfx": "NunchukPanAtk/NunchukPanAtkA",
+          "source_item": "NunchuckPan",
+          "source_strike": 0,
+          "audio": {
+            "source_item": "NunchuckPan",
+            "source_strike_index": 0,
+            "source_hit_frame": 2,
+            "release": {
+              "path": "res://Hcxmmx_King/Presentation/Audio/weapon_nunchukpan_release1.ogg",
+              "volume_db": 0.0,
+              "offset_seconds": 0.0
+            },
+            "hit": {
+              "path": "res://Hcxmmx_King/Presentation/Audio/weapon_nunchukpan_hit1.ogg",
+              "volume_db": 0.0,
+              "offset_seconds": 0.0
+            }
+          }
+        },
+        {
+          "body": "AtkNunchuckPanRefactoB",
+          "vfx": "NunchukPanAtk/NunchukPanAtkB",
+          "source_item": "NunchuckPan",
+          "source_strike": 1,
+          "audio": {
+            "source_item": "NunchuckPan",
+            "source_strike_index": 1,
+            "source_hit_frame": 3,
+            "release": {
+              "path": "res://Hcxmmx_King/Presentation/Audio/weapon_nunchukpan_release2.ogg",
+              "volume_db": 0.0,
+              "offset_seconds": 0.0
+            },
+            "hit": {
+              "path": "res://Hcxmmx_King/Presentation/Audio/weapon_nunchukpan_hit2.ogg",
+              "volume_db": 0.0,
+              "offset_seconds": 0.0
+            }
+          }
+        },
+        {
+          "body": "AtkNunchuckPanRefactoC",
+          "vfx": "NunchukPanAtk/NunchukPanAtkC",
+          "source_item": "NunchuckPan",
+          "source_strike": 2,
+          "audio": {
+            "source_item": "NunchuckPan",
+            "source_strike_index": 2,
+            "source_hit_frame": 4,
+            "release": {
+              "path": "res://Hcxmmx_King/Presentation/Audio/weapon_nunchukpan_release3.ogg",
+              "volume_db": 0.0,
+              "offset_seconds": 0.0
+            },
+            "hit": {
+              "path": "res://Hcxmmx_King/Presentation/Audio/weapon_nunchukpan_hit3.ogg",
+              "volume_db": 0.0,
+              "offset_seconds": 0.0
+            }
+          }
+        },
+        {
+          "body": "AtkNunchuckPanRefactoD",
+          "vfx": "NunchukPanAtk/NunchukPanAtkD",
+          "source_item": "NunchuckPan",
+          "source_strike": 3,
+          "audio": {
+            "source_item": "NunchuckPan",
+            "source_strike_index": 3,
+            "source_hit_frame": 3,
+            "release": {
+              "path": "res://Hcxmmx_King/Presentation/Audio/weapon_nunchukpan_release4.ogg",
+              "volume_db": 0.0,
+              "offset_seconds": 0.0
+            },
+            "hit": {
+              "path": "res://Hcxmmx_King/Presentation/Audio/weapon_nunchukpan_hit1.ogg",
+              "volume_db": 0.0,
+              "offset_seconds": 0.0
+            }
+          }
+        },
+        {
+          "body": "AtkNunchuckPanRefactoE",
+          "vfx": "NunchukPanAtk/NunchukPanAtkE",
+          "source_item": "NunchuckPan",
+          "source_strike": 4,
+          "audio": {
+            "source_item": "NunchuckPan",
+            "source_strike_index": 4,
+            "source_hit_frame": 1,
+            "release": {
+              "path": "res://Hcxmmx_King/Presentation/Audio/weapon_nunchukpan_release5.ogg",
+              "volume_db": 0.0,
+              "offset_seconds": 0.0
+            },
+            "hit": {
+              "path": "res://Hcxmmx_King/Presentation/Audio/weapon_nunchukpan_hit2.ogg",
+              "volume_db": 0.0,
+              "offset_seconds": 0.0
+            }
+          }
+        },
+        {
+          "body": "AtkNunchuckPanRefactoF",
+          "vfx": "NunchukPanAtk/NunchukPanAtkF",
+          "source_item": "NunchuckPan",
+          "source_strike": 5,
+          "audio": {
+            "source_item": "NunchuckPan",
+            "source_strike_index": 5,
+            "source_hit_frame": 3,
+            "release": {
+              "path": "res://Hcxmmx_King/Presentation/Audio/weapon_nunchukpan_release6.ogg",
+              "volume_db": 0.0,
+              "offset_seconds": 0.0
+            },
+            "hit": {
+              "path": "res://Hcxmmx_King/Presentation/Audio/weapon_nunchukpan_hit3.ogg",
+              "volume_db": 0.0,
+              "offset_seconds": 0.0
+            }
+          }
+        },
+        {
+          "body": "AtkNunchuckPanRefactoG",
+          "vfx": "NunchukPanAtk/NunchukPanAtkG",
+          "source_item": "NunchuckPan",
+          "source_strike": 6,
+          "audio": {
+            "source_item": "NunchuckPan",
+            "source_strike_index": 6,
+            "source_hit_frame": 3,
+            "release": {
+              "path": "res://Hcxmmx_King/Presentation/Audio/weapon_nunchukpan_release7.ogg",
+              "volume_db": 0.0,
+              "offset_seconds": 0.0
+            },
+            "hit": {
+              "path": "res://Hcxmmx_King/Presentation/Audio/weapon_nunchukpan_hit1.ogg",
+              "volume_db": 0.0,
+              "offset_seconds": 0.0
+            }
+          }
+        },
+        {
+          "body": "AtkNunchuckPanRefactoH",
+          "vfx": "NunchukPanAtk/NunchukPanAtkH",
+          "source_item": "NunchuckPan",
+          "source_strike": 7,
+          "audio": {
+            "source_item": "NunchuckPan",
+            "source_strike_index": 7,
+            "source_hit_frame": 7,
+            "release": {
+              "path": "res://Hcxmmx_King/Presentation/Audio/weapon_nunchukpan_release8.ogg",
+              "volume_db": 0.0,
+              "offset_seconds": 0.0
+            },
+            "hit": {
+              "path": "res://Hcxmmx_King/Presentation/Audio/weapon_nunchukpan_hit2.ogg",
+              "volume_db": 0.0,
+              "offset_seconds": 0.0
+            }
+          }
+        },
+        {
+          "body": "AtkNunchuckPanRefactoI",
+          "vfx": "NunchukPanAtk/NunchukPanAtkI",
+          "source_item": "NunchuckPan",
+          "source_strike": 8,
+          "audio": {
+            "source_item": "NunchuckPan",
+            "source_strike_index": 8,
+            "source_hit_frame": 7,
+            "release": {
+              "path": "res://Hcxmmx_King/Presentation/Audio/weapon_nunchukpan_release9.ogg",
+              "volume_db": 0.0,
+              "offset_seconds": 0.0
+            },
+            "hit": {
+              "path": "res://Hcxmmx_King/Presentation/Audio/weapon_nunchukpan_hit1.ogg",
+              "volume_db": 0.0,
+              "offset_seconds": 0.0
+            }
+          }
+        },
+        {
+          "body": "AtkNunchuckPanE",
+          "vfx": "fxAtkNunchuckPan/AtkNunchuckPanE",
+          "source_item": "NunchuckPan",
+          "source_strike": 9,
+          "audio": {
+            "source_item": "NunchuckPan",
+            "source_strike_index": 9,
+            "source_hit_frame": 11,
+            "release": {
+              "path": "res://Hcxmmx_King/Presentation/Audio/weapon_pan_release2.ogg",
+              "volume_db": 0.0,
+              "offset_seconds": 0.0
+            },
+            "hit": {
+              "path": "res://Hcxmmx_King/Presentation/Audio/weapon_pan_hit3.ogg",
+              "volume_db": 0.0,
+              "offset_seconds": 0.0
+            },
+            "charge": {
+              "path": "res://Hcxmmx_King/Presentation/Audio/weapon_nunchukpan_charge8.ogg",
+              "volume_db": 0.0,
+              "offset_seconds": 0.0
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "fast_bow",
+      "kind": "ranged",
+      "weight": 1,
+      "stages": [
+        {
+          "body": "FastBow",
+          "vfx": null,
+          "audio": {
+            "charge": {
+              "path": "res://Hcxmmx_King/Presentation/RangedAssets/bow_charge1.ogg",
+              "volume_db": 0.0
+            },
+            "release": {
+              "path": "res://Hcxmmx_King/Presentation/RangedAssets/bow_shot3.ogg",
+              "volume_db": 0.0
+            },
+            "hit": {
+              "path": "res://Hcxmmx_King/Presentation/RangedAssets/arrow_hit.ogg",
+              "volume_db": 0.0
+            }
+          }
         }
       ]
     }

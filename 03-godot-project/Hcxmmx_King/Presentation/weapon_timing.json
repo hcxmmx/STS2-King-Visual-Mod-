@@ -1,0 +1,1693 @@
+{
+  "AtkKatanaB2": {
+    "source_item": "Katana",
+    "source_strike_index": 0,
+    "source_fx": "fxBeheadedKatanaB2",
+    "charge": 0.2,
+    "hit_frame": 6,
+    "animation_speed": 1,
+    "reverse": false,
+    "lock_after": 0,
+    "cooldown": 0.1,
+    "vfx": "fxBeheadedKatanaB2",
+    "audio": {
+      "source_item": "Katana",
+      "source_hit_frame": 6,
+      "release": {
+        "path": "res://Hcxmmx_King/Presentation/Audio/weapon_katana_release1.ogg",
+        "volume_db": 0.0,
+        "offset_seconds": 0.0
+      },
+      "hit": {
+        "path": "res://Hcxmmx_King/Presentation/Audio/weapon_katana_hit1.ogg",
+        "volume_db": 0.0,
+        "offset_seconds": 0.0
+      },
+      "source_strike_index": 0,
+      "charge": {
+        "path": "res://Hcxmmx_King/Presentation/Audio/weapon_katana_charge1.ogg",
+        "volume_db": 0.0,
+        "offset_seconds": 0.0
+      }
+    },
+    "adaptation": "",
+    "body_fps": 30.0,
+    "body_delay": 0.0,
+    "fx_time": 0.2,
+    "release_time": 0.2,
+    "body": "AtkKatanaB2",
+    "fx_lead_frames": 0,
+    "fx_visible_time": 0.2,
+    "fx_clock": "independent",
+    "fx_carry_over": true
+  },
+  "AtkKatanaB3": {
+    "source_item": "Katana",
+    "source_strike_index": 1,
+    "source_fx": "fxBeheadedKatanaB3",
+    "charge": 0.2,
+    "hit_frame": 5,
+    "animation_speed": 1,
+    "reverse": false,
+    "lock_after": 0,
+    "cooldown": 0.3,
+    "vfx": "fxBeheadedKatanaB3",
+    "audio": {
+      "source_item": "Katana",
+      "source_hit_frame": 5,
+      "release": {
+        "path": "res://Hcxmmx_King/Presentation/Audio/weapon_katana_release1.ogg",
+        "volume_db": 0.0,
+        "offset_seconds": 0.0
+      },
+      "hit": {
+        "path": "res://Hcxmmx_King/Presentation/Audio/weapon_katana_hit1.ogg",
+        "volume_db": 0.0,
+        "offset_seconds": 0.0
+      },
+      "source_strike_index": 1,
+      "charge": {
+        "path": "res://Hcxmmx_King/Presentation/Audio/weapon_katana_charge1.ogg",
+        "volume_db": 0.0,
+        "offset_seconds": 0.0
+      }
+    },
+    "adaptation": "",
+    "body_fps": 30.0,
+    "body_delay": 0.033333333333333354,
+    "fx_time": 0.2,
+    "release_time": 0.2,
+    "body": "AtkKatanaB3",
+    "fx_lead_frames": 0,
+    "fx_visible_time": 0.2,
+    "fx_clock": "independent",
+    "fx_carry_over": true
+  },
+  "AtkKatanaB4": {
+    "source_item": "Katana",
+    "source_strike_index": 2,
+    "source_fx": "fxBeheadedKatanaB",
+    "charge": 0.2,
+    "hit_frame": 3,
+    "animation_speed": 1,
+    "reverse": false,
+    "lock_after": 0.3,
+    "cooldown": 0.4,
+    "vfx": "fxBeheadedKatanaB4",
+    "audio": {
+      "source_item": "Katana",
+      "source_hit_frame": 3,
+      "release": {
+        "path": "res://Hcxmmx_King/Presentation/Audio/weapon_katana_release3.ogg",
+        "volume_db": 0.0,
+        "offset_seconds": 0.0
+      },
+      "hit": {
+        "path": "res://Hcxmmx_King/Presentation/Audio/weapon_katana_hit1.ogg",
+        "volume_db": 0.0,
+        "offset_seconds": 0.0
+      },
+      "source_strike_index": 2,
+      "charge": {
+        "path": "res://Hcxmmx_King/Presentation/Audio/weapon_katana_charge1.ogg",
+        "volume_db": 0.0,
+        "offset_seconds": 0.0
+      }
+    },
+    "adaptation": "",
+    "body_fps": 30.0,
+    "body_delay": 0.1,
+    "fx_time": 0.2,
+    "release_time": 0.2,
+    "body": "AtkKatanaB4",
+    "fx_lead_frames": 0,
+    "fx_visible_time": 0.2,
+    "fx_clock": "independent",
+    "fx_carry_over": true
+  },
+  "AtkKingScepter": {
+    "source_item": "KingScepter",
+    "source_strike_index": 0,
+    "source_fx": "fxKingScepterAtk",
+    "charge": 0.1,
+    "hit_frame": 3,
+    "animation_speed": 1,
+    "reverse": false,
+    "lock_after": 0.08,
+    "cooldown": 0.6,
+    "vfx": null,
+    "audio": {
+      "source_item": "KingScepter",
+      "source_strike_index": 0,
+      "source_hit_frame": 0,
+      "release": {
+        "path": "res://Hcxmmx_King/Presentation/Audio/weapon_kingscepter_release.ogg",
+        "volume_db": 0.0,
+        "offset_seconds": 0.0
+      },
+      "hit": {
+        "path": "res://Hcxmmx_King/Presentation/Audio/weapon_kingscepter_hit.ogg",
+        "volume_db": 0.0,
+        "offset_seconds": 0.0
+      },
+      "charge": {
+        "path": "res://Hcxmmx_King/Presentation/Audio/weapon_eblade_charge2.ogg",
+        "volume_db": 0.0,
+        "offset_seconds": 0.0
+      }
+    },
+    "adaptation": "Project grounded composite: Load[0..2] + Impact[0..6] + End[0..4]. Contact is first Impact frame; original aerial bounce physics are not transplanted.",
+    "body_fps": 30.0,
+    "body_delay": 0.0,
+    "fx_time": 0.1,
+    "release_time": 0.1,
+    "body": "AtkKingScepter",
+    "fx_lead_frames": 0,
+    "fx_visible_time": 0.1,
+    "fx_clock": "independent",
+    "fx_carry_over": true
+  },
+  "AtkVampireKillerA": {
+    "source_item": "VampireKiller",
+    "source_strike_index": 0,
+    "source_fx": "fxAtkVampireKillerA",
+    "charge": 0.3,
+    "hit_frame": 6,
+    "animation_speed": 1,
+    "reverse": false,
+    "lock_after": 0.1,
+    "cooldown": 0.25,
+    "vfx": "fxAtkVampireKillerA",
+    "audio": {
+      "source_item": "VampireKiller",
+      "source_strike_index": 0,
+      "source_hit_frame": 6,
+      "release": {
+        "path": "res://Hcxmmx_King/Presentation/Audio/purpleDLC_vampireKiller_releaseA.ogg",
+        "volume_db": 0.0,
+        "offset_seconds": 0.0
+      },
+      "hit": {
+        "path": "res://Hcxmmx_King/Presentation/Audio/purpleDLC_vampireKiller_hit.ogg",
+        "volume_db": 0.0,
+        "offset_seconds": 0.0
+      }
+    },
+    "adaptation": "",
+    "body_fps": 30.0,
+    "body_delay": 0.09999999999999998,
+    "fx_time": 0.09999999999999998,
+    "release_time": 0.09999999999999998,
+    "body": "AtkVampireKillerA",
+    "fx_lead_frames": 6,
+    "fx_visible_time": 0.3,
+    "fx_clock": "independent",
+    "fx_carry_over": true
+  },
+  "AtkVampireKillerB": {
+    "source_item": "VampireKiller",
+    "source_strike_index": 1,
+    "source_fx": "fxAtkVampireKillerB",
+    "charge": 0.4,
+    "hit_frame": 10,
+    "animation_speed": 1,
+    "reverse": false,
+    "lock_after": 0.1,
+    "cooldown": 0,
+    "vfx": "fxAtkVampireKillerB",
+    "audio": {
+      "source_item": "VampireKiller",
+      "source_strike_index": 1,
+      "source_hit_frame": 10,
+      "release": {
+        "path": "res://Hcxmmx_King/Presentation/Audio/purpleDLC_vampireKiller_releaseB.ogg",
+        "volume_db": 0.0,
+        "offset_seconds": 0.0
+      },
+      "hit": {
+        "path": "res://Hcxmmx_King/Presentation/Audio/purpleDLC_vampireKiller_hit.ogg",
+        "volume_db": 0.0,
+        "offset_seconds": 0.0
+      }
+    },
+    "adaptation": "",
+    "body_fps": 30.0,
+    "body_delay": 0.06666666666666671,
+    "fx_time": 0.06666666666666671,
+    "release_time": 0.06666666666666671,
+    "body": "AtkVampireKillerB",
+    "fx_lead_frames": 10,
+    "fx_visible_time": 0.4,
+    "fx_clock": "independent",
+    "fx_carry_over": true
+  },
+  "AtkVampireKillerC": {
+    "source_item": "VampireKiller",
+    "source_strike_index": 2,
+    "source_fx": "fxAtkVampireKillerC",
+    "charge": 0.6,
+    "hit_frame": 17,
+    "animation_speed": 1,
+    "reverse": false,
+    "lock_after": 0.1,
+    "cooldown": 0,
+    "vfx": "fxAtkVampireKillerC",
+    "audio": {
+      "source_item": "VampireKiller",
+      "source_strike_index": 2,
+      "source_hit_frame": 17,
+      "release": {
+        "path": "res://Hcxmmx_King/Presentation/Audio/purpleDLC_vampireKiller_releaseC.ogg",
+        "volume_db": 0.0,
+        "offset_seconds": 0.0
+      },
+      "hit": {
+        "path": "res://Hcxmmx_King/Presentation/Audio/purpleDLC_vampireKiller_hit.ogg",
+        "volume_db": 0.0,
+        "offset_seconds": 0.0
+      },
+      "charge": {
+        "path": "res://Hcxmmx_King/Presentation/Audio/purpleDLC_vampireKiller_hit03.ogg",
+        "volume_db": 0.0,
+        "offset_seconds": 0.0
+      }
+    },
+    "adaptation": "",
+    "body_fps": 30.0,
+    "body_delay": 0.033333333333333326,
+    "fx_time": 0.033333333333333326,
+    "release_time": 0.033333333333333326,
+    "body": "AtkVampireKillerC",
+    "fx_lead_frames": 17,
+    "fx_visible_time": 0.6,
+    "fx_clock": "independent",
+    "fx_carry_over": true
+  },
+  "atkBroadSwordA": {
+    "source_item": "BroadSword",
+    "source_strike_index": 0,
+    "source_fx": "fxAtkBroadSwordA",
+    "charge": 0.4,
+    "hit_frame": 8,
+    "animation_speed": 1,
+    "reverse": false,
+    "lock_after": 0.2,
+    "cooldown": 0,
+    "vfx": "fxAtkBroadSwordA",
+    "audio": {
+      "source_item": "BroadSword",
+      "source_strike_index": 0,
+      "source_hit_frame": 8,
+      "release": {
+        "path": "res://Hcxmmx_King/Presentation/Audio/weapon_broadsword_release1.ogg",
+        "volume_db": 0.0,
+        "offset_seconds": 0.0
+      },
+      "hit": {
+        "path": "res://Hcxmmx_King/Presentation/Audio/hit_broadsword.ogg",
+        "volume_db": 0.0,
+        "offset_seconds": 0.0
+      },
+      "charge": {
+        "path": "res://Hcxmmx_King/Presentation/Audio/weapon_broadsword_charge1.ogg",
+        "volume_db": 0.0,
+        "offset_seconds": 0.0
+      }
+    },
+    "adaptation": "",
+    "body_fps": 30.0,
+    "body_delay": 0.13333333333333336,
+    "fx_time": 0.4,
+    "release_time": 0.4,
+    "body": "atkBroadSwordA",
+    "fx_lead_frames": 0,
+    "fx_visible_time": 0.4,
+    "fx_clock": "independent",
+    "fx_carry_over": true
+  },
+  "atkBroadSwordB": {
+    "source_item": "BroadSword",
+    "source_strike_index": 1,
+    "source_fx": "fxAtkBroadSwordB",
+    "charge": 0.5,
+    "hit_frame": 12,
+    "animation_speed": 1,
+    "reverse": false,
+    "lock_after": 0.25,
+    "cooldown": 0,
+    "vfx": "fxAtkBroadSwordB",
+    "audio": {
+      "source_item": "BroadSword",
+      "source_strike_index": 1,
+      "source_hit_frame": 12,
+      "release": {
+        "path": "res://Hcxmmx_King/Presentation/Audio/weapon_broadsword_release2.ogg",
+        "volume_db": 0.0,
+        "offset_seconds": 0.0
+      },
+      "hit": {
+        "path": "res://Hcxmmx_King/Presentation/Audio/hit_broadsword.ogg",
+        "volume_db": 0.0,
+        "offset_seconds": 0.0
+      },
+      "charge": {
+        "path": "res://Hcxmmx_King/Presentation/Audio/weapon_broadsword_charge2.ogg",
+        "volume_db": 0.0,
+        "offset_seconds": 0.0
+      }
+    },
+    "adaptation": "",
+    "body_fps": 30.0,
+    "body_delay": 0.09999999999999998,
+    "fx_time": 0.5,
+    "release_time": 0.5,
+    "body": "atkBroadSwordB",
+    "fx_lead_frames": 0,
+    "fx_visible_time": 0.5,
+    "fx_clock": "independent",
+    "fx_carry_over": true
+  },
+  "atkBroadSwordC": {
+    "source_item": "BroadSword",
+    "source_strike_index": 2,
+    "source_fx": "fxAtkBroadSwordC",
+    "charge": 0.5,
+    "hit_frame": 16,
+    "animation_speed": 1,
+    "reverse": false,
+    "lock_after": 0.4,
+    "cooldown": 0,
+    "vfx": "fxAtkBroadSwordC",
+    "audio": {
+      "source_item": "BroadSword",
+      "source_strike_index": 2,
+      "source_hit_frame": 16,
+      "release": {
+        "path": "res://Hcxmmx_King/Presentation/Audio/weapon_broadsword_release3.ogg",
+        "volume_db": 0.0,
+        "offset_seconds": 0.0
+      },
+      "hit": {
+        "path": "res://Hcxmmx_King/Presentation/Audio/hit_broadsword.ogg",
+        "volume_db": 0.0,
+        "offset_seconds": 0.0
+      },
+      "charge": {
+        "path": "res://Hcxmmx_King/Presentation/Audio/weapon_broadsword_charge3.ogg",
+        "volume_db": 0.0,
+        "offset_seconds": 0.0
+      }
+    },
+    "adaptation": "",
+    "body_fps": 30.0,
+    "body_delay": 0.0,
+    "fx_time": 0.5,
+    "release_time": 0.5,
+    "body": "atkBroadSwordC",
+    "fx_lead_frames": 0,
+    "fx_visible_time": 0.5,
+    "fx_clock": "independent",
+    "fx_carry_over": true
+  },
+  "atkPanA": {
+    "source_item": "Pan",
+    "source_strike_index": 0,
+    "source_fx": "fxPanHitA",
+    "charge": 0.25,
+    "hit_frame": 8,
+    "animation_speed": 1,
+    "reverse": false,
+    "lock_after": 0.1,
+    "cooldown": 0,
+    "vfx": "fxAtkPanA",
+    "audio": {
+      "source_item": "Pan",
+      "source_hit_frame": 8,
+      "release": {
+        "path": "res://Hcxmmx_King/Presentation/Audio/weapon_pan_release1.ogg",
+        "volume_db": 0.0,
+        "offset_seconds": 0.0
+      },
+      "hit": {
+        "path": "res://Hcxmmx_King/Presentation/Audio/weapon_pan_hit1.ogg",
+        "volume_db": 0.0,
+        "offset_seconds": 0.0
+      },
+      "source_strike_index": 0
+    },
+    "adaptation": "",
+    "body_fps": 30.0,
+    "body_delay": 0.0,
+    "fx_time": 0.25,
+    "release_time": 0.25,
+    "body": "atkPanA",
+    "fx_lead_frames": 0,
+    "fx_visible_time": 0.25,
+    "fx_clock": "independent",
+    "fx_carry_over": true
+  },
+  "atkPanB": {
+    "source_item": "Pan",
+    "source_strike_index": 1,
+    "source_fx": "fxPanHitB",
+    "charge": 0.2,
+    "hit_frame": 5,
+    "animation_speed": 1,
+    "reverse": false,
+    "lock_after": 0.1,
+    "cooldown": 0,
+    "vfx": "fxAtkPanB",
+    "audio": {
+      "source_item": "Pan",
+      "source_hit_frame": 5,
+      "release": {
+        "path": "res://Hcxmmx_King/Presentation/Audio/weapon_pan_release2.ogg",
+        "volume_db": 0.0,
+        "offset_seconds": 0.0
+      },
+      "hit": {
+        "path": "res://Hcxmmx_King/Presentation/Audio/weapon_pan_hit2.ogg",
+        "volume_db": 0.0,
+        "offset_seconds": 0.0
+      },
+      "source_strike_index": 1
+    },
+    "adaptation": "",
+    "body_fps": 30.0,
+    "body_delay": 0.033333333333333354,
+    "fx_time": 0.2,
+    "release_time": 0.2,
+    "body": "atkPanB",
+    "fx_lead_frames": 0,
+    "fx_visible_time": 0.2,
+    "fx_clock": "independent",
+    "fx_carry_over": true
+  },
+  "atkPanC": {
+    "source_item": "Pan",
+    "source_strike_index": 2,
+    "source_fx": "fxPanHitC",
+    "charge": 0.3,
+    "hit_frame": 6,
+    "animation_speed": 1,
+    "reverse": false,
+    "lock_after": 0.05,
+    "cooldown": 0,
+    "vfx": "fxAtkPanC",
+    "audio": {
+      "source_item": "Pan",
+      "source_hit_frame": 6,
+      "release": {
+        "path": "res://Hcxmmx_King/Presentation/Audio/weapon_pan_release3.ogg",
+        "volume_db": 0.0,
+        "offset_seconds": 0.0
+      },
+      "hit": {
+        "path": "res://Hcxmmx_King/Presentation/Audio/weapon_pan_hit3.ogg",
+        "volume_db": 0.0,
+        "offset_seconds": 0.0
+      },
+      "source_strike_index": 2
+    },
+    "adaptation": "",
+    "body_fps": 30.0,
+    "body_delay": 0.09999999999999998,
+    "fx_time": 0.3,
+    "release_time": 0.3,
+    "body": "atkPanC",
+    "fx_lead_frames": 0,
+    "fx_visible_time": 0.3,
+    "fx_clock": "independent",
+    "fx_carry_over": true
+  },
+  "atkPanD": {
+    "source_item": "Pan",
+    "source_strike_index": 3,
+    "source_fx": "fxPanHitC",
+    "charge": 0.3,
+    "hit_frame": 9,
+    "animation_speed": 1,
+    "reverse": false,
+    "lock_after": 0.1,
+    "cooldown": 0,
+    "vfx": "fxAtkPanD",
+    "audio": {
+      "source_item": "Pan",
+      "source_hit_frame": 9,
+      "release": {
+        "path": "res://Hcxmmx_King/Presentation/Audio/weapon_pan_release4.ogg",
+        "volume_db": 0.0,
+        "offset_seconds": 0.0
+      },
+      "hit": {
+        "path": "res://Hcxmmx_King/Presentation/Audio/weapon_pan_hit4.ogg",
+        "volume_db": 0.0,
+        "offset_seconds": 0.0
+      },
+      "source_strike_index": 3
+    },
+    "adaptation": "",
+    "body_fps": 30.0,
+    "body_delay": 0.0,
+    "fx_time": 0.3,
+    "release_time": 0.3,
+    "body": "atkPanD",
+    "fx_lead_frames": 0,
+    "fx_visible_time": 0.3,
+    "fx_clock": "independent",
+    "fx_carry_over": true
+  },
+  "atkRapierA": {
+    "source_item": "Rapier",
+    "source_strike_index": 0,
+    "source_fx": "fxRapierA",
+    "charge": 0.2,
+    "hit_frame": 6,
+    "animation_speed": 1,
+    "reverse": false,
+    "lock_after": 0.1,
+    "cooldown": 0,
+    "vfx": "fxRapierA",
+    "audio": {
+      "source_item": "Rapier",
+      "source_strike_index": 0,
+      "source_hit_frame": 6,
+      "release": {
+        "path": "res://Hcxmmx_King/Presentation/Audio/weapon_rapier_release.ogg",
+        "volume_db": 0.0,
+        "offset_seconds": 0.0
+      },
+      "hit": {
+        "path": "res://Hcxmmx_King/Presentation/Audio/hit_blade.ogg",
+        "volume_db": 0.0,
+        "offset_seconds": 0.0
+      }
+    },
+    "adaptation": "",
+    "body_fps": 30.0,
+    "body_delay": 0.0,
+    "fx_time": 0.2,
+    "release_time": 0.2,
+    "body": "atkRapierA",
+    "fx_lead_frames": 0,
+    "fx_visible_time": 0.2,
+    "fx_clock": "independent",
+    "fx_carry_over": true
+  },
+  "atkRapierB": {
+    "source_item": "Rapier",
+    "source_strike_index": 1,
+    "source_fx": "fxRapierB",
+    "charge": 0.1,
+    "hit_frame": 2,
+    "animation_speed": 1,
+    "reverse": false,
+    "lock_after": 0,
+    "cooldown": 0,
+    "vfx": "fxRapierB",
+    "audio": {
+      "source_item": "Rapier",
+      "source_strike_index": 1,
+      "source_hit_frame": 2,
+      "release": {
+        "path": "res://Hcxmmx_King/Presentation/Audio/weapon_kunai_release.ogg",
+        "volume_db": 0.0,
+        "offset_seconds": 0.0
+      },
+      "hit": {
+        "path": "res://Hcxmmx_King/Presentation/Audio/hit_blade.ogg",
+        "volume_db": 0.0,
+        "offset_seconds": 0.0
+      }
+    },
+    "adaptation": "Explicitly select the first short thrust; the source reuses body B in three different entries.",
+    "body_fps": 30.0,
+    "body_delay": 0.03333333333333334,
+    "fx_time": 0.1,
+    "release_time": 0.1,
+    "body": "atkRapierB",
+    "fx_lead_frames": 0,
+    "fx_visible_time": 0.1,
+    "fx_clock": "independent",
+    "fx_carry_over": true
+  },
+  "atkRapierC": {
+    "source_item": "Rapier",
+    "source_strike_index": 0,
+    "source_fx": "fxRapierA",
+    "charge": 0.2,
+    "hit_frame": 6,
+    "animation_speed": 1,
+    "reverse": false,
+    "lock_after": 0.1,
+    "cooldown": 0,
+    "vfx": "fxRapierC",
+    "audio": {
+      "source_item": "Rapier",
+      "source_strike_index": 0,
+      "source_hit_frame": 6,
+      "release": {
+        "path": "res://Hcxmmx_King/Presentation/Audio/weapon_rapier_release.ogg",
+        "volume_db": 0.0,
+        "offset_seconds": 0.0
+      },
+      "hit": {
+        "path": "res://Hcxmmx_King/Presentation/Audio/hit_blade.ogg",
+        "volume_db": 0.0,
+        "offset_seconds": 0.0
+      }
+    },
+    "adaptation": "Preserve the project's legacy C thrust. Source atlas/track contains it, but current data.cdb does not use it in the normal chain. Use long-thrust entry A timing/audio; visible extension begins at frame 6.",
+    "body_fps": 30.0,
+    "body_delay": 0.0,
+    "fx_time": 0.2,
+    "release_time": 0.2,
+    "body": "atkRapierC",
+    "fx_lead_frames": 0,
+    "fx_visible_time": 0.2,
+    "fx_clock": "independent",
+    "fx_carry_over": true
+  },
+  "atkScytheA1": {
+    "source_item": "TickScytheRight",
+    "source_strike_index": 0,
+    "source_fx": "fxAtkScytheA1",
+    "charge": 0.77,
+    "hit_frame": 23,
+    "animation_speed": 1.5,
+    "reverse": false,
+    "lock_after": 0.2,
+    "cooldown": 0,
+    "vfx": "fxAtkScytheA1",
+    "audio": {
+      "source_item": "TickScytheRight",
+      "source_strike_index": 0,
+      "source_hit_frame": 23,
+      "release": {
+        "path": "res://Hcxmmx_King/Presentation/Audio/weapon_tickscythe_release1.ogg",
+        "volume_db": 0.0,
+        "offset_seconds": 0.0
+      },
+      "hit": {
+        "path": "res://Hcxmmx_King/Presentation/Audio/hit_broadsword.ogg",
+        "volume_db": 0.0,
+        "offset_seconds": 0.0
+      },
+      "charge": {
+        "path": "res://Hcxmmx_King/Presentation/Audio/weapon_tickscythe_charge2.ogg",
+        "volume_db": 0.0,
+        "offset_seconds": 0.0
+      }
+    },
+    "adaptation": "",
+    "body_fps": 45.0,
+    "body_delay": 0.0033333333333332993,
+    "fx_time": 0.77,
+    "release_time": 0.77,
+    "body": "atkScytheA1",
+    "fx_lead_frames": 0,
+    "fx_visible_time": 0.77,
+    "fx_clock": "independent",
+    "fx_carry_over": true
+  },
+  "atkScytheA2": {
+    "source_item": "TickScytheRight",
+    "source_strike_index": 1,
+    "source_fx": "fxAtkScytheA2",
+    "charge": 0.75,
+    "hit_frame": 22,
+    "animation_speed": 1.5,
+    "reverse": false,
+    "lock_after": 0.25,
+    "cooldown": 0,
+    "vfx": "fxAtkScytheA2",
+    "audio": {
+      "source_item": "TickScytheRight",
+      "source_strike_index": 1,
+      "source_hit_frame": 22,
+      "release": {
+        "path": "res://Hcxmmx_King/Presentation/Audio/weapon_tickscythe_release1.ogg",
+        "volume_db": 0.0,
+        "offset_seconds": 0.0
+      },
+      "hit": {
+        "path": "res://Hcxmmx_King/Presentation/Audio/hit_broadsword.ogg",
+        "volume_db": 0.0,
+        "offset_seconds": 0.0
+      },
+      "charge": {
+        "path": "res://Hcxmmx_King/Presentation/Audio/weapon_tickscythe_charge2.ogg",
+        "volume_db": 0.0,
+        "offset_seconds": 0.0
+      }
+    },
+    "adaptation": "",
+    "body_fps": 45.0,
+    "body_delay": 0.01666666666666672,
+    "fx_time": 0.75,
+    "release_time": 0.75,
+    "body": "atkScytheA2",
+    "fx_lead_frames": 0,
+    "fx_visible_time": 0.75,
+    "fx_clock": "independent",
+    "fx_carry_over": true
+  },
+  "atkScytheB1": {
+    "source_item": "TickScytheLeft",
+    "source_strike_index": 0,
+    "source_fx": "fxAtkScytheB2",
+    "charge": 0.57,
+    "hit_frame": 17,
+    "animation_speed": 1,
+    "reverse": false,
+    "lock_after": 0.25,
+    "cooldown": 0,
+    "vfx": "fxAtkScytheB2",
+    "audio": {
+      "source_item": "TickScytheLeft",
+      "source_strike_index": 0,
+      "source_hit_frame": 17,
+      "release": {
+        "path": "res://Hcxmmx_King/Presentation/Audio/weapon_tickscythe_release1.ogg",
+        "volume_db": 0.0,
+        "offset_seconds": 0.0
+      },
+      "hit": {
+        "path": "res://Hcxmmx_King/Presentation/Audio/hit_broadsword.ogg",
+        "volume_db": 0.0,
+        "offset_seconds": 0.0
+      },
+      "charge": {
+        "path": "res://Hcxmmx_King/Presentation/Audio/weapon_tickscythe_charge1.ogg",
+        "volume_db": 0.0,
+        "offset_seconds": 0.0
+      }
+    },
+    "adaptation": "",
+    "body_fps": 30.0,
+    "body_delay": 0.0033333333333332993,
+    "fx_time": 0.57,
+    "release_time": 0.57,
+    "body": "atkScytheB1",
+    "fx_lead_frames": 0,
+    "fx_visible_time": 0.57,
+    "fx_clock": "independent",
+    "fx_carry_over": true
+  },
+  "atkScytheB2": {
+    "source_item": "TickScytheLeft",
+    "source_strike_index": 1,
+    "source_fx": "fxAtkScytheB1",
+    "charge": 0.57,
+    "hit_frame": 17,
+    "animation_speed": 1,
+    "reverse": false,
+    "lock_after": 0.25,
+    "cooldown": 0,
+    "vfx": "fxAtkScytheB1",
+    "audio": {
+      "source_item": "TickScytheLeft",
+      "source_strike_index": 1,
+      "source_hit_frame": 17,
+      "release": {
+        "path": "res://Hcxmmx_King/Presentation/Audio/weapon_tickscythe_release1.ogg",
+        "volume_db": 0.0,
+        "offset_seconds": 0.0
+      },
+      "hit": {
+        "path": "res://Hcxmmx_King/Presentation/Audio/hit_broadsword.ogg",
+        "volume_db": 0.0,
+        "offset_seconds": 0.0
+      },
+      "charge": {
+        "path": "res://Hcxmmx_King/Presentation/Audio/weapon_tickscythe_charge3.ogg",
+        "volume_db": 0.0,
+        "offset_seconds": 0.0
+      }
+    },
+    "adaptation": "",
+    "body_fps": 30.0,
+    "body_delay": 0.0033333333333332993,
+    "fx_time": 0.57,
+    "release_time": 0.57,
+    "body": "atkScytheB2",
+    "fx_lead_frames": 0,
+    "fx_visible_time": 0.57,
+    "fx_clock": "independent",
+    "fx_carry_over": true
+  },
+  "atkTombstoneA3": {
+    "source_item": "Tombstone",
+    "source_strike_index": 0,
+    "source_fx": "fxTombstoneAtkA",
+    "charge": 0.4,
+    "hit_frame": 14,
+    "animation_speed": 1,
+    "reverse": false,
+    "lock_after": 0.1,
+    "cooldown": 0,
+    "vfx": "fxTombestoneAtkA",
+    "audio": {
+      "source_item": "Tombstone",
+      "source_strike_index": 0,
+      "source_hit_frame": 14,
+      "release": {
+        "path": "res://Hcxmmx_King/Presentation/Audio/weapon_tombstone_release1.ogg",
+        "volume_db": 0.0,
+        "offset_seconds": 0.0
+      },
+      "hit": {
+        "path": "res://Hcxmmx_King/Presentation/Audio/weapon_tombstone_hit.ogg",
+        "volume_db": 0.0,
+        "offset_seconds": 0.0
+      },
+      "charge": {
+        "path": "res://Hcxmmx_King/Presentation/Audio/weapon_tombstone_charge1.ogg",
+        "volume_db": 0.0,
+        "offset_seconds": 0.0
+      }
+    },
+    "adaptation": "Original Tombstone.dynOnAttackAnim appends modelNum. Keep existing model 3.",
+    "body_fps": 30.0,
+    "body_delay": 0.0,
+    "fx_time": 0.4,
+    "release_time": 0.4,
+    "body": "atkTombstoneA3",
+    "fx_lead_frames": 0,
+    "fx_visible_time": 0.4,
+    "fx_clock": "independent",
+    "fx_carry_over": true
+  },
+  "atkTombstoneB3": {
+    "source_item": "Tombstone",
+    "source_strike_index": 1,
+    "source_fx": "fxTombstoneAtkB",
+    "charge": 0.45,
+    "hit_frame": 15,
+    "animation_speed": 1,
+    "reverse": false,
+    "lock_after": 0.1,
+    "cooldown": 0,
+    "vfx": "fxTombestoneAtkB",
+    "audio": {
+      "source_item": "Tombstone",
+      "source_strike_index": 1,
+      "source_hit_frame": 15,
+      "release": {
+        "path": "res://Hcxmmx_King/Presentation/Audio/weapon_tombstone_release1.ogg",
+        "volume_db": 0.0,
+        "offset_seconds": 0.0
+      },
+      "hit": {
+        "path": "res://Hcxmmx_King/Presentation/Audio/weapon_tombstone_hit.ogg",
+        "volume_db": 0.0,
+        "offset_seconds": 0.0
+      },
+      "charge": {
+        "path": "res://Hcxmmx_King/Presentation/Audio/weapon_tombstone_charge2.ogg",
+        "volume_db": 0.0,
+        "offset_seconds": 0.0
+      }
+    },
+    "adaptation": "Original model 3 variant.",
+    "body_fps": 30.0,
+    "body_delay": 0.0,
+    "fx_time": 0.45,
+    "release_time": 0.45,
+    "body": "atkTombstoneB3",
+    "fx_lead_frames": 0,
+    "fx_visible_time": 0.45,
+    "fx_clock": "independent",
+    "fx_carry_over": true
+  },
+  "atkTombstoneE3": {
+    "source_item": "Tombstone",
+    "source_strike_index": 2,
+    "source_fx": "fxTombstoneAtkC",
+    "charge": 0.6,
+    "hit_frame": 16,
+    "animation_speed": 1,
+    "reverse": false,
+    "lock_after": 0.15,
+    "cooldown": 0,
+    "vfx": "fxTombestoneAtkC",
+    "audio": {
+      "source_item": "Tombstone",
+      "source_strike_index": 2,
+      "source_hit_frame": 16,
+      "release": {
+        "path": "res://Hcxmmx_King/Presentation/Audio/weapon_tombstone_release3.ogg",
+        "volume_db": 0.0,
+        "offset_seconds": 0.0
+      },
+      "hit": {
+        "path": "res://Hcxmmx_King/Presentation/Audio/weapon_tombstone_hit3.ogg",
+        "volume_db": 0.0,
+        "offset_seconds": 0.0
+      },
+      "charge": {
+        "path": "res://Hcxmmx_King/Presentation/Audio/weapon_tombstone_charge3.ogg",
+        "volume_db": 0.0,
+        "offset_seconds": 0.0
+      }
+    },
+    "adaptation": "Original model 3 variant; death-chain gameplay is not transplanted.",
+    "body_fps": 30.0,
+    "body_delay": 0.06666666666666665,
+    "fx_time": 0.6,
+    "release_time": 0.6,
+    "body": "atkTombstoneE3",
+    "fx_lead_frames": 0,
+    "fx_visible_time": 0.6,
+    "fx_clock": "independent",
+    "fx_carry_over": true
+  },
+  "halberdAtkA": {
+    "source_item": "KingsSpear",
+    "source_strike_index": 0,
+    "source_fx": "halberdFxAtkA",
+    "charge": 0.6,
+    "hit_frame": 18,
+    "animation_speed": 1,
+    "reverse": false,
+    "lock_after": 0.2,
+    "cooldown": 0,
+    "vfx": "halberdFxAtkA",
+    "audio": {
+      "source_item": "KingsSpear",
+      "source_strike_index": 0,
+      "source_hit_frame": 18,
+      "release": {
+        "path": "res://Hcxmmx_King/Presentation/Audio/weapon_doublelance_release1.ogg",
+        "volume_db": 0.0,
+        "offset_seconds": 0.0
+      },
+      "hit": {
+        "path": "res://Hcxmmx_King/Presentation/Audio/hit_blade.ogg",
+        "volume_db": 0.0,
+        "offset_seconds": 0.0
+      },
+      "charge": {
+        "path": "res://Hcxmmx_King/Presentation/Audio/weapon_spear_charge1.ogg",
+        "volume_db": 0.0,
+        "offset_seconds": 0.0
+      }
+    },
+    "adaptation": "",
+    "body_fps": 30.0,
+    "body_delay": 0.0,
+    "fx_time": 0.5666666666666667,
+    "release_time": 0.5666666666666667,
+    "body": "halberdAtkA",
+    "fx_lead_frames": 0,
+    "fx_visible_time": 0.5666666666666667,
+    "fx_clock": "independent",
+    "fx_carry_over": true
+  },
+  "halberdAtkB": {
+    "source_item": "KingsSpear",
+    "source_strike_index": 1,
+    "source_fx": "halberdFxAtkB",
+    "charge": 0.17,
+    "hit_frame": 5,
+    "animation_speed": 1,
+    "reverse": false,
+    "lock_after": 0.2,
+    "cooldown": 0,
+    "vfx": "halberdFxAtkB",
+    "audio": {
+      "source_item": "KingsSpear",
+      "source_strike_index": 1,
+      "source_hit_frame": 5,
+      "release": {
+        "path": "res://Hcxmmx_King/Presentation/Audio/weapon_doublelance_release2.ogg",
+        "volume_db": 0.0,
+        "offset_seconds": 0.0
+      },
+      "hit": {
+        "path": "res://Hcxmmx_King/Presentation/Audio/hit_blade.ogg",
+        "volume_db": 0.0,
+        "offset_seconds": 0.0
+      },
+      "charge": {
+        "path": "res://Hcxmmx_King/Presentation/Audio/weapon_stunmace_charge1.ogg",
+        "volume_db": 0.0,
+        "offset_seconds": 0.0
+      }
+    },
+    "adaptation": "",
+    "body_fps": 30.0,
+    "body_delay": 0.003333333333333355,
+    "fx_time": 0.003333333333333355,
+    "release_time": 0.003333333333333355,
+    "body": "halberdAtkB",
+    "fx_lead_frames": 0,
+    "fx_visible_time": 0.003333333333333355,
+    "fx_clock": "independent",
+    "fx_carry_over": true
+  },
+  "halberdAtkC": {
+    "source_item": "KingsSpear",
+    "source_strike_index": 2,
+    "source_fx": "halberdFxAtkC",
+    "charge": 0.3,
+    "hit_frame": 9,
+    "animation_speed": 1,
+    "reverse": false,
+    "lock_after": 0.35,
+    "cooldown": 0,
+    "vfx": "halberdFxAtkC",
+    "audio": {
+      "source_item": "KingsSpear",
+      "source_strike_index": 2,
+      "source_hit_frame": 9,
+      "release": {
+        "path": "res://Hcxmmx_King/Presentation/Audio/weapon_doublelance_release3.ogg",
+        "volume_db": 0.0,
+        "offset_seconds": 0.0
+      },
+      "hit": {
+        "path": "res://Hcxmmx_King/Presentation/Audio/hit_blade.ogg",
+        "volume_db": 0.0,
+        "offset_seconds": 0.0
+      },
+      "charge": {
+        "path": "res://Hcxmmx_King/Presentation/Audio/weapon_broadsword_charge3.ogg",
+        "volume_db": 0.0,
+        "offset_seconds": 0.0
+      }
+    },
+    "adaptation": "",
+    "body_fps": 30.0,
+    "body_delay": 0.0,
+    "fx_time": 0.3,
+    "release_time": 0.3,
+    "body": "halberdAtkC",
+    "fx_lead_frames": 0,
+    "fx_visible_time": 0.3,
+    "fx_clock": "independent",
+    "fx_carry_over": true
+  },
+  "perfectHalberdAtkA": {
+    "source_item": "PerfectHalberd",
+    "source_strike_index": 0,
+    "source_fx": "fxPerfectHalberdAtkA",
+    "charge": 0.45,
+    "hit_frame": 13,
+    "animation_speed": 1,
+    "reverse": false,
+    "lock_after": 0.2,
+    "cooldown": 0,
+    "vfx": "fxPerfectHalberdAtkA",
+    "audio": {
+      "source_item": "PerfectHalberd",
+      "source_strike_index": 0,
+      "source_hit_frame": 13,
+      "release": {
+        "path": "res://Hcxmmx_King/Presentation/Audio/weapon_perfectsw_release1.ogg",
+        "volume_db": 0.0,
+        "offset_seconds": 0.0
+      },
+      "hit": {
+        "path": "res://Hcxmmx_King/Presentation/Audio/hit_broadsword.ogg",
+        "volume_db": 0.0,
+        "offset_seconds": 0.0
+      },
+      "charge": {
+        "path": "res://Hcxmmx_King/Presentation/Audio/weapon_broadsword_charge3.ogg",
+        "volume_db": 0.0,
+        "offset_seconds": 0.0
+      }
+    },
+    "adaptation": "",
+    "body_fps": 30.0,
+    "body_delay": 0.016666666666666663,
+    "fx_time": 0.38333333333333336,
+    "release_time": 0.38333333333333336,
+    "body": "perfectHalberdAtkA",
+    "fx_lead_frames": 0,
+    "fx_visible_time": 0.38333333333333336,
+    "fx_clock": "independent",
+    "fx_carry_over": true
+  },
+  "perfectHalberdAtkB": {
+    "source_item": "PerfectHalberd",
+    "source_strike_index": 1,
+    "source_fx": "fxPerfectHalberdAtkB",
+    "charge": 0.15,
+    "hit_frame": 6,
+    "animation_speed": 1,
+    "reverse": false,
+    "lock_after": 0.2,
+    "cooldown": 0,
+    "vfx": "fxPerfectHalberdAtkB",
+    "audio": {
+      "source_item": "PerfectHalberd",
+      "source_strike_index": 1,
+      "source_hit_frame": 6,
+      "release": {
+        "path": "res://Hcxmmx_King/Presentation/Audio/weapon_perfectsw_release2.ogg",
+        "volume_db": 0.0,
+        "offset_seconds": 0.0
+      },
+      "hit": {
+        "path": "res://Hcxmmx_King/Presentation/Audio/hit_broadsword.ogg",
+        "volume_db": 0.0,
+        "offset_seconds": 0.0
+      }
+    },
+    "adaptation": "",
+    "body_fps": 30.0,
+    "body_delay": 0.0,
+    "fx_time": 0.15,
+    "release_time": 0.15,
+    "body": "perfectHalberdAtkB",
+    "fx_lead_frames": 0,
+    "fx_visible_time": 0.15,
+    "fx_clock": "independent",
+    "fx_carry_over": true
+  },
+  "perfectHalberdAtkC": {
+    "source_item": "PerfectHalberd",
+    "source_strike_index": 2,
+    "source_fx": "fxPerfectHalberdAtkC",
+    "charge": 0.55,
+    "hit_frame": 18,
+    "animation_speed": 1,
+    "reverse": false,
+    "lock_after": 0.2,
+    "cooldown": 0,
+    "vfx": "fxPerfectHalberdAtkC",
+    "audio": {
+      "source_item": "PerfectHalberd",
+      "source_strike_index": 2,
+      "source_hit_frame": 18,
+      "release": {
+        "path": "res://Hcxmmx_King/Presentation/Audio/weapon_perfectsw_release3.ogg",
+        "volume_db": 0.0,
+        "offset_seconds": 0.0
+      },
+      "hit": {
+        "path": "res://Hcxmmx_King/Presentation/Audio/hit_broadsword.ogg",
+        "volume_db": 0.0,
+        "offset_seconds": 0.0
+      }
+    },
+    "adaptation": "",
+    "body_fps": 30.0,
+    "body_delay": 0.0,
+    "fx_time": 0.55,
+    "release_time": 0.55,
+    "body": "perfectHalberdAtkC",
+    "fx_lead_frames": 0,
+    "fx_visible_time": 0.55,
+    "fx_clock": "independent",
+    "fx_carry_over": true
+  },
+  "perfectHalberdAtkD": {
+    "source_item": "PerfectHalberd",
+    "source_strike_index": 3,
+    "source_fx": "fxPerfectHalberdAtkD",
+    "charge": 0.15,
+    "hit_frame": 5,
+    "animation_speed": 1,
+    "reverse": false,
+    "lock_after": 0.4,
+    "cooldown": 0,
+    "vfx": "fxPerfectHalberdAtkD",
+    "audio": {
+      "source_item": "PerfectHalberd",
+      "source_strike_index": 3,
+      "source_hit_frame": 5,
+      "release": {
+        "path": "res://Hcxmmx_King/Presentation/Audio/weapon_perfectsw_release4.ogg",
+        "volume_db": 0.0,
+        "offset_seconds": 0.0
+      },
+      "hit": {
+        "path": "res://Hcxmmx_King/Presentation/Audio/hit_broadsword.ogg",
+        "volume_db": 0.0,
+        "offset_seconds": 0.0
+      }
+    },
+    "adaptation": "",
+    "body_fps": 30.0,
+    "body_delay": 0.0,
+    "fx_time": 0.15,
+    "release_time": 0.15,
+    "body": "perfectHalberdAtkD",
+    "fx_lead_frames": 0,
+    "fx_visible_time": 0.15,
+    "fx_clock": "independent",
+    "fx_carry_over": true
+  },
+  "scissorsAtkA": {
+    "source_item": "Scissor",
+    "source_strike_index": 0,
+    "source_fx": "fxScissorsAtkA",
+    "charge": 0.46,
+    "hit_frame": 15,
+    "animation_speed": 1,
+    "reverse": false,
+    "lock_after": 0.2,
+    "cooldown": 0,
+    "vfx": "fxScissorsAtkA",
+    "audio": {
+      "source_item": "Scissor",
+      "source_strike_index": 0,
+      "source_hit_frame": 15,
+      "release": {
+        "path": "res://Hcxmmx_King/Presentation/Audio/weapon_scissors_atk1.ogg",
+        "volume_db": 0.0,
+        "offset_seconds": 0.0
+      },
+      "hit": {
+        "path": "res://Hcxmmx_King/Presentation/Audio/weapon_scissors_hit2.ogg",
+        "volume_db": 0.0,
+        "offset_seconds": 0.0
+      }
+    },
+    "adaptation": "",
+    "body_fps": 30.0,
+    "body_delay": 0.0,
+    "fx_time": 0.0,
+    "release_time": 0.0,
+    "body": "scissorsAtkA",
+    "fx_lead_frames": 3,
+    "fx_visible_time": 0.1,
+    "fx_clock": "body",
+    "fx_carry_over": false
+  },
+  "scissorsAtkB": {
+    "source_item": "Scissor",
+    "source_strike_index": 1,
+    "source_fx": "fxScissorsAtkB",
+    "charge": 0.43,
+    "hit_frame": 13,
+    "animation_speed": 1,
+    "reverse": false,
+    "lock_after": 0.3,
+    "cooldown": 0,
+    "vfx": "fxScissorsAtkB",
+    "audio": {
+      "source_item": "Scissor",
+      "source_strike_index": 1,
+      "source_hit_frame": 13,
+      "release": {
+        "path": "res://Hcxmmx_King/Presentation/Audio/weapon_scissors_atk2.ogg",
+        "volume_db": 0.0,
+        "offset_seconds": 0.0
+      },
+      "hit": {
+        "path": "res://Hcxmmx_King/Presentation/Audio/weapon_scissors_hit3.ogg",
+        "volume_db": 0.0,
+        "offset_seconds": 0.0
+      }
+    },
+    "adaptation": "",
+    "body_fps": 30.0,
+    "body_delay": 0.0,
+    "fx_time": 0.0,
+    "release_time": 0.0,
+    "body": "scissorsAtkB",
+    "fx_lead_frames": 1,
+    "fx_visible_time": 0.03333333333333333,
+    "fx_clock": "body",
+    "fx_carry_over": false
+  },
+  "AtkNunchuckPanRefactoA": {
+    "source_item": "NunchuckPan",
+    "source_strike_index": 0,
+    "source_fx": "NunchukPanAtk/NunchukPanAtkA",
+    "charge": 0.06,
+    "hit_frame": 2,
+    "animation_speed": 1,
+    "reverse": false,
+    "lock_after": 0.2,
+    "cooldown": 0,
+    "vfx": "NunchukPanAtk/NunchukPanAtkA",
+    "audio": {
+      "source_item": "NunchuckPan",
+      "source_strike_index": 0,
+      "source_hit_frame": 2,
+      "release": {
+        "path": "res://Hcxmmx_King/Presentation/Audio/weapon_nunchukpan_release1.ogg",
+        "volume_db": 0.0,
+        "offset_seconds": 0.0
+      },
+      "hit": {
+        "path": "res://Hcxmmx_King/Presentation/Audio/weapon_nunchukpan_hit1.ogg",
+        "volume_db": 0.0,
+        "offset_seconds": 0.0
+      }
+    },
+    "adaptation": "",
+    "body_fps": 30.0,
+    "body_delay": 0.0,
+    "fx_time": 0.0,
+    "release_time": 0.06,
+    "body": "AtkNunchuckPanRefactoA",
+    "fx_lead_frames": 0,
+    "fx_visible_time": 0.0,
+    "fx_clock": "independent",
+    "fx_carry_over": true
+  },
+  "AtkNunchuckPanRefactoB": {
+    "source_item": "NunchuckPan",
+    "source_strike_index": 1,
+    "source_fx": "NunchukPanAtk/NunchukPanAtkB",
+    "charge": 0.1,
+    "hit_frame": 3,
+    "animation_speed": 1,
+    "reverse": false,
+    "lock_after": 0.25,
+    "cooldown": 0,
+    "vfx": "NunchukPanAtk/NunchukPanAtkB",
+    "audio": {
+      "source_item": "NunchuckPan",
+      "source_strike_index": 1,
+      "source_hit_frame": 3,
+      "release": {
+        "path": "res://Hcxmmx_King/Presentation/Audio/weapon_nunchukpan_release2.ogg",
+        "volume_db": 0.0,
+        "offset_seconds": 0.0
+      },
+      "hit": {
+        "path": "res://Hcxmmx_King/Presentation/Audio/weapon_nunchukpan_hit2.ogg",
+        "volume_db": 0.0,
+        "offset_seconds": 0.0
+      }
+    },
+    "adaptation": "",
+    "body_fps": 30.0,
+    "body_delay": 0.0,
+    "fx_time": 0.0,
+    "release_time": 0.1,
+    "body": "AtkNunchuckPanRefactoB",
+    "fx_lead_frames": 0,
+    "fx_visible_time": 0.0,
+    "fx_clock": "independent",
+    "fx_carry_over": true
+  },
+  "AtkNunchuckPanRefactoC": {
+    "source_item": "NunchuckPan",
+    "source_strike_index": 2,
+    "source_fx": "NunchukPanAtk/NunchukPanAtkC",
+    "charge": 0.13,
+    "hit_frame": 4,
+    "animation_speed": 1,
+    "reverse": false,
+    "lock_after": 0.1,
+    "cooldown": 0,
+    "vfx": "NunchukPanAtk/NunchukPanAtkC",
+    "audio": {
+      "source_item": "NunchuckPan",
+      "source_strike_index": 2,
+      "source_hit_frame": 4,
+      "release": {
+        "path": "res://Hcxmmx_King/Presentation/Audio/weapon_nunchukpan_release3.ogg",
+        "volume_db": 0.0,
+        "offset_seconds": 0.0
+      },
+      "hit": {
+        "path": "res://Hcxmmx_King/Presentation/Audio/weapon_nunchukpan_hit3.ogg",
+        "volume_db": 0.0,
+        "offset_seconds": 0.0
+      }
+    },
+    "adaptation": "",
+    "body_fps": 30.0,
+    "body_delay": 0.0,
+    "fx_time": 0.0,
+    "release_time": 0.13,
+    "body": "AtkNunchuckPanRefactoC",
+    "fx_lead_frames": 0,
+    "fx_visible_time": 0.0,
+    "fx_clock": "independent",
+    "fx_carry_over": true
+  },
+  "AtkNunchuckPanRefactoD": {
+    "source_item": "NunchuckPan",
+    "source_strike_index": 3,
+    "source_fx": "NunchukPanAtk/NunchukPanAtkD",
+    "charge": 0.1,
+    "hit_frame": 3,
+    "animation_speed": 1,
+    "reverse": false,
+    "lock_after": 0.15,
+    "cooldown": 0,
+    "vfx": "NunchukPanAtk/NunchukPanAtkD",
+    "audio": {
+      "source_item": "NunchuckPan",
+      "source_strike_index": 3,
+      "source_hit_frame": 3,
+      "release": {
+        "path": "res://Hcxmmx_King/Presentation/Audio/weapon_nunchukpan_release4.ogg",
+        "volume_db": 0.0,
+        "offset_seconds": 0.0
+      },
+      "hit": {
+        "path": "res://Hcxmmx_King/Presentation/Audio/weapon_nunchukpan_hit1.ogg",
+        "volume_db": 0.0,
+        "offset_seconds": 0.0
+      }
+    },
+    "adaptation": "",
+    "body_fps": 30.0,
+    "body_delay": 0.0,
+    "fx_time": 0.0,
+    "release_time": 0.1,
+    "body": "AtkNunchuckPanRefactoD",
+    "fx_lead_frames": 0,
+    "fx_visible_time": 0.0,
+    "fx_clock": "independent",
+    "fx_carry_over": true
+  },
+  "AtkNunchuckPanRefactoE": {
+    "source_item": "NunchuckPan",
+    "source_strike_index": 4,
+    "source_fx": "NunchukPanAtk/NunchukPanAtkE",
+    "charge": 0.03,
+    "hit_frame": 1,
+    "animation_speed": 1,
+    "reverse": false,
+    "lock_after": 0.1,
+    "cooldown": 0,
+    "vfx": "NunchukPanAtk/NunchukPanAtkE",
+    "audio": {
+      "source_item": "NunchuckPan",
+      "source_strike_index": 4,
+      "source_hit_frame": 1,
+      "release": {
+        "path": "res://Hcxmmx_King/Presentation/Audio/weapon_nunchukpan_release5.ogg",
+        "volume_db": 0.0,
+        "offset_seconds": 0.0
+      },
+      "hit": {
+        "path": "res://Hcxmmx_King/Presentation/Audio/weapon_nunchukpan_hit2.ogg",
+        "volume_db": 0.0,
+        "offset_seconds": 0.0
+      }
+    },
+    "adaptation": "",
+    "body_fps": 30.0,
+    "body_delay": 0.0,
+    "fx_time": 0.0,
+    "release_time": 0.03,
+    "body": "AtkNunchuckPanRefactoE",
+    "fx_lead_frames": 0,
+    "fx_visible_time": 0.0,
+    "fx_clock": "independent",
+    "fx_carry_over": true
+  },
+  "AtkNunchuckPanRefactoF": {
+    "source_item": "NunchuckPan",
+    "source_strike_index": 5,
+    "source_fx": "NunchukPanAtk/NunchukPanAtkF",
+    "charge": 0.1,
+    "hit_frame": 3,
+    "animation_speed": 1,
+    "reverse": false,
+    "lock_after": 0.05,
+    "cooldown": 0,
+    "vfx": "NunchukPanAtk/NunchukPanAtkF",
+    "audio": {
+      "source_item": "NunchuckPan",
+      "source_strike_index": 5,
+      "source_hit_frame": 3,
+      "release": {
+        "path": "res://Hcxmmx_King/Presentation/Audio/weapon_nunchukpan_release6.ogg",
+        "volume_db": 0.0,
+        "offset_seconds": 0.0
+      },
+      "hit": {
+        "path": "res://Hcxmmx_King/Presentation/Audio/weapon_nunchukpan_hit3.ogg",
+        "volume_db": 0.0,
+        "offset_seconds": 0.0
+      }
+    },
+    "adaptation": "",
+    "body_fps": 30.0,
+    "body_delay": 0.0,
+    "fx_time": 0.0,
+    "release_time": 0.1,
+    "body": "AtkNunchuckPanRefactoF",
+    "fx_lead_frames": 0,
+    "fx_visible_time": 0.0,
+    "fx_clock": "independent",
+    "fx_carry_over": true
+  },
+  "AtkNunchuckPanRefactoG": {
+    "source_item": "NunchuckPan",
+    "source_strike_index": 6,
+    "source_fx": "NunchukPanAtk/NunchukPanAtkG",
+    "charge": 0.1,
+    "hit_frame": 3,
+    "animation_speed": 1,
+    "reverse": false,
+    "lock_after": 0.05,
+    "cooldown": 0,
+    "vfx": "NunchukPanAtk/NunchukPanAtkG",
+    "audio": {
+      "source_item": "NunchuckPan",
+      "source_strike_index": 6,
+      "source_hit_frame": 3,
+      "release": {
+        "path": "res://Hcxmmx_King/Presentation/Audio/weapon_nunchukpan_release7.ogg",
+        "volume_db": 0.0,
+        "offset_seconds": 0.0
+      },
+      "hit": {
+        "path": "res://Hcxmmx_King/Presentation/Audio/weapon_nunchukpan_hit1.ogg",
+        "volume_db": 0.0,
+        "offset_seconds": 0.0
+      }
+    },
+    "adaptation": "",
+    "body_fps": 30.0,
+    "body_delay": 0.0,
+    "fx_time": 0.0,
+    "release_time": 0.1,
+    "body": "AtkNunchuckPanRefactoG",
+    "fx_lead_frames": 0,
+    "fx_visible_time": 0.0,
+    "fx_clock": "independent",
+    "fx_carry_over": true
+  },
+  "AtkNunchuckPanRefactoH": {
+    "source_item": "NunchuckPan",
+    "source_strike_index": 7,
+    "source_fx": "NunchukPanAtk/NunchukPanAtkH",
+    "charge": 0.23,
+    "hit_frame": 7,
+    "animation_speed": 1,
+    "reverse": false,
+    "lock_after": 0.2,
+    "cooldown": 0,
+    "vfx": "NunchukPanAtk/NunchukPanAtkH",
+    "audio": {
+      "source_item": "NunchuckPan",
+      "source_strike_index": 7,
+      "source_hit_frame": 7,
+      "release": {
+        "path": "res://Hcxmmx_King/Presentation/Audio/weapon_nunchukpan_release8.ogg",
+        "volume_db": 0.0,
+        "offset_seconds": 0.0
+      },
+      "hit": {
+        "path": "res://Hcxmmx_King/Presentation/Audio/weapon_nunchukpan_hit2.ogg",
+        "volume_db": 0.0,
+        "offset_seconds": 0.0
+      }
+    },
+    "adaptation": "",
+    "body_fps": 30.0,
+    "body_delay": 0.0,
+    "fx_time": 0.0,
+    "release_time": 0.23,
+    "body": "AtkNunchuckPanRefactoH",
+    "fx_lead_frames": 0,
+    "fx_visible_time": 0.0,
+    "fx_clock": "independent",
+    "fx_carry_over": true
+  },
+  "AtkNunchuckPanRefactoI": {
+    "source_item": "NunchuckPan",
+    "source_strike_index": 8,
+    "source_fx": "NunchukPanAtk/NunchukPanAtkI",
+    "charge": 0.23,
+    "hit_frame": 7,
+    "animation_speed": 1,
+    "reverse": false,
+    "lock_after": 0.3,
+    "cooldown": 0,
+    "vfx": "NunchukPanAtk/NunchukPanAtkI",
+    "audio": {
+      "source_item": "NunchuckPan",
+      "source_strike_index": 8,
+      "source_hit_frame": 7,
+      "release": {
+        "path": "res://Hcxmmx_King/Presentation/Audio/weapon_nunchukpan_release9.ogg",
+        "volume_db": 0.0,
+        "offset_seconds": 0.0
+      },
+      "hit": {
+        "path": "res://Hcxmmx_King/Presentation/Audio/weapon_nunchukpan_hit1.ogg",
+        "volume_db": 0.0,
+        "offset_seconds": 0.0
+      }
+    },
+    "adaptation": "",
+    "body_fps": 30.0,
+    "body_delay": 0.0,
+    "fx_time": 0.0,
+    "release_time": 0.23,
+    "body": "AtkNunchuckPanRefactoI",
+    "fx_lead_frames": 0,
+    "fx_visible_time": 0.0,
+    "fx_clock": "independent",
+    "fx_carry_over": true
+  },
+  "AtkNunchuckPanE": {
+    "source_item": "NunchuckPan",
+    "source_strike_index": 9,
+    "source_fx": "fxAtkNunchuckPan/AtkNunchuckPanE",
+    "charge": 0.367,
+    "hit_frame": 11,
+    "animation_speed": 1,
+    "reverse": false,
+    "lock_after": 0.35,
+    "cooldown": 0,
+    "vfx": "fxAtkNunchuckPan/AtkNunchuckPanE",
+    "audio": {
+      "source_item": "NunchuckPan",
+      "source_strike_index": 9,
+      "source_hit_frame": 11,
+      "release": {
+        "path": "res://Hcxmmx_King/Presentation/Audio/weapon_pan_release2.ogg",
+        "volume_db": 0.0,
+        "offset_seconds": 0.0
+      },
+      "hit": {
+        "path": "res://Hcxmmx_King/Presentation/Audio/weapon_pan_hit3.ogg",
+        "volume_db": 0.0,
+        "offset_seconds": 0.0
+      },
+      "charge": {
+        "path": "res://Hcxmmx_King/Presentation/Audio/weapon_nunchukpan_charge8.ogg",
+        "volume_db": 0.0,
+        "offset_seconds": 0.0
+      }
+    },
+    "adaptation": "",
+    "body_fps": 30.0,
+    "body_delay": 0.00033333333333335213,
+    "fx_time": 0.00033333333333335213,
+    "release_time": 0.367,
+    "body": "AtkNunchuckPanE",
+    "fx_lead_frames": 0,
+    "fx_visible_time": 0.00033333333333335213,
+    "fx_clock": "independent",
+    "fx_carry_over": true
+  }
+}

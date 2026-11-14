@@ -30,7 +30,7 @@ internal static class AudioCheck
             var weapons = (Array)catalog.GetField("Weapons", Static)!.GetValue(null)!;
             var stages = weapons.Cast<object>().SelectMany(w => ((Array)weaponType.GetProperty("Stages")!.GetValue(w)!).Cast<object>())
                 .Where(stage => stageType.GetProperty("Audio")!.GetValue(stage) != null).ToArray();
-            Require(stages.Length == 7, "Only two sample weapons / seven stages");
+            Require(stages.Length == 44, "All thirteen weapons / forty-four stages have audio");
             int sfxBus = AudioServer.GetBusIndex("SFX");
             if (sfxBus < 0)
             {
@@ -94,10 +94,9 @@ internal static class AudioCheck
             Require(Voices() == 3, "Unbound command cannot borrow last actor weapon");
             executionType.GetField("Started", Instance)!.SetValue(execution, false);
             Require(!(bool)replace.Invoke(null, [command, "blunt_attack.mp3"])!, "No actual animation keeps original hit");
-            var unsupported = weapons.Cast<object>().SelectMany(w => ((Array)weaponType.GetProperty("Stages")!.GetValue(w)!).Cast<object>())
-                .First(stage => stageType.GetProperty("Audio")!.GetValue(stage) == null);
+            var unsupported = Activator.CreateInstance(stageType, Instance, null, ["UnsupportedProbe", null, null], null)!;
             audio.GetMethod("OnAnimation", Static)!.Invoke(null, [actor, unsupported]);
-            Require(Voices() == 3, "Other weapons retain original audio");
+            Require(Voices() == 3, "Unsupported future stage retains original audio");
             var sound0 = stageType.GetProperty("Audio")!.GetValue(stages[0])!;
             var cue0 = soundType.GetProperty("Hit")!.GetValue(sound0)!;
             for (int i = 0; i < 12; i++) audio.GetMethod("PlayCue", Static)!.Invoke(null, [actor, cue0]);
@@ -108,7 +107,7 @@ internal static class AudioCheck
             var voices = actor.GetChildren().OfType<AudioStreamPlayer>().ToArray();
             actor.Free();
             Require(voices.All(player => !GodotObject.IsInstanceValid(player)), "Actor audio cleanup");
-            GD.Print("AUDIO_NATIVE_PASS: .NET " + System.Environment.Version + "; real async patches compile; 7 sample stages; original Ogg decode, release, per-command hit suppression, immediate HP-loss impact, AOE/multi-hit/block/miss, nested damage isolation, unsupported fallback, SFX bus, voice limit, cleanup");
+            GD.Print("AUDIO_NATIVE_PASS: .NET " + System.Environment.Version + "; real async patches compile; 44 stages; original Ogg decode, release, per-command hit suppression, immediate HP-loss impact, AOE/multi-hit/block/miss, nested damage isolation, unsupported fallback, SFX bus, voice limit, cleanup");
         }
         finally { harmony.UnpatchAll(harmony.Id); }
     }

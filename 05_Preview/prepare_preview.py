@@ -62,6 +62,7 @@ def prepare(game_assets: Path, workspace: Path) -> None:
 
     presentation = source / "Hcxmmx_King/Presentation"
     weapons = json.loads((presentation / "weapons.json").read_text(encoding="utf-8"))["weapons"]
+    weapons = [weapon for weapon in weapons if weapon.get("kind") != "ranged"]
     stages = [stage for weapon in weapons for stage in weapon["stages"]]
     assert len({stage["body"] for stage in stages}) == len(stages), "Duplicate weapon animation"
     vfx = {stage["body"]: stage["vfx"] for stage in stages if stage["vfx"]}

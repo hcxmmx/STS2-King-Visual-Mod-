@@ -16,11 +16,12 @@ internal static class KingWeaponCatalog
 {
     internal sealed record Cue(
         [property: JsonPropertyName("path")] string Path,
-        [property: JsonPropertyName("volume_db")] float VolumeDb = -6f,
+        [property: JsonPropertyName("volume_db")] float VolumeDb = 0f,
         [property: JsonPropertyName("offset_seconds")] float OffsetSeconds = 0f);
     internal sealed record Sound(
         [property: JsonPropertyName("release")] Cue Release,
-        [property: JsonPropertyName("hit")] Cue Hit);
+        [property: JsonPropertyName("hit")] Cue Hit,
+        [property: JsonPropertyName("charge")] Cue? Charge = null);
     internal sealed record Stage(
         [property: JsonPropertyName("body")] string Body,
         [property: JsonPropertyName("vfx")] string? Vfx,
@@ -32,6 +33,7 @@ internal static class KingWeaponCatalog
     private sealed record Manifest([property: JsonPropertyName("weapons")] Weapon[] Weapons);
 
     internal static readonly Weapon[] Weapons = Load();
+    internal static Stage StageFor(string body) => Weapons.SelectMany(w => w.Stages).First(s => s.Body == body);
     private static Weapon[] Load()
     {
         using var stream = typeof(KingWeaponCatalog).Assembly.GetManifestResourceStream("KingMod.Presentation.weapons.json")
@@ -45,6 +47,9 @@ internal static class KingWeaponCatalog
 
     internal static Weapon Pick(Random random)
     {
+#if KING_BOW_TEST
+        return Weapons.Single(weapon => weapon.Id == "fast_bow");
+#else
         int choice = random.Next(Weapons.Sum(w => w.Weight));
         foreach (var weapon in Weapons)
         {
@@ -52,6 +57,7 @@ internal static class KingWeaponCatalog
             if (choice < 0) return weapon;
         }
         throw new InvalidOperationException("Invalid King weapon weights");
+#endif
     }
 }
 
@@ -60,6 +66,8 @@ internal sealed class KingActorPresentation
     private KingWeaponCatalog.Weapon? _weapon;
     internal int ComboIndex { get; private set; }
     internal bool IsDead { get; set; }
+    internal bool CombatEnded { get; set; }
+    internal bool LastRequestMerged { get; set; }
     internal KingWeaponCatalog.Stage PeekAttack(Random random)
     {
         if (_weapon == null || ComboIndex >= _weapon.Stages.Length)
@@ -81,12 +89,52 @@ internal sealed class KingActorPresentation
 internal static class KingPresentation
 {
     internal const string RigName = "KingScarf";
+    internal const string TimelineName = "KingCombatTimeline";
     private const string ScriptPath = "res://Hcxmmx_King/Presentation/KingScarf.gd";
     private static readonly ConditionalWeakTable<Node2D, KingActorPresentation> Actors = new();
     private static readonly ConditionalWeakTable<ICombatState, WindChoice> Winds = new();
     private sealed record WindChoice(float Value);
 
     internal static KingActorPresentation For(Node2D actor) => Actors.GetOrCreateValue(actor);
+
+    internal static KingWeaponCatalog.Stage PeekRequest(Node2D actor)
+    {
+        string pending = actor.GetNodeOrNull<Node>(TimelineName)?.Call("pending_body").AsString() ?? "";
+        return pending.Length > 0 ? KingWeaponCatalog.StageFor(pending) : For(actor).PeekAttack(KingGlobals.Rng);
+    }
+
+    internal static KingWeaponCatalog.Stage RequestAttack(Node2D actor)
+    {
+        actor.GetNodeOrNull<Node>(KingDefense.NodeName)?.Call("cancel", false);
+        var timeline = actor.GetNodeOrNull<Node>(TimelineName);
+        string pending = timeline?.Call("pending_body").AsString() ?? "";
+        For(actor).LastRequestMerged = pending.Length > 0;
+        var stage = pending.Length > 0 ? KingWeaponCatalog.StageFor(pending) : For(actor).NextAttack(KingGlobals.Rng);
+        if (timeline != null)
+        {
+            long shot = KingWeaponAudio.BindAttack(actor, stage);
+            timeline.Call("request_attack", stage.Body, shot);
+        }
+        else
+        {
+            // Compatibility fallback if a resource is absent; never lose the old skin.
+            actor.GetNode<AnimatedSprite2D>("Body").Play(stage.Body);
+            KingWeaponAudio.OnAnimation(actor, stage);
+            WeaponUse(actor);
+        }
+        return stage;
+    }
+
+    internal static void Interrupt(Node2D actor, bool endCombat = false)
+    {
+        if (endCombat) For(actor).CombatEnded = true;
+        actor.GetNodeOrNull<Node>(KingDefense.NodeName)?.Call("cancel", false);
+        actor.GetNodeOrNull<Node>(TimelineName)?.Call("interrupt", false);
+        KingWeaponAudio.StopOwnedVoices(actor);
+    }
+
+    internal static void RefreshTiming(Node2D actor) =>
+        actor.GetNodeOrNull<Node>(TimelineName)?.Call("set_mode", KingGlobals.UseOriginalTiming ? 1 : 0);
 
     // Stable visual randomness: no gameplay RNG draws, no room-ID increment, no savegame changes.
     // All clients/reloads at the same seed/map/encounter get the same independent wind choice.
@@ -120,8 +168,40 @@ internal static class KingPresentation
             rig.Name = RigName;
             actor.AddChild(rig);
             actor.MoveChild(rig, 0);
+            var timelineScript = ResourceLoader.Load<GDScript>("res://Hcxmmx_King/Presentation/KingCombatTimeline.gd")
+                ?? throw new InvalidOperationException("Missing combat timeline");
+            var timeline = timelineScript.New().AsGodotObject() as Node
+                ?? throw new InvalidOperationException("Unable to instantiate combat timeline");
+            timeline.Name = TimelineName;
+            actor.AddChild(timeline);
+            timeline.Connect("cue_requested", Callable.From<string, string>((name, kind) =>
+                KingWeaponAudio.PlayTimelineCue(actor, KingWeaponCatalog.StageFor(name), kind)));
+            timeline.Connect("swing_started", Callable.From<string>(_ =>
+            {
+                KingWeaponAudio.StopOwnedVoices(actor, chargeOnly: true);
+                WeaponUse(actor);
+            }));
+            timeline.Connect("projectile_released", Callable.From<long>(shot => KingRanged.Release(actor, shot)));
+            timeline.Connect("cancelled", Callable.From(() =>
+            {
+                KingWeaponAudio.StopOwnedVoices(actor);
+                KingRanged.Cancel(actor);
+            }));
+            timeline.Call("bind_actor", actor, KingGlobals.UseOriginalTiming ? 1 : 0);
+            var shieldScript = ResourceLoader.Load<GDScript>("res://Hcxmmx_King/Presentation/ShieldPresentation.gd")
+                ?? throw new InvalidOperationException("Missing King shield presentation");
+            var shield = shieldScript.New().AsGodotObject() as Node2D
+                ?? throw new InvalidOperationException("Unable to instantiate King shield presentation");
+            shield.Name = KingDefense.NodeName;
+            actor.AddChild(shield);
+            shield.Call("bind_actor", actor);
             rig.Call("bind_body", body, KingGlobals.IsWhiteKingSkin, WindFor(combat));
-            actor.TreeExiting += () => { Actors.Remove(actor); KingGlobals.ActiveKingSprites.Remove(body); };
+            actor.TreeExiting += () =>
+            {
+                KingRanged.Cancel(actor, true);
+                Actors.Remove(actor);
+                KingGlobals.ActiveKingSprites.Remove(body);
+            };
         }
         catch (Exception exception)
         {

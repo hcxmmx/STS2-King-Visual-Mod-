@@ -1,0 +1,15 @@
+{
+  "schema_version": 1,
+  "stages": {
+    "scissorsAtkA": {
+      "clock": "body",
+      "carry_over": false,
+      "basis": "Scissor strike 0: fxStartFrame=0, body/FX both 30 Hz. FX contains windup trajectory; visible source frames 3..21 correspond to the same body frame numbers."
+    },
+    "scissorsAtkB": {
+      "clock": "body",
+      "carry_over": false,
+      "basis": "Scissor strike 1: fxStartFrame=0, body/FX both 30 Hz. Visible source frames 1..17 correspond to the same body frame numbers."
+    }
+  }
+}

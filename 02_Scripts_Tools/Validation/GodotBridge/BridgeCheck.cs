@@ -3,8 +3,10 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Runtime.CompilerServices;
 using System.Runtime.Loader;
 using Godot;
+using HarmonyLib;
 
 // Run under the real Godot mono engine; no mod initializer or game/save startup.
 public partial class BridgeCheck : Node
@@ -20,7 +22,7 @@ public partial class BridgeCheck : Node
     private void Validate()
     {
         var args = OS.GetCmdlineUserArgs();
-        Require(args.Length == 2, "Expected package-directory and game-data-directory");
+        Require(args.Length is 2 or 3, "Expected package-directory, game-data-directory and optional --patch-check");
         var context = AssemblyLoadContext.GetLoadContext(typeof(BridgeCheck).Assembly)!;
         context.Resolving += (_, name) =>
         {
@@ -30,6 +32,51 @@ public partial class BridgeCheck : Node
         };
         Require(ProjectSettings.LoadResourcePack(Path.Combine(args[0], "Hcxmmx_King_Skin.pck")), "Pack mount");
         var mod = context.LoadFromAssemblyPath(Path.Combine(args[0], "Hcxmmx_King_Skin.dll"));
+        if (args.Length == 3)
+        {
+            if (args[2] == "--mod-combo-check")
+            {
+                ModCombinationCheck.Validate(mod, context);
+                return;
+            }
+            Require(args[2] == "--patch-check", "Unknown validation option");
+            ValidatePatches(mod);
+            AudioCheck.Validate(mod, this, ResourceLoader.Load<PackedScene>("res://Hcxmmx_King/tscn/white_king.tscn"));
+            if (args[0].Contains("shield-integration", StringComparison.OrdinalIgnoreCase))
+                DefenseCheck.Validate(mod, this, ResourceLoader.Load<PackedScene>("res://Hcxmmx_King/tscn/white_king.tscn"));
+            if (args[0].Contains("enemy-impact", StringComparison.OrdinalIgnoreCase))
+                EnemyImpactCheck.Validate(mod, this);
+            if (args[0].Contains("selection-settings", StringComparison.OrdinalIgnoreCase))
+                SelectionSettingsCheck.Validate(mod, this);
+            if (args[0].Contains("ranged-game", StringComparison.OrdinalIgnoreCase) ||
+                args[0].Contains("bow-only-test", StringComparison.OrdinalIgnoreCase))
+                RangedCheck.Validate(mod, this, ResourceLoader.Load<PackedScene>("res://Hcxmmx_King/tscn/white_king.tscn"));
+            if (args[0].Contains("bow-only-test", StringComparison.OrdinalIgnoreCase))
+            {
+                var catalog = mod.GetType("Hcxmmx.KingMod.Scripts.KingWeaponCatalog", true)!;
+                for (int index = 0; index < 1000; index++)
+                {
+                    var weapon = catalog.GetMethod("Pick", Static)!.Invoke(null, [new Random(index)])!;
+                    Require((string)weapon.GetType().GetProperty("Id")!.GetValue(weapon)! == "fast_bow", "Bow-only test selection");
+                }
+                GD.Print("BOW_ONLY_PASS: 1000 selections return FastBow");
+            }
+            else
+            {
+                var catalog = mod.GetType("Hcxmmx.KingMod.Scripts.KingWeaponCatalog", true)!;
+                var available = (Array)catalog.GetField("Weapons", Static)!.GetValue(null)!;
+                var selected = new HashSet<string>();
+                var random = new Random(113);
+                for (int index = 0; index < 1000; index++)
+                {
+                    var weapon = catalog.GetMethod("Pick", Static)!.Invoke(null, [random])!;
+                    selected.Add((string)weapon.GetType().GetProperty("Id")!.GetValue(weapon)!);
+                }
+                Require(selected.Count == available.Length, "Normal weapon pool restored");
+                GD.Print($"RANDOM_POOL_PASS: all {available.Length} weapons sampled in 1000 selections");
+            }
+            return;
+        }
         using var manifest = mod.GetManifestResourceStream("KingMod.Presentation.weapons.json")!;
         using var bytes = new MemoryStream();
         manifest.CopyTo(bytes);
@@ -54,11 +101,36 @@ public partial class BridgeCheck : Node
         Require(rig.Get("white_skin").AsBool(), "Skin refresh bridge");
         ValidateActorState(bridge, scene);
         ValidateWind(bridge);
-        if (args[0].Contains("audio-integration", StringComparison.OrdinalIgnoreCase))
+        if (args[0].Contains("audio-integration", StringComparison.OrdinalIgnoreCase) ||
+            args[0].Contains("weapon-expansion", StringComparison.OrdinalIgnoreCase) ||
+            args[0].Contains("game-integration", StringComparison.OrdinalIgnoreCase))
             AudioCheck.Validate(mod, this, scene);
         actor.Free();
         Require(!GodotObject.IsInstanceValid(rig), "Child cleanup");
+        if (args[0].Contains("game-integration", StringComparison.OrdinalIgnoreCase) ||
+            args[0].Contains("selection-settings", StringComparison.OrdinalIgnoreCase))
+            RuntimeTimelineCheck.Validate(mod, this, scene);
         GD.Print("CSHARP_BRIDGE_PASS: real compiled DLL -> native scarf; duplicate guard, attack push, palette switch, per-actor combos/death, wind lifetime, RNG isolation, cleanup");
+    }
+
+    private static void ValidatePatches(Assembly mod)
+    {
+        var harmony = new Harmony("king_beta113_patch_validation");
+        try
+        {
+            harmony.PatchAll(mod);
+            int methods = 0;
+            foreach (var type in mod.GetTypes())
+            foreach (var method in type.GetMethods(Static | Instance | BindingFlags.DeclaredOnly))
+            {
+                if (method.ContainsGenericParameters || method.IsAbstract || method.GetMethodBody() == null) continue;
+                RuntimeHelpers.PrepareMethod(method.MethodHandle);
+                methods++;
+            }
+            int patchClasses = mod.GetTypes().Count(type => type.IsDefined(typeof(HarmonyPatch), false));
+            GD.Print($"PATCH_INSTALL_PASS: {patchClasses} classes; {harmony.GetPatchedMethods().Count()} originals; {methods} methods JIT compiled");
+        }
+        finally { harmony.UnpatchAll(harmony.Id); }
     }
 
     private void ValidateActorState(Type bridge, PackedScene scene)

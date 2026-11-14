@@ -97,8 +97,8 @@ internal static class NMerchantRoom_Ready_Patch
 }
 
 // 离开商店解锁
-[HarmonyPatch(typeof(MegaCrit.Sts2.Core.Nodes.Rooms.NMerchantRoom), "HideScreen")]
-internal static class NMerchantRoom_HideScreen_Patch
+[HarmonyPatch(typeof(MegaCrit.Sts2.Core.Nodes.Rooms.NMerchantRoom), "_ExitTree")]
+internal static class NMerchantRoom_ExitTree_Patch
 {
     private static void Prefix() { KingGlobals.IsInShop = false; }
 }
@@ -258,17 +258,12 @@ internal static class NFakeMerchant_Ready_Patch
     }
 }
 
-[HarmonyPatch(typeof(MegaCrit.Sts2.Core.Nodes.Events.Custom.NFakeMerchant), "HideScreen")]
-internal static class NFakeMerchant_HideScreen_Patch
-{
-    private static void Prefix() { KingGlobals.IsInShop = false; }
-}
-
 [HarmonyPatch(typeof(MegaCrit.Sts2.Core.Nodes.Events.Custom.NFakeMerchant), "_ExitTree")]
 internal static class NFakeMerchant_ExitTree_Patch
 {
     private static void Prefix(MegaCrit.Sts2.Core.Nodes.Events.Custom.NFakeMerchant __instance)
     {
+        KingGlobals.IsInShop = false;
         var characterContainer = __instance.GetNodeOrNull<Control>("%CharacterContainer");
         if (characterContainer == null) return;
 

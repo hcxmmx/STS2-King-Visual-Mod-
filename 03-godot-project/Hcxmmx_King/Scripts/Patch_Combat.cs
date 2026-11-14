@@ -197,7 +197,7 @@ internal static class NCreature_SetAnimationTrigger_Patch
         var presentation = KingPresentation.For(kingMecha);
 
         var kingSprite = KingCombatNodeCache.GetSprite(kingMecha);
-        if (kingSprite == null || presentation.IsDead) return;
+        if (kingSprite == null || presentation.IsDead || presentation.CombatEnded) return;
 
         KingGlobals.VerboseLog(() => $"---> King Project: 收到动作指令: {trigger} <---");
 
@@ -207,33 +207,14 @@ internal static class NCreature_SetAnimationTrigger_Patch
             case "AttackSingle":
             case "AttackTriple":
             {
-                var stage = presentation.NextAttack(KingGlobals.Rng);
-                string currentAtkFrame = stage.Body;
-                KingPresentation.WeaponUse(kingMecha);
-
-                kingSprite.Stop();
-                kingSprite.Play(currentAtkFrame);
-                KingWeaponAudio.OnAnimation(kingMecha, stage);
-
-                // ==========================================
-                // 🎇 极其致命的刀光引爆逻辑
-                // ==========================================
-                var vfxSprite = KingCombatNodeCache.GetVfx(kingMecha);
-                if (vfxSprite != null) { vfxSprite.Stop(); vfxSprite.Visible = false; }
-                if (vfxSprite != null && stage.Vfx is { } mappedVfx)
-                {
-                    vfxSprite.Visible = true;
-                    vfxSprite.Stop();
-                    vfxSprite.Play(mappedVfx);
-                    KingGlobals.VerboseLog(() => $"🎇 连携引爆: 动作 [{currentAtkFrame}] 映射刀光 -> [{mappedVfx}]");
-                }
+                KingPresentation.RequestAttack(kingMecha);
 
                 kingMecha.Position = Vector2.Zero;
 
                 // ==========================================
                 // 💬 夜歌傲娇弹幕：攻击吐槽！(仅在连招第一击触发，防刷屏)
                 // ==========================================
-                if (presentation.ComboIndex == 1)
+                if (presentation.ComboIndex == 1 && !presentation.LastRequestMerged)
                 {
                     DanmakuEngine.Fire(KingLocalization.PickQuote(SerenadeQuoteKind.Attack));
                 }
@@ -241,10 +222,11 @@ internal static class NCreature_SetAnimationTrigger_Patch
             }
             case "Hit":
             {
+                KingPresentation.Interrupt(kingMecha);
                 presentation.ResetCombo(); // 🚨 受击打断连击！
-                string chosenHit = KingGlobals.HitPool[KingGlobals.Rng.Next(KingGlobals.HitPool.Length)];
                 kingSprite.Stop();
-                kingSprite.Play(chosenHit);
+                kingSprite.Play("stun");
+                KingDefense.PlayHurt(kingMecha);
                 kingMecha.Position = Vector2.Zero;
 
                 // ==========================================
@@ -255,6 +237,7 @@ internal static class NCreature_SetAnimationTrigger_Patch
             }
             case "Cast":
             {
+                KingPresentation.Interrupt(kingMecha);
                 presentation.ResetCombo(); // 🚨 施法打断连击！
                 string chosenCast = KingGlobals.CastPool[KingGlobals.Rng.Next(KingGlobals.CastPool.Length)];
                 kingSprite.Stop();
@@ -270,6 +253,7 @@ internal static class NCreature_SetAnimationTrigger_Patch
             case "Die":
             case "Death":
             case "Dead":
+                KingPresentation.Interrupt(kingMecha);
                 presentation.IsDead = true;
                 presentation.ResetCombo();
                 string chosenDie = KingGlobals.DiePool[0];
@@ -278,6 +262,7 @@ internal static class NCreature_SetAnimationTrigger_Patch
                 kingMecha.Position = Vector2.Zero;
                 break;
             default:
+                KingPresentation.Interrupt(kingMecha);
                 presentation.ResetCombo();
                 kingSprite.Play("Idle");
                 kingMecha.Position = Vector2.Zero;
@@ -305,6 +290,7 @@ internal static class NCreature_AnimDie_Patch
         if (kingSprite == null) return;
 
         KingPresentation.For(kingMecha).IsDead = true;
+        KingPresentation.Interrupt(kingMecha);
         kingSprite.Stop();
         kingSprite.Play("letha");
         kingMecha.Position = Vector2.Zero;
@@ -335,6 +321,7 @@ internal static class CombatManager_EndCombatInternal_Patch
         foreach (var sprite in KingGlobals.ActiveKingSprites)
         {
             if (!sprite.IsInsideTree() || sprite.Animation == "letha") continue;
+            if (sprite.GetParent() is Node2D actor) KingPresentation.Interrupt(actor, endCombat: true);
 
             // 防重复嘲讽
             bool isAlreadyTaunting = (sprite.Animation == "travolta" || sprite.Animation == "no" || sprite.Animation == "what");

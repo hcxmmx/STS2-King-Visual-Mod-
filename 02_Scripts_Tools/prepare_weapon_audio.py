@@ -1,48 +1,39 @@
-"""Import the two audio samples using Dead Cells' own weapon/strike mappings (no re-encoding)."""
+"""Import every existing weapon's audio using explicit source mappings, without re-encoding."""
 import argparse
 import hashlib
 import json
 from pathlib import Path
-import shutil
+from weapon_sources import load_sources, resolve_stage, copy_audio
 
 
 def prepare(assets: Path, root: Path):
     presentation = root / "03-godot-project/Hcxmmx_King/Presentation"
     manifest_path = presentation / "weapons.json"
     manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
-    database = json.loads((assets / "data.cdb").read_text(encoding="utf-8-sig"))
-    rows = next(sheet["lines"] for sheet in database["sheets"] if sheet["name"] == "weapon")
-    selected = {row["item"]: row for row in rows if row.get("item") in {"Katana", "Pan"}}
+    rows, overrides = load_sources(root, assets)
     report = []
     audio_dir = presentation / "Audio"
     audio_dir.mkdir(exist_ok=True)
     for weapon in manifest["weapons"]:
-        source_item = {"katana": "Katana", "pan": "Pan"}.get(weapon["id"])
-        if not source_item:
-            continue
-        strikes = {strike.get("animId"): strike for strike in selected[source_item]["strikeChain"]}
+        if weapon.get("kind") == "ranged":
+            continue  # Promoted from the separately verified bow source data.
         for stage in weapon["stages"]:
-            strike = strikes[stage["body"]]
+            source_item, source_index, strike, override = resolve_stage(stage, rows, overrides)
             audio = stage.setdefault("audio", {})
             audio["source_item"] = source_item
+            audio["source_strike_index"] = source_index
             audio["source_hit_frame"] = strike["hitFrame"]
-            for kind, field in (("release", "sfxRelease"), ("hit", "sfxHit")):
-                source = assets / strike[field]
-                blob = source.read_bytes()
-                assert blob[:4] == b"OggS", f"Unsupported source format: {source}"
-                destination = audio_dir / (source.stem + ".ogg")
-                shutil.copyfile(source, destination)
-                cue = audio.setdefault(kind, {})
-                cue.update(path="res://Hcxmmx_King/Presentation/Audio/" + destination.name)
-                cue.setdefault("volume_db", -6.0)
-                cue.setdefault("offset_seconds", 0.0)
+            cues = copy_audio(strike, assets, audio_dir, "res://Hcxmmx_King/Presentation/Audio/", audio)
+            audio.update(cues)
+            for kind, cue in cues.items():
+                source = assets / strike[{"release": "sfxRelease", "hit": "sfxHit", "charge": "sfxCharge"}[kind]]
                 report.append({"animation": stage["body"], "kind": kind, "source": str(source),
-                               "sha256": hashlib.sha256(blob).hexdigest()})
+                               "sha256": hashlib.sha256(source.read_bytes()).hexdigest()})
     manifest_path.write_text(json.dumps(manifest, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
     output = root / "artifacts/audio-integration"
     output.mkdir(parents=True, exist_ok=True)
     (output / "source-audio.json").write_text(json.dumps(report, ensure_ascii=False, indent=2), encoding="utf-8")
-    print(f"AUDIO_IMPORT_PASS: 7 stages, {len({r['sha256'] for r in report})} original Ogg files; no re-encoding")
+    print(f"AUDIO_IMPORT_PASS: {len({r['animation'] for r in report})} melee stages, {len({r['sha256'] for r in report})} original Ogg files; no re-encoding")
 
 
 if __name__ == "__main__":

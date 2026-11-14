@@ -5,7 +5,22 @@
     "skin.white.button": "👑 白き王",
     "skin.blue.button": "👑 青き王",
     "skin.white.selected": "✨ 無傷の証。白き王のお出ましだ！",
-    "skin.blue.selected": "🔵 おなじみの姿。原点に戻ろう。"
+    "skin.blue.selected": "🔵 おなじみの姿。原点に戻ろう。",
+    "rhythm.fast.button": "テンポ：高速",
+    "rhythm.original.button": "テンポ：原作",
+    "rhythm.tooltip": "クリックで高速／原作の動作テンポを切り替え、自動保存します。ダメージ処理の速度は変わりません。",
+    "settings.open": "設定",
+    "settings.title": "設定",
+    "settings.close": "閉じる",
+    "settings.skin": "スキン",
+    "settings.blue": "青き王",
+    "settings.white": "白き王",
+    "settings.rhythm": "動作テンポ",
+    "settings.fast": "高速",
+    "settings.original": "原作",
+    "settings.fast_hint": "予備動作と硬直を短縮",
+    "settings.original_hint": "原作の動作テンポを再現",
+    "settings.saved": "自動保存"
   },
   "Quotes": {
     "Idle": [

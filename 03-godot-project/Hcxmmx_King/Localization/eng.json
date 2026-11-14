@@ -5,7 +5,22 @@
     "skin.white.button": "👑 White King",
     "skin.blue.button": "👑 Blue King",
     "skin.white.selected": "✨ Proof of a flawless victory. The White King arrives!",
-    "skin.blue.selected": "🔵 A familiar look. Back to the classics."
+    "skin.blue.selected": "🔵 A familiar look. Back to the classics.",
+    "rhythm.fast.button": "Pace: Fast",
+    "rhythm.original.button": "Pace: Original",
+    "rhythm.tooltip": "Switch between fast and original animation pacing. Saved automatically. Damage timing is unchanged.",
+    "settings.open": "Settings",
+    "settings.title": "Settings",
+    "settings.close": "Close",
+    "settings.skin": "Outfit",
+    "settings.blue": "Blue King",
+    "settings.white": "White King",
+    "settings.rhythm": "Animation pace",
+    "settings.fast": "Fast",
+    "settings.original": "Original",
+    "settings.fast_hint": "Shorter wind-up and recovery",
+    "settings.original_hint": "Original animation pacing",
+    "settings.saved": "Saved automatically"
   },
   "Quotes": {
     "Idle": [

@@ -1,7 +1,13 @@
 using System;
+using System.Collections.Generic;
+using System.Reflection;
+using System.Reflection.Emit;
 using Godot;
 using HarmonyLib;
+using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Localization;
+using MegaCrit.Sts2.Core.Models;
+using MegaCrit.Sts2.Core.Nodes.Screens.CharacterSelect;
 
 // ✅ 命名空间已重构为 KingMod
 namespace Hcxmmx.KingMod.Scripts;
@@ -9,27 +15,52 @@ namespace Hcxmmx.KingMod.Scripts;
 [HarmonyPatch(typeof(MegaCrit.Sts2.Core.Nodes.Screens.CharacterSelect.NCharacterSelectScreen), "SelectCharacter")]
 internal static class NCharacterSelectScreen_SelectCharacter_Patch
 {
-    private static void Prefix(object characterModel, ref string __state)
+    private static bool IsKing(CharacterModel character)
     {
-        var entryName = KingGlobals.GetCharacterEntry(characterModel);
-        if (!string.Equals(entryName, KingGlobals.TargetCharacterId, StringComparison.OrdinalIgnoreCase))
-        {
-            return;
-        }
-
-        var characterTraverse = Traverse.Create(characterModel);
-        __state = characterTraverse.Property("CharacterSelectSfx").GetValue<string>()
-            ?? characterTraverse.Field("CharacterSelectSfx").GetValue<string>();
-
-        try { characterTraverse.Property("CharacterSelectSfx").SetValue(""); } catch { }
-        try { characterTraverse.Field("CharacterSelectSfx").SetValue(""); } catch { }
-        try { characterTraverse.Field("<CharacterSelectSfx>k__BackingField").SetValue(""); } catch { }
+        return string.Equals(character.Id.Entry, KingGlobals.TargetCharacterId, StringComparison.OrdinalIgnoreCase);
     }
 
-    private static void Postfix(MegaCrit.Sts2.Core.Nodes.Screens.CharacterSelect.NCharacterSelectScreen __instance, Node charSelectButton, object characterModel, ref string __state)
+    private static IEnumerable<CodeInstruction> Transpiler(IEnumerable<CodeInstruction> instructions, ILGenerator generator)
     {
-        var entryName = KingGlobals.GetCharacterEntry(characterModel);
-        if (!string.Equals(entryName, KingGlobals.TargetCharacterId, StringComparison.OrdinalIgnoreCase))
+        var sound = AccessTools.Method(typeof(SfxCmd), nameof(SfxCmd.Play), [typeof(string), typeof(float)]);
+        var character = AccessTools.PropertyGetter(typeof(NCharacterSelectButton), nameof(NCharacterSelectButton.Character));
+        var guard = AccessTools.Method(typeof(NCharacterSelectScreen_SelectCharacter_Patch), nameof(IsKing));
+        int changed = 0;
+        foreach (var instruction in instructions)
+        {
+            var method = instruction.operand as MethodInfo;
+            bool skinWrapper = method?.DeclaringType?.FullName == "Hcxmmx.SothebySkin.CharacterSelectPresentation" &&
+                method.Name == "PlaySelectionSound";
+            if (!instruction.Calls(sound) && !skinWrapper)
+            {
+                yield return instruction;
+                continue;
+            }
+
+            // Guard the existing call so other skins can apply their own guards in either order.
+            var playOriginal = generator.DefineLabel();
+            var end = generator.DefineLabel();
+            yield return new CodeInstruction(OpCodes.Ldarg_1).MoveLabelsFrom(instruction).MoveBlocksFrom(instruction);
+            yield return new CodeInstruction(OpCodes.Callvirt, character);
+            yield return new CodeInstruction(OpCodes.Call, guard);
+            yield return new CodeInstruction(OpCodes.Brfalse, playOriginal);
+            int arguments = method!.GetParameters().Length + (method.IsStatic ? 0 : 1);
+            for (int index = 0; index < arguments; index++) yield return new CodeInstruction(OpCodes.Pop);
+            yield return new CodeInstruction(OpCodes.Br, end);
+            instruction.labels.Add(playOriginal);
+            yield return instruction;
+            var tail = new CodeInstruction(OpCodes.Nop);
+            tail.labels.Add(end);
+            yield return tail;
+            changed++;
+        }
+        if (changed != 1) throw new InvalidOperationException($"King selection: expected 1 sound call, found {changed}");
+    }
+
+    private static void Postfix(NCharacterSelectScreen __instance, NCharacterSelectButton charSelectButton)
+    {
+        KingSelectionSettings.Update(__instance, IsKing(charSelectButton.Character) && !charSelectButton.IsLocked);
+        if (!IsKing(charSelectButton.Character))
         {
             return;
         }
@@ -99,14 +130,6 @@ internal static class NCharacterSelectScreen_SelectCharacter_Patch
             descLabel.Text = KingLocalization.GetText("character.description");
         }
 
-        if (__state != null)
-        {
-            var characterTraverse = Traverse.Create(characterModel);
-            try { characterTraverse.Property("CharacterSelectSfx").SetValue(__state); } catch { }
-            try { characterTraverse.Field("CharacterSelectSfx").SetValue(__state); } catch { }
-            try { characterTraverse.Field("<CharacterSelectSfx>k__BackingField").SetValue(__state); } catch { }
-        }
-
         KingGlobals.VerboseLog("🎉 UI 篡改与防崩溃战术静音协议极其完美地执行完毕！");
     }
 }
@@ -164,95 +187,6 @@ internal static class NCharacterSelectButton_Init_Patch_Avatar
         var iconTraverse = Traverse.Create(iconNode);
         iconTraverse.Property("Texture").SetValue(customAvatar);
         KingGlobals.VerboseLog("✅ 枭首者头像极其完美地贴上去了！");
-    }
-}
-
-// ==========================================
-// 🎨 选人界面：终极原生 UI 按钮换肤与动态弹幕
-// ==========================================
-[HarmonyPatch(typeof(MegaCrit.Sts2.Core.Nodes.Screens.CharacterSelect.NCharacterSelectButton), "Init")]
-internal static class NCharacterSelectButton_SkinToggle_Patch
-{
-    private static readonly StringName SkinBtnInjectedKey = new("KingSkinBtnInjected");
-    private const string BtnNodeName = "KingSkinToggleBtn";
-
-    private static void Postfix(Control __instance, object character)
-    {
-        var entryName = KingGlobals.GetCharacterEntry(character);
-        if (!string.Equals(entryName, KingGlobals.TargetCharacterId, StringComparison.OrdinalIgnoreCase)) return;
-
-        // 双重防重：Meta 与节点名都做检查
-        if (__instance.HasMeta(SkinBtnInjectedKey) || __instance.GetNodeOrNull<Button>(BtnNodeName) != null) return;
-        __instance.SetMeta(SkinBtnInjectedKey, true);
-
-        var toggleBtn = new Button();
-        toggleBtn.Name = BtnNodeName;
-        toggleBtn.Flat = true;
-
-        Action updateBtnVisuals = () =>
-        {
-            toggleBtn.Text = KingLocalization.GetText(KingGlobals.IsWhiteKingSkin ? "skin.white.button" : "skin.blue.button");
-            toggleBtn.AddThemeColorOverride("font_color", KingGlobals.IsWhiteKingSkin ? new Color(1f, 0.9f, 0.5f) : new Color(0.5f, 0.8f, 1f));
-        };
-
-        updateBtnVisuals();
-        var locManager = LocManager.Instance;
-        if (locManager != null)
-        {
-            LocManager.LocaleChangeCallback refreshText = () => updateBtnVisuals();
-            locManager.SubscribeToLocaleChange(refreshText);
-            toggleBtn.TreeExiting += () => locManager.UnsubscribeToLocaleChange(refreshText);
-        }
-        toggleBtn.AddThemeFontSizeOverride("font_size", 16);
-        toggleBtn.AddThemeConstantOverride("outline_size", 4);
-        toggleBtn.AddThemeColorOverride("font_outline_color", Colors.Black);
-        toggleBtn.MouseFilter = Control.MouseFilterEnum.Stop;
-        toggleBtn.FocusMode = Control.FocusModeEnum.All;
-        toggleBtn.CustomMinimumSize = new Vector2(90f, 30f);
-
-        __instance.AddChild(toggleBtn);
-
-        void RepositionButton()
-        {
-            toggleBtn.Position = new Vector2(Mathf.Max(6f, __instance.Size.X - toggleBtn.Size.X - 10f), 10f);
-        }
-
-        RepositionButton();
-        __instance.Resized += RepositionButton;
-        toggleBtn.Resized += RepositionButton;
-
-        toggleBtn.Pressed += () =>
-        {
-            KingGlobals.IsWhiteKingSkin = !KingGlobals.IsWhiteKingSkin;
-            KingGlobals.SaveConfig();
-            updateBtnVisuals();
-
-            string quote = KingLocalization.GetText(KingGlobals.IsWhiteKingSkin ? "skin.white.selected" : "skin.blue.selected");
-            FireDynamicDanmaku(__instance, quote, KingGlobals.IsWhiteKingSkin);
-            toggleBtn.AcceptEvent();
-        };
-    }
-
-    private static void FireDynamicDanmaku(Control parent, string text, bool isWhiteKing)
-    {
-        var label = new Label();
-        label.Text = text;
-        label.ZIndex = 100;
-
-        label.AddThemeFontSizeOverride("font_size", 20);
-        label.AddThemeColorOverride("font_color", isWhiteKing ? new Color(1f, 0.9f, 0.5f) : new Color(0.5f, 0.8f, 1f));
-        label.AddThemeConstantOverride("outline_size", 4);
-        label.AddThemeColorOverride("font_outline_color", Colors.Black);
-
-        parent.AddChild(label);
-
-        label.ResetSize();
-        label.Position = new Vector2((parent.Size.X - label.Size.X) / 2f, -20f);
-
-        var tween = parent.CreateTween();
-        tween.TweenProperty(label, "position:y", label.Position.Y - 50f, 1.2f).SetTrans(Tween.TransitionType.Quad).SetEase(Tween.EaseType.Out);
-        tween.Parallel().TweenProperty(label, "modulate:a", 0f, 1.2f).SetTrans(Tween.TransitionType.Cubic);
-        tween.TweenCallback(Callable.From(() => label.QueueFree()));
     }
 }
 

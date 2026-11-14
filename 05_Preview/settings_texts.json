@@ -1,0 +1,19 @@
+{
+  "translations": {
+    "zhs": {
+      "open": "设置", "title": "设置", "close": "关闭", "skin": "皮肤",
+      "blue": "蓝王", "white": "白王", "rhythm": "演出节奏", "fast": "加速", "original": "原作",
+      "fast_hint": "更紧凑的前摇与收招", "original_hint": "保留原作的动作节奏", "saved": "自动保存"
+    },
+    "eng": {
+      "open": "Settings", "title": "Settings", "close": "Close", "skin": "Outfit",
+      "blue": "Blue King", "white": "White King", "rhythm": "Animation pace", "fast": "Fast", "original": "Original",
+      "fast_hint": "Shorter wind-up and recovery", "original_hint": "Original animation pacing", "saved": "Saved automatically"
+    },
+    "jpn": {
+      "open": "設定", "title": "設定", "close": "閉じる", "skin": "スキン",
+      "blue": "青き王", "white": "白き王", "rhythm": "動作テンポ", "fast": "高速", "original": "原作",
+      "fast_hint": "予備動作と硬直を短縮", "original_hint": "原作の動作テンポを再現", "saved": "自動保存"
+    }
+  }
+}

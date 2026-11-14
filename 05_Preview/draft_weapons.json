@@ -1,0 +1,20 @@
+{
+  "weapons": [
+    {"id": "scissors", "label": "巨型剪刀 · 新", "weight": 1, "stages": [
+      {"body": "scissorsAtkA", "vfx": "fxScissorsAtkA", "source_item": "Scissor", "source_strike": 0},
+      {"body": "scissorsAtkB", "vfx": "fxScissorsAtkB", "source_item": "Scissor", "source_strike": 1}
+    ]},
+    {"id": "nunchuck_pan", "label": "双截锅 · 新", "weight": 1, "stages": [
+      {"body": "AtkNunchuckPanRefactoA", "vfx": "NunchukPanAtk/NunchukPanAtkA", "source_item": "NunchuckPan", "source_strike": 0},
+      {"body": "AtkNunchuckPanRefactoB", "vfx": "NunchukPanAtk/NunchukPanAtkB", "source_item": "NunchuckPan", "source_strike": 1},
+      {"body": "AtkNunchuckPanRefactoC", "vfx": "NunchukPanAtk/NunchukPanAtkC", "source_item": "NunchuckPan", "source_strike": 2},
+      {"body": "AtkNunchuckPanRefactoD", "vfx": "NunchukPanAtk/NunchukPanAtkD", "source_item": "NunchuckPan", "source_strike": 3},
+      {"body": "AtkNunchuckPanRefactoE", "vfx": "NunchukPanAtk/NunchukPanAtkE", "source_item": "NunchuckPan", "source_strike": 4},
+      {"body": "AtkNunchuckPanRefactoF", "vfx": "NunchukPanAtk/NunchukPanAtkF", "source_item": "NunchuckPan", "source_strike": 5},
+      {"body": "AtkNunchuckPanRefactoG", "vfx": "NunchukPanAtk/NunchukPanAtkG", "source_item": "NunchuckPan", "source_strike": 6},
+      {"body": "AtkNunchuckPanRefactoH", "vfx": "NunchukPanAtk/NunchukPanAtkH", "source_item": "NunchuckPan", "source_strike": 7},
+      {"body": "AtkNunchuckPanRefactoI", "vfx": "NunchukPanAtk/NunchukPanAtkI", "source_item": "NunchuckPan", "source_strike": 8},
+      {"body": "AtkNunchuckPanE", "vfx": "fxAtkNunchuckPan/AtkNunchuckPanE", "source_item": "NunchuckPan", "source_strike": 9}
+    ]}
+  ]
+}

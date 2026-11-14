@@ -5,7 +5,22 @@
     "skin.white.button": "👑切换：白王",
     "skin.blue.button": "👑切换：蓝王",
     "skin.white.selected": "✨无伤的证明，白王降临！",
-    "skin.blue.selected": "🔵熟悉的味道，重返经典。"
+    "skin.blue.selected": "🔵熟悉的味道，重返经典。",
+    "rhythm.fast.button": "节奏：加速",
+    "rhythm.original.button": "节奏：原作",
+    "rhythm.tooltip": "点击切换加速／原作动作节奏，自动保存。仅改变角色演出，不改变伤害结算速度。",
+    "settings.open": "设置",
+    "settings.title": "设置",
+    "settings.close": "关闭",
+    "settings.skin": "皮肤",
+    "settings.blue": "蓝王",
+    "settings.white": "白王",
+    "settings.rhythm": "演出节奏",
+    "settings.fast": "加速",
+    "settings.original": "原作",
+    "settings.fast_hint": "更紧凑的前摇与收招",
+    "settings.original_hint": "保留原作的动作节奏",
+    "settings.saved": "自动保存"
   },
   "Quotes": {
     "Idle": [

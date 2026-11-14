@@ -12,6 +12,10 @@
     <Sts2DataDir>$(Sts2Dir)\data_sts2_windows_x86_64</Sts2DataDir>
   </PropertyGroup>
 
+  <PropertyGroup Condition="'$(KingBowTest)' == 'true'">
+    <DefineConstants>$(DefineConstants);KING_BOW_TEST</DefineConstants>
+  </PropertyGroup>
+
   <ItemGroup>
     <Compile Include="03-godot-project\Hcxmmx_King\Scripts\**\*.cs" />
     <EmbeddedResource Include="03-godot-project\Hcxmmx_King\Localization\*.json"

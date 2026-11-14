@@ -1,0 +1,30 @@
+{
+  "schema_version": 1,
+  "stages": {
+    "AtkKingScepter": {
+      "item": "KingScepter", "strike": 0,
+      "timing": {"hit_frame": 3, "charge": 0.1, "lock_after": 0.08},
+      "note": "Project grounded composite: Load[0..2] + Impact[0..6] + End[0..4]. Contact is first Impact frame; original aerial bounce physics are not transplanted."
+    },
+    "atkRapierB": {"item": "Rapier", "strike": 1, "note": "Explicitly select the first short thrust; the source reuses body B in three different entries."},
+    "atkRapierC": {
+      "item": "Rapier", "strike": 0,
+      "note": "Preserve the project's legacy C thrust. Source atlas/track contains it, but current data.cdb does not use it in the normal chain. Use long-thrust entry A timing/audio; visible extension begins at frame 6."
+    },
+    "atkTombstoneA3": {"item": "Tombstone", "strike": 0, "note": "Original Tombstone.dynOnAttackAnim appends modelNum. Keep existing model 3."},
+    "atkTombstoneB3": {"item": "Tombstone", "strike": 1, "note": "Original model 3 variant."},
+    "atkTombstoneE3": {"item": "Tombstone", "strike": 2, "note": "Original model 3 variant; death-chain gameplay is not transplanted."}
+  },
+  "fx_aliases": [
+    ["AtkKatanaB4", "fxBeheadedKatanaB", "fxBeheadedKatanaB4"],
+    ["atkPanA", "fxPanHitA", "fxAtkPanA"],
+    ["atkPanB", "fxPanHitB", "fxAtkPanB"],
+    ["atkPanC", "fxPanHitC", "fxAtkPanC"],
+    ["atkPanD", "fxPanHitC", "fxAtkPanD"],
+    ["AtkKingScepter", "fxKingScepterAtk", null],
+    ["atkRapierC", "fxRapierA", "fxRapierC"],
+    ["atkTombstoneA3", "fxTombstoneAtkA", "fxTombestoneAtkA"],
+    ["atkTombstoneB3", "fxTombstoneAtkB", "fxTombestoneAtkB"],
+    ["atkTombstoneE3", "fxTombstoneAtkC", "fxTombestoneAtkC"]
+  ]
+}

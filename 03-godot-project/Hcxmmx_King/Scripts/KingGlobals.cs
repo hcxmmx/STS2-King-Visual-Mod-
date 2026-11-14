@@ -39,6 +39,7 @@ public static class KingGlobals
 
 // 极其关键的状态位，记录当前穿的是哪套
     public static bool IsWhiteKingSkin = false;
+    public static bool UseOriginalTiming = false;
 
     // 💾 赛博档案馆：读取与保存
     public static void LoadConfig()
@@ -47,6 +48,7 @@ public static class KingGlobals
         if (config.Load(ConfigPath) == Error.Ok)
         {
             IsWhiteKingSkin = (bool)config.GetValue("Skin", "IsWhiteKing", false);
+            UseOriginalTiming = (bool)config.GetValue("Presentation", "OriginalTiming", false);
             VerboseLog($"💾 赛博档案馆读取成功：当前为 {(IsWhiteKingSkin ? "白王" : "蓝王")}");
         }
     }
@@ -54,9 +56,20 @@ public static class KingGlobals
     public static void SaveConfig()
     {
         var config = new ConfigFile();
+        config.Load(ConfigPath);
         config.SetValue("Skin", "IsWhiteKing", IsWhiteKingSkin);
+        config.SetValue("Presentation", "OriginalTiming", UseOriginalTiming);
         config.Save(ConfigPath);
         VerboseLog("💾 赛博档案馆保存成功！");
+    }
+
+    public static void ToggleTiming()
+    {
+        UseOriginalTiming = !UseOriginalTiming;
+        CleanupActiveKingSprites();
+        foreach (var sprite in ActiveKingSprites)
+            if (sprite.GetParent() is Node2D actor) KingPresentation.RefreshTiming(actor);
+        SaveConfig();
     }
 
     // ==========================================
@@ -82,7 +95,6 @@ public static class KingGlobals
     public static readonly string[] IntroPool = { "runB", "show", "walk" };
     public static readonly string[] VictoryPool = { "no", "travolta", "what" };
     public static readonly string[] CastPool = { "fuckOffFast", "moonwalk", "ohYes", "yes", "secretPortal", "spanking" };
-    public static readonly string[] HitPool = { "stun", "blockDashShield", "blockIceShield", "blockLightningShield" };
     public static readonly string[] DiePool = { "letha" };
 
     public static bool IsSwordForged = false;
