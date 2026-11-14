@@ -1,3 +1,13 @@
+# v1.1.1
+
+- 修复与其他皮肤模组同装时，部分攻击牌播放音效导致出牌流程卡住的问题。此次日志中的触发牌为 LUNAR_BLAST。
+- 保持 v1.1.0 的 13 套武器随机池及全部外观功能。
+
+## English
+
+- Fixed an audio-patch argument mismatch that could stall attack cards when installed alongside other skin mods. The reported failure occurred with Lunar Blast.
+- Includes the 13-weapon random pool and visual features from v1.1.0.
+
 # v1.1.0
 
 这次把之前陆续做的外观、动作和声音调整一起整理更新，也适配了当前的 beta 0.113。

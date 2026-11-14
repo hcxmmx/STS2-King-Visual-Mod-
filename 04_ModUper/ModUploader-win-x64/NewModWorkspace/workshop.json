@@ -5,5 +5,5 @@
     "Skin"
   ],
   "visibility": "public",
-  "changeNote": "v1.1.0\n\n新增光效披风、加速／原作两种演出节奏。\n新增巨型剪刀、双截锅、迅捷弓，随机池共 13 套、44 段攻击。\n接入死亡细胞原版攻击、格挡和受伤音效。\n完善盾挡／受伤分流，加入敌人喷溅、闪色和致死碎块。\n新增右上角齿轮设置面板，以及英语、日语文本。\n适配 beta 0.113，修复胜利动作及与未锈铠、苏芙比的相关补丁兼容。\n校正部分武器刀光时序，修复箭矢在发行环境下的空纹理错误。\n\nLight-trail cape, Fast/Original pacing, Giant Scissors, Panchaku and Quick Bow.\n13 weapon sets / 44 stages, original audio, shield reactions, enemy hit feedback and a gear-button settings panel.\nEnglish/Japanese localization, beta 0.113 compatibility, animation fixes and release-build arrow loading fix."
+  "changeNote": "v1.1.1\n\n修复部分攻击牌在与其他皮肤模组同装时，因音效参数读取错误导致出牌流程卡住的问题。保留全部随机武器及 v1.1.0 外观功能。\n\nFixed an audio-patch argument mismatch that could stall attack cards when installed alongside other skin mods."
 }

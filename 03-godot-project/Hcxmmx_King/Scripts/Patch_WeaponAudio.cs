@@ -132,6 +132,8 @@ internal static class KingAudio_AttackExecution_Patch
         var method = (MethodInfo)original.operand;
         var types = method.GetParameters().Select(parameter => parameter.ParameterType).ToList();
         if (!method.IsStatic) types.Insert(0, method.DeclaringType!);
+        // Static debug wrappers retain the audio manager as their first argument.
+        int soundArgument = Enumerable.Range(0, types.Count).Single(index => types[index] == typeof(string));
         var arguments = types.Select(generator.DeclareLocal).ToArray();
         var codes = new List<CodeInstruction>();
         // Preserve the existing native/skin wrapper as the fall-through call.
@@ -145,7 +147,7 @@ internal static class KingAudio_AttackExecution_Patch
         var end = generator.DefineLabel();
         codes.Add(new CodeInstruction(OpCodes.Ldarg_0));
         codes.Add(new CodeInstruction(OpCodes.Ldfld, command));
-        codes.Add(new CodeInstruction(OpCodes.Ldloc, arguments[method.IsStatic ? 0 : 1]));
+        codes.Add(new CodeInstruction(OpCodes.Ldloc, arguments[soundArgument]));
         codes.Add(new CodeInstruction(OpCodes.Call, KingAudioPatchTargets.Wrapper(attacker
             ? nameof(KingWeaponAudio.ReplacesAttacker) : nameof(KingWeaponAudio.ReplacesHit))));
         codes.Add(new CodeInstruction(OpCodes.Brfalse, callOriginal));

@@ -39,6 +39,14 @@ internal static class ModCombinationCheck
                     method.Name is "ReplacesAttacker" or "ReplacesHit");
                 if (kingDamage != 1 || knightHit != 1 || soundGuards != 4)
                     throw new InvalidOperationException($"Combination coverage changed: King damage={kingDamage}, Knight hit={knightHit}, sound guards={soundGuards}");
+                for (int index = 1; index < codes.Count; index++)
+                {
+                    if (codes[index].operand is not MethodInfo guard ||
+                        guard.DeclaringType?.FullName != "Hcxmmx.KingMod.Scripts.KingWeaponAudio" ||
+                        guard.Name is not ("ReplacesAttacker" or "ReplacesHit")) continue;
+                    if (codes[index - 1].operand is not System.Reflection.Emit.LocalBuilder local || local.LocalType != typeof(string))
+                        throw new InvalidOperationException("Audio guard must receive the string sound argument");
+                }
                 RuntimeHelpers.PrepareMethod(moveNext.MethodHandle);
                 GD.Print("MOD_COMBINATION_PASS: " + string.Join(" -> ", order.Select(index => mods[index].GetName().Name)) +
                     "; full PatchAll, native observer, King hit scope, four sound guards");
