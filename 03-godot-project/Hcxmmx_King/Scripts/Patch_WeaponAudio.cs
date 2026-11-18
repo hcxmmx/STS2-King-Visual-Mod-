@@ -34,10 +34,23 @@ internal static class KingAudioPatchTargets
     }
     internal static readonly MethodInfo Play = AccessTools.Method(typeof(SfxCmd), nameof(SfxCmd.Play), [typeof(string), typeof(float)]);
     internal static readonly MethodInfo TmpPlay = AccessTools.Method(typeof(NDebugAudioManager), nameof(NDebugAudioManager.Play));
-    internal static readonly MethodInfo Damage = AccessTools.DeclaredMethod(typeof(CreatureCmd), nameof(CreatureCmd.Damage),
-        [typeof(PlayerChoiceContext), typeof(IEnumerable<DamageTargetData>), typeof(decimal), typeof(ValueProp),
-            typeof(Creature), typeof(CardModel), typeof(CardPlay), typeof(ModifyDamageHookType)])
-        ?? throw new MissingMethodException(typeof(CreatureCmd).FullName, "Damage(DamageTargetData, ModifyDamageHookType)");
+    private static readonly Type? DamageTarget = typeof(Creature).Assembly.GetType("MegaCrit.Sts2.Core.Entities.Creatures.DamageTargetData");
+    internal static bool LegacyDamage => DamageTarget == null;
+    internal static readonly MethodInfo Damage = FindDamage();
+
+    private static MethodInfo FindDamage()
+    {
+        var sequence = typeof(IEnumerable<>).MakeGenericType(DamageTarget ?? typeof(Creature));
+        Type[] parameters = [typeof(PlayerChoiceContext), sequence, typeof(decimal), typeof(ValueProp),
+            typeof(Creature), typeof(CardModel), typeof(CardPlay)];
+        if (!LegacyDamage) parameters = [.. parameters, typeof(ModifyDamageHookType)];
+        return AccessTools.DeclaredMethod(typeof(CreatureCmd), nameof(CreatureCmd.Damage), parameters)
+            ?? throw new MissingMethodException(typeof(CreatureCmd).FullName, "Damage");
+    }
+
+    internal static MethodInfo DamageWrapper => LegacyDamage
+        ? Wrapper(nameof(KingWeaponAudio.DealDamageStable))
+        : Wrapper(nameof(KingWeaponAudio.DealDamage)).MakeGenericMethod(DamageTarget!);
     internal static MethodInfo Wrapper(string name) => AccessTools.Method(typeof(KingWeaponAudio), name);
 }
 
@@ -118,7 +131,8 @@ internal static class KingAudio_AttackExecution_Patch
             var owner = new CodeInstruction(OpCodes.Ldarg_0).MoveLabelsFrom(codes[i]);
             codes.InsertRange(i, [owner, new CodeInstruction(OpCodes.Ldfld, command)]);
             codes[i + 2].opcode = OpCodes.Call;
-            codes[i + 2].operand = KingAudioPatchTargets.Wrapper(wrapper);
+            codes[i + 2].operand = wrapper == nameof(KingWeaponAudio.DealDamage)
+                ? KingAudioPatchTargets.DamageWrapper : KingAudioPatchTargets.Wrapper(wrapper);
             i += 2;
         }
         if (sounds != 2 || temporary != 2 || animations != 1 || damages != 1 || sideEffects != 1)
@@ -171,23 +185,28 @@ internal static class KingAudio_AttackExecution_Patch
 internal static class KingAudio_DamageImpact_Patch
 {
     private static MethodBase TargetMethod() => KingAudioPatchTargets.MoveNext(KingAudioPatchTargets.Damage);
-    private static IEnumerable<CodeInstruction> Transpiler(IEnumerable<CodeInstruction> instructions, MethodBase __originalMethod)
+    private static IEnumerable<CodeInstruction> Transpiler(IEnumerable<CodeInstruction> instructions, MethodBase __originalMethod, ILGenerator generator)
     {
         var codes = instructions.ToList();
         var loseHp = AccessTools.DeclaredMethod(typeof(Creature), nameof(Creature.LoseHpInternal));
-        var targets = AccessTools.Field(__originalMethod.DeclaringType, "targetData")
-            ?? throw new MissingFieldException(__originalMethod.DeclaringType?.FullName, "targetData");
+        bool stable = KingAudioPatchTargets.LegacyDamage;
+        string targetField = stable ? "targets" : "targetData";
+        var targets = AccessTools.Field(__originalMethod.DeclaringType, targetField)
+            ?? throw new MissingFieldException(__originalMethod.DeclaringType?.FullName, targetField);
         var dealer = AccessTools.Field(__originalMethod.DeclaringType, "dealer");
         var props = AccessTools.Field(__originalMethod.DeclaringType, "props");
         var blocked = AccessTools.PropertyGetter(typeof(DamageResult), nameof(DamageResult.WasFullyBlocked));
-        int resolvedIndex = Enumerable.Range(0, codes.Count - 1).Single(index => codes[index].Calls(blocked) &&
-            (codes[index + 1].opcode == OpCodes.Brtrue || codes[index + 1].opcode == OpCodes.Brtrue_S));
-        if (resolvedIndex < 2 || codes[resolvedIndex - 1].operand is not FieldInfo resolvedField || resolvedField.FieldType != typeof(DamageResult))
-            throw new InvalidOperationException("King impact: missing resolved damage-result load");
-        // The closure local survives through native VFX calls. Copy only opcodes
-        // and operands, preserving the original branch labels at their sites.
-        var loadResult = codes.Skip(resolvedIndex - 2).Take(2)
-            .Select(code => new CodeInstruction(code.opcode, code.operand)).ToArray();
+        var resolved = stable ? generator.DeclareLocal(typeof(DamageResult)) : null;
+        CodeInstruction[] betaResultLoad = [];
+        if (!stable)
+        {
+            // Beta may play a card effect before reaching the full-block branch.
+            // Read its already-resolved result from the game's closure at each VFX call.
+            int branch = Enumerable.Range(0, codes.Count - 1).Single(index => IsBlockBranch(codes, index, blocked));
+            if (branch < 2 || codes[branch - 1].operand is not FieldInfo field || field.FieldType != typeof(DamageResult))
+                throw new InvalidOperationException("King impact: missing beta damage-result load");
+            betaResultLoad = [codes[branch - 2], codes[branch - 1]];
+        }
         var spark = AccessTools.DeclaredMethod(typeof(NHitSparkVfx), nameof(NHitSparkVfx.Create));
         var cardCenter = AccessTools.DeclaredMethod(typeof(VfxCmd), nameof(VfxCmd.PlayOnCreatureCenter));
         var cardBase = AccessTools.DeclaredMethod(typeof(VfxCmd), nameof(VfxCmd.PlayOnCreature));
@@ -199,26 +218,30 @@ internal static class KingAudio_DamageImpact_Patch
         {
             // This is the resolved-result branch that skips hurt animations for
             // full blocks. The other getters belong to VFX/death bookkeeping.
-            if (codes[i].Calls(blocked) && i + 1 < codes.Count &&
-                (codes[i + 1].opcode == OpCodes.Brtrue || codes[i + 1].opcode == OpCodes.Brtrue_S))
+            if (i + 1 < codes.Count && IsBlockBranch(codes, i, blocked))
             {
-                var first = new CodeInstruction(OpCodes.Ldarg_0).MoveLabelsFrom(codes[i]);
-                codes.InsertRange(i, [first, new CodeInstruction(OpCodes.Ldfld, dealer),
+                var extra = new List<CodeInstruction>();
+                if (resolved != null) extra.AddRange([new(OpCodes.Dup), new(OpCodes.Stloc, resolved)]);
+                extra.AddRange([
+                    new CodeInstruction(OpCodes.Ldarg_0), new CodeInstruction(OpCodes.Ldfld, dealer),
                     new CodeInstruction(OpCodes.Ldarg_0), new CodeInstruction(OpCodes.Ldfld, props),
                     new CodeInstruction(OpCodes.Ldarg_0), new CodeInstruction(OpCodes.Ldfld, targets)]);
-                codes[i + 6].opcode = OpCodes.Call;
-                codes[i + 6].operand = KingAudioPatchTargets.Wrapper(nameof(KingWeaponAudio.ObserveResult));
+                extra[0].MoveLabelsFrom(codes[i]).MoveBlocksFrom(codes[i]);
+                codes.InsertRange(i, extra);
+                codes[i + extra.Count].opcode = OpCodes.Call;
+                codes[i + extra.Count].operand = KingAudioPatchTargets.Wrapper(nameof(KingWeaponAudio.ObserveResult));
                 blocks++;
-                i += 6;
+                i += extra.Count;
                 continue;
             }
-            if (codes[i].Calls(spark) || codes[i].Calls(cardCenter) || codes[i].Calls(cardBase))
+            if (codes[i].Calls(spark) || (!stable && (codes[i].Calls(cardCenter) || codes[i].Calls(cardBase))))
             {
                 bool isSpark = codes[i].Calls(spark);
                 string wrapper = isSpark ? nameof(KingEnemyImpact.CreateNativeSpark) :
                     codes[i].Calls(cardCenter) ? nameof(KingEnemyImpact.PlayCardCenter) : nameof(KingEnemyImpact.PlayCardBase);
-                var extra = loadResult.Select(code => new CodeInstruction(code.opcode, code.operand)).ToList();
-                extra[0].MoveLabelsFrom(codes[i]);
+                var extra = stable ? new List<CodeInstruction> { new(OpCodes.Ldloc, resolved) }
+                    : betaResultLoad.Select(code => new CodeInstruction(code.opcode, code.operand)).ToList();
+                extra[0].MoveLabelsFrom(codes[i]).MoveBlocksFrom(codes[i]);
                 if (!isSpark) extra.AddRange([new CodeInstruction(OpCodes.Ldarg_0), new CodeInstruction(OpCodes.Ldfld, targets)]);
                 codes.InsertRange(i, extra);
                 codes[i + extra.Count].opcode = OpCodes.Call;
@@ -246,11 +269,15 @@ internal static class KingAudio_DamageImpact_Patch
             changed++;
             i += 2;
         }
-        if (changed != 3) throw new InvalidOperationException($"King audio: expected 3 HP loss sites, found {changed}");
+        if (changed != (stable ? 2 : 3)) throw new InvalidOperationException($"King audio: unexpected HP loss sites ({changed})");
         if (blocks != 1 || blockSounds != 1)
             throw new InvalidOperationException($"King defense: unexpected block sites ({blocks}, {blockSounds})");
-        if (sparks != 1 || cardEffects != 2)
+        if (sparks != 1 || cardEffects != (stable ? 0 : 2))
             throw new InvalidOperationException($"King impact: unexpected VFX sites ({sparks}, {cardEffects})");
         return codes;
     }
+
+    private static bool IsBlockBranch(List<CodeInstruction> codes, int index, MethodInfo blocked) =>
+        codes[index].Calls(blocked) &&
+        (codes[index + 1].opcode == OpCodes.Brtrue || codes[index + 1].opcode == OpCodes.Brtrue_S);
 }

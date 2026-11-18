@@ -35,6 +35,8 @@ internal static class KingRanged
 
     private static readonly ConditionalWeakTable<Node2D, State> Actors = new();
     private static bool warned;
+    private static readonly Func<DamageResult, Creature>? OriginalTarget =
+        typeof(DamageResult).GetProperty("OriginalTarget")?.GetMethod?.CreateDelegate<Func<DamageResult, Creature>>();
 
     internal static Shot Prepare(Node2D actor, long pending)
     {
@@ -90,11 +92,12 @@ internal static class KingRanged
         var target = result.Receiver.GetCreatureNode();
         var container = result.Receiver.GetVfxContainer();
         if (target == null || container == null) return;
-        if (!shot.Targets.TryGetValue(result.OriginalTarget, out var aim))
+        var original = OriginalTarget?.Invoke(result) ?? result.Receiver;
+        if (!shot.Targets.TryGetValue(original, out var aim))
         {
             if (shot.Targets.Count >= 32) return;
             aim = new Aim(container, target.VfxSpawnPosition, shot.Targets.Count);
-            shot.Targets.Add(result.OriginalTarget, aim);
+            shot.Targets.Add(original, aim);
             if (shot.Released) Fire(shot, aim);
             return;
         }

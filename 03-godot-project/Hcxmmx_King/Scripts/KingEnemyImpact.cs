@@ -60,8 +60,8 @@ internal static class KingEnemyImpact
         return true;
     }
 
-    internal static NHitSparkVfx? CreateNativeSpark(Creature target, bool requireInteractable, DamageResult result) =>
-        Handled.TryGetValue(result, out _) ? null : NHitSparkVfx.Create(target, requireInteractable);
+    internal static NHitSparkVfx? CreateNativeSpark(Creature target, bool requireInteractable, DamageResult? result) =>
+        result != null && Handled.TryGetValue(result, out _) ? null : NHitSparkVfx.Create(target, requireInteractable);
 
     private static Node2D? GetLayer(Control container)
     {
@@ -100,15 +100,25 @@ internal static class KingEnemyImpact
 
     internal static bool Generic(string path) => path is VfxCmd.slashPath or VfxCmd.bluntPath or VfxCmd.heavyBluntPath;
 
+    private static class BetaVfx
+    {
+        internal static readonly Action<Creature, string, bool> PlayOnCreatureCenter = Bind(nameof(VfxCmd.PlayOnCreatureCenter));
+        internal static readonly Action<Creature, string, bool> PlayOnCreature = Bind(nameof(VfxCmd.PlayOnCreature));
+
+        private static Action<Creature, string, bool> Bind(string name) =>
+            typeof(VfxCmd).GetMethod(name, [typeof(Creature), typeof(string), typeof(bool)])!
+                .CreateDelegate<Action<Creature, string, bool>>();
+    }
+
     internal static void PlayCardCenter(Creature target, string path, bool forceIfDead, DamageResult result, object? targets)
     {
         if (Generic(path) && KingWeaponAudio.EnsureImpact(result, targets)) return;
-        VfxCmd.PlayOnCreatureCenter(target, path, forceIfDead);
+        BetaVfx.PlayOnCreatureCenter(target, path, forceIfDead);
     }
 
     internal static void PlayCardBase(Creature target, string path, bool forceIfDead, DamageResult result, object? targets)
     {
         if (Generic(path) && KingWeaponAudio.EnsureImpact(result, targets)) return;
-        VfxCmd.PlayOnCreature(target, path, forceIfDead);
+        BetaVfx.PlayOnCreature(target, path, forceIfDead);
     }
 }

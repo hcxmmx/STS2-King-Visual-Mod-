@@ -86,9 +86,14 @@ internal static class RangedCheck
                 Require(Flights().Count == 1, "Timeline release reaches compiled C# and room projectile layer");
                 var flight = Flights()[0].AsGodotDictionary();
                 Require(layer.ToGlobal(flight["point"].AsVector2()).IsEqualApprox(Points[Nodes[targets[0]]]), "Transformed actual target endpoint");
-                var redirected = new DamageResult(targets[1], ValueProp.Move) { OriginalTarget = targets[0], UnblockedDamage = 6 };
-                resolve.Invoke(null, [shot, redirected]);
-                Require(Flights().Count == 1 && layer.ToGlobal(Flights()[0].AsGodotDictionary()["point"].AsVector2()).IsEqualApprox(Points[Nodes[targets[1]]]), "Damage redirection retargets existing arrow");
+                var redirected = new DamageResult(targets[1], ValueProp.Move) { UnblockedDamage = 6 };
+                var originalTarget = typeof(DamageResult).GetProperty("OriginalTarget");
+                if (originalTarget != null)
+                {
+                    originalTarget.SetValue(redirected, targets[0]);
+                    resolve.Invoke(null, [shot, redirected]);
+                    Require(Flights().Count == 1 && layer.ToGlobal(Flights()[0].AsGodotDictionary()["point"].AsVector2()).IsEqualApprox(Points[Nodes[targets[1]]]), "Damage redirection retargets existing arrow");
+                }
                 resolve.Invoke(null, [shot, new DamageResult(targets[1], ValueProp.Move) { WasFullyBlocked = true, BlockedDamage = 6 }]);
                 Require(Flights().Count == 2, "Additional AOE receiver includes fully blocked target");
                 presentation.GetMethod("Interrupt", All)!.Invoke(null, [actor, false]);

@@ -20,8 +20,9 @@ internal static class NCharacterSelectScreen_SelectCharacter_Patch
         return string.Equals(character.Id.Entry, KingGlobals.TargetCharacterId, StringComparison.OrdinalIgnoreCase);
     }
 
-    private static IEnumerable<CodeInstruction> Transpiler(IEnumerable<CodeInstruction> instructions, ILGenerator generator)
+    private static IEnumerable<CodeInstruction> Transpiler(IEnumerable<CodeInstruction> instructions, ILGenerator generator, MethodBase __originalMethod)
     {
+        bool hasCharacterArgument = __originalMethod.GetParameters().Length == 2;
         var sound = AccessTools.Method(typeof(SfxCmd), nameof(SfxCmd.Play), [typeof(string), typeof(float)]);
         var character = AccessTools.PropertyGetter(typeof(NCharacterSelectButton), nameof(NCharacterSelectButton.Character));
         var guard = AccessTools.Method(typeof(NCharacterSelectScreen_SelectCharacter_Patch), nameof(IsKing));
@@ -40,8 +41,9 @@ internal static class NCharacterSelectScreen_SelectCharacter_Patch
             // Guard the existing call so other skins can apply their own guards in either order.
             var playOriginal = generator.DefineLabel();
             var end = generator.DefineLabel();
-            yield return new CodeInstruction(OpCodes.Ldarg_1).MoveLabelsFrom(instruction).MoveBlocksFrom(instruction);
-            yield return new CodeInstruction(OpCodes.Callvirt, character);
+            yield return new CodeInstruction(hasCharacterArgument ? OpCodes.Ldarg_2 : OpCodes.Ldarg_1)
+                .MoveLabelsFrom(instruction).MoveBlocksFrom(instruction);
+            if (!hasCharacterArgument) yield return new CodeInstruction(OpCodes.Callvirt, character);
             yield return new CodeInstruction(OpCodes.Call, guard);
             yield return new CodeInstruction(OpCodes.Brfalse, playOriginal);
             int arguments = method!.GetParameters().Length + (method.IsStatic ? 0 : 1);
@@ -57,10 +59,12 @@ internal static class NCharacterSelectScreen_SelectCharacter_Patch
         if (changed != 1) throw new InvalidOperationException($"King selection: expected 1 sound call, found {changed}");
     }
 
-    private static void Postfix(NCharacterSelectScreen __instance, NCharacterSelectButton charSelectButton)
+    private static void Postfix(NCharacterSelectScreen __instance, NCharacterSelectButton __0, object[] __args)
     {
-        KingSelectionSettings.Update(__instance, IsKing(charSelectButton.Character) && !charSelectButton.IsLocked);
-        if (!IsKing(charSelectButton.Character))
+        var character = __args.Length == 2 ? (CharacterModel)__args[1] : __0.Character;
+        bool isKing = IsKing(character);
+        KingSelectionSettings.Update(__instance, isKing && !__0.IsLocked);
+        if (!isKing)
         {
             return;
         }

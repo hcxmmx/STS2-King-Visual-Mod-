@@ -1,3 +1,13 @@
+# v1.1.2
+
+- 修复正式版 v0.111.1 上模组初始化失败，恢复盾挡和攻击反馈，并适配正式版选人接口。
+- 修复 beta v0.113.1 中打击可能卡在界面上、敌人受击特效未播放的问题。
+
+## English
+
+- Fixed mod initialization on stable v0.111.1, restoring shield and attack effects and adapting to its character selection API.
+- Fixed stalled Strike plays and missing enemy hit effects on beta v0.113.1.
+
 # v1.1.1
 
 - 修复与其他皮肤模组同装时，部分攻击牌播放音效导致出牌流程卡住的问题。此次日志中的触发牌为 LUNAR_BLAST。

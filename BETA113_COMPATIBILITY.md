@@ -1,5 +1,17 @@
 # beta 0.113 兼容调查
 
+## 2026-11-18 beta v0.113.1 出牌中断
+
+正式版兼容改动曾共用全挡分支缓存的伤害结果。beta 的原生卡牌特效在该分支之前执行，导致打击调用命中特效时传入空结果，出牌协程抛出异常。beta 恢复从游戏结算闭包读取结果，正式版保留其独立路径。空结果直接回退到原生特效。
+
+用用户当前 v0.113.1 程序集完成补丁安装、攻击音效、敌人受击、盾挡、迅捷弓和设置桥接检查。已替换本地订阅 DLL，记录见 `artifacts/beta-1131-card-stall/deployment.json`，待重进对局复验。
+
+## 2026-11-18 正式版 v0.111.1
+
+工坊 v1.1.1 初始化时在 Harmony 的攻击音效补丁中引用了正式版不存在的 `DamageTargetData`。已挂上的外观补丁仍能运行，后续盾挡与伤害反馈补丁未能安装。现按实际程序集选择伤害重载、参数字段和扣血调用点，并兼容两个版本的选人传参。正式版保留原生卡牌特效调用，自定义受击反馈仍使用实际伤害结果。
+
+本地 v0.111.1 已通过全部补丁安装、盾挡、攻击音效、敌人受击、迅捷弓及设置桥接检查。新版伤害接口的分支保留，尚未在含 `DamageTargetData` 的 beta 程序集上复验。只替换本地订阅目录中的 DLL，备份及哈希见 `artifacts/stable-111/deployment.json`。
+
 ## 2026-11-14 同装兼容修复
 
 用户报告未锈铠初始化失败。最新游戏日志显示 `Hcxmmx.AKnightSkin.AttackAudioPatch` 在 `AttackCommand.Execute.MoveNext` 报 `Expected one native damage call, found 0`。国王先将该原生调用替换为 `KingWeaponAudio.DealDamage`，导致未锈铠的新版伤害观察器无法找到挂接位置。

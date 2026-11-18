@@ -181,14 +181,40 @@ internal static class KingWeaponAudio
         GodotObject.IsInstanceValid(execution.Actor) && execution.Actor.IsVisibleInTree() && Ready(execution.Stage)) ||
         KingDefense.ReplacesIncomingHit(command));
 
-    internal static async Task<IEnumerable<DamageResult>> DealDamage(PlayerChoiceContext choiceContext,
-        IEnumerable<DamageTargetData>? targets, decimal amount, ValueProp props, Creature? dealer,
-        CardModel? cardSource, CardPlay? cardPlay, ModifyDamageHookType modifyDamageHookType, AttackCommand command)
+    private delegate Task<IEnumerable<DamageResult>> DamageCall<T>(PlayerChoiceContext context,
+        IEnumerable<T>? targets, decimal amount, ValueProp props, Creature? dealer,
+        CardModel? card, CardPlay? play, ModifyDamageHookType hook);
+
+    private static class BetaDamage<T>
+    {
+        internal static readonly DamageCall<T> Invoke = KingAudioPatchTargets.Damage.CreateDelegate<DamageCall<T>>();
+    }
+
+    internal static Task<IEnumerable<DamageResult>> DealDamage<T>(PlayerChoiceContext choiceContext,
+        IEnumerable<T>? targets, decimal amount, ValueProp props, Creature? dealer,
+        CardModel? cardSource, CardPlay? cardPlay, ModifyDamageHookType hook, AttackCommand command) =>
+        WithImpact(command, targets, () => BetaDamage<T>.Invoke(choiceContext, targets, amount, props, dealer, cardSource, cardPlay, hook));
+
+    internal static Task<IEnumerable<DamageResult>> DealDamageStable(PlayerChoiceContext choiceContext,
+        IEnumerable<Creature>? targets, decimal amount, ValueProp props, Creature? dealer,
+        CardModel? cardSource, CardPlay? cardPlay, AttackCommand command) =>
+        WithImpact(command, targets, () => StableDamage.Invoke(choiceContext, targets, amount, props, dealer, cardSource, cardPlay));
+
+    private delegate Task<IEnumerable<DamageResult>> StableDamageCall(PlayerChoiceContext context,
+        IEnumerable<Creature>? targets, decimal amount, ValueProp props, Creature? dealer, CardModel? card, CardPlay? play);
+
+    private static class StableDamage
+    {
+        internal static readonly StableDamageCall Invoke = KingAudioPatchTargets.Damage.CreateDelegate<StableDamageCall>();
+    }
+
+    private static async Task<IEnumerable<DamageResult>> WithImpact(AttackCommand command, object? targets,
+        Func<Task<IEnumerable<DamageResult>>> damage)
     {
         var previous = Hitting.Value;
         Hitting.Value = Executions.TryGetValue(command, out var execution) && execution.Started && Ready(execution.Stage)
             ? new ImpactGroup(execution, targets) : null;
-        try { return await CreatureCmd.Damage(choiceContext, targets, amount, props, dealer, cardSource, cardPlay, modifyDamageHookType); }
+        try { return await damage(); }
         finally { Hitting.Value = previous; }
     }
 
@@ -207,10 +233,10 @@ internal static class KingWeaponAudio
         return result;
     }
 
-    internal static bool EnsureImpact(DamageResult result, object? targets)
+    internal static bool EnsureImpact(DamageResult? result, object? targets)
     {
         var group = Hitting.Value;
-        if (group == null || !ReferenceEquals(group.Targets, targets)) return false;
+        if (result == null || group == null || !ReferenceEquals(group.Targets, targets)) return false;
         var actor = group.Execution.Actor;
         if (!GodotObject.IsInstanceValid(actor) || !actor.IsInsideTree() || !actor.IsVisibleInTree()) return false;
         var state = KingPresentation.For(actor);
